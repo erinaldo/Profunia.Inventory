@@ -3,7 +3,31 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27604.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profunia.Inventory", "Profunia.Inventory\Profunia.Inventory.csproj", "{6DFC755F-612D-4BB2-B187-6F3CD8783870}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data Access", "Data Access", "{3D931C89-121E-42E5-BAF5-743CFD2BB0FA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Profunia.Inventory.Repository", "Profunia.Inventory.Repository\Profunia.Inventory.Repository.csproj", "{53C3D6BB-A2B0-409D-9E65-3A5E630E920C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Models", "Models", "{21D618FF-0DF4-4A46-944B-C6CDD8CBC3C8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{224E104C-7BF8-4F0F-98A6-C4147A63F453}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F8E302CB-CB19-48D8-A82E-576FC9222886}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utility", "Utility", "{88E49B2B-10AC-4FD1-ACA8-6CC64CD99545}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Profunia.Inventory.Service", "Profunia.Inventory.Service\Profunia.Inventory.Service.csproj", "{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profunia.Inventory.DTO", "Profunia.Inventory.DTO\Profunia.Inventory.DTO.csproj", "{FDED2C5B-1021-4090-8F91-E360CA35C699}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profunia.Inventory.Entities", "Profunia.Inventory.Entities\Profunia.Inventory.Entities.csproj", "{41AD844D-1976-4D9A-9598-4C28E5095044}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DesktopUI", "DesktopUI", "{20C61F26-4A8E-43CE-8677-8F53C72A5292}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "WebUI", "WebUI", "{F67C9BB0-9718-42C5-ACA7-D490A0CC5C75}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profunia.Inventory.Web", "Profunia.Inventory.Web\Profunia.Inventory.Web.csproj", "{A2F96DAA-437C-424F-B27C-67BFF72F9141}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Profunia.Inventory.Desktop", "Profunia.Inventory.Desktop\Profunia.Inventory.Desktop.csproj", "{32C7B2DD-2004-44D9-9A97-C2DBFA780093}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,13 +35,41 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6DFC755F-612D-4BB2-B187-6F3CD8783870}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6DFC755F-612D-4BB2-B187-6F3CD8783870}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6DFC755F-612D-4BB2-B187-6F3CD8783870}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6DFC755F-612D-4BB2-B187-6F3CD8783870}.Release|Any CPU.Build.0 = Release|Any CPU
+		{53C3D6BB-A2B0-409D-9E65-3A5E630E920C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{53C3D6BB-A2B0-409D-9E65-3A5E630E920C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{53C3D6BB-A2B0-409D-9E65-3A5E630E920C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{53C3D6BB-A2B0-409D-9E65-3A5E630E920C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FDED2C5B-1021-4090-8F91-E360CA35C699}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FDED2C5B-1021-4090-8F91-E360CA35C699}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FDED2C5B-1021-4090-8F91-E360CA35C699}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FDED2C5B-1021-4090-8F91-E360CA35C699}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41AD844D-1976-4D9A-9598-4C28E5095044}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41AD844D-1976-4D9A-9598-4C28E5095044}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41AD844D-1976-4D9A-9598-4C28E5095044}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41AD844D-1976-4D9A-9598-4C28E5095044}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A2F96DAA-437C-424F-B27C-67BFF72F9141}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A2F96DAA-437C-424F-B27C-67BFF72F9141}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A2F96DAA-437C-424F-B27C-67BFF72F9141}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A2F96DAA-437C-424F-B27C-67BFF72F9141}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32C7B2DD-2004-44D9-9A97-C2DBFA780093}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32C7B2DD-2004-44D9-9A97-C2DBFA780093}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32C7B2DD-2004-44D9-9A97-C2DBFA780093}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32C7B2DD-2004-44D9-9A97-C2DBFA780093}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{53C3D6BB-A2B0-409D-9E65-3A5E630E920C} = {3D931C89-121E-42E5-BAF5-743CFD2BB0FA}
+		{9B4E11B7-A2D9-4FEA-B1B1-4CAD39239C13} = {F8E302CB-CB19-48D8-A82E-576FC9222886}
+		{FDED2C5B-1021-4090-8F91-E360CA35C699} = {21D618FF-0DF4-4A46-944B-C6CDD8CBC3C8}
+		{41AD844D-1976-4D9A-9598-4C28E5095044} = {21D618FF-0DF4-4A46-944B-C6CDD8CBC3C8}
+		{A2F96DAA-437C-424F-B27C-67BFF72F9141} = {F67C9BB0-9718-42C5-ACA7-D490A0CC5C75}
+		{32C7B2DD-2004-44D9-9A97-C2DBFA780093} = {20C61F26-4A8E-43CE-8677-8F53C72A5292}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {69AEE11D-504F-4399-9E7E-397122E06C33}

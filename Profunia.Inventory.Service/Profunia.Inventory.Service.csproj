@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Implementations\" />
+    <Folder Include="Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Profunia.Inventory.DTO\Profunia.Inventory.DTO.csproj" />
+    <ProjectReference Include="..\Profunia.Inventory.Entities\Profunia.Inventory.Entities.csproj" />
+    <ProjectReference Include="..\Profunia.Inventory.Repository\Profunia.Inventory.Repository.csproj" />
+  </ItemGroup>
+
+</Project>
