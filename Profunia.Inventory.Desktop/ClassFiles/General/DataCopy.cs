@@ -18,6 +18,8 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Windows.Forms;
 using System.IO;
+using Profunia.Inventory.Desktop.Transfer;
+
 namespace Profunia.Inventory.Desktop.ClassFiles.General
 {
     /// <summary>

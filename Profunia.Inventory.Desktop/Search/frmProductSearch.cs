@@ -14,9 +14,11 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
-using System.Drawing;
+using System.Drawing;using Profunia.Inventory.Desktop.Company;using Profunia.Inventory.Desktop.FinancialStatements;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Payroll;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Reminder;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Search;using Profunia.Inventory.Desktop.Settings;using Profunia.Inventory.Desktop.Transactions;using Profunia.Inventory.Desktop.Transfer;using Profunia.Inventory.Desktop.Budget;
 using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
 using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Search
 {
     public partial class frmProductSearch : Form
@@ -422,11 +424,11 @@ namespace Profunia.Inventory.Desktop.Search
                     strCriteria = "Reorder Level";
                 }
                 DataSet dsProductSearch = spProduct.ProductSearchReport(1, Convert.ToDecimal(cmbGodown.SelectedValue), Convert.ToDecimal(cmbBrand.SelectedValue), Convert.ToDecimal(cmbModelNo.SelectedValue), Convert.ToDecimal(cmbRack.SelectedValue), Convert.ToDecimal(cmbSize.SelectedValue), Convert.ToDecimal(cmbTax.SelectedValue), Convert.ToDecimal(cmbProductGroup.SelectedValue), Convert.ToString(cmbStatus.Text), txtProductCode.Text, txtProductName.Text, strCriteria,txtBatchName.Text);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
                 if (dgvProductSearch.Rows.Count > 0)
                 {
-                    frmReport.ProductSearchReport(dsProductSearch, strCriteria);
+                    frmRepor.ProductSearchReport(dsProductSearch, strCriteria);
                 }
                 else
                 {

@@ -17,6 +17,8 @@ using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Prof
 using System.Drawing;
 using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
 using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.FinancialStatements
 {
     public partial class frmFundFlow : Form
@@ -133,13 +135,13 @@ namespace Profunia.Inventory.Desktop.FinancialStatements
             try
             {
                 DataSet dsFundFlow = GetdataSet();
-                frmReport frmReport = new frmReport();
+                frmReport frmRepor = new frmReport();
                 frmReport open = Application.OpenForms["frmReport"] as frmReport;
                 if (open == null)
                 {
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.FundFlow(dsFundFlow);
-                    frmReport.Show();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.FundFlow(dsFundFlow);
+                    frmRepor.Show();
                 }
                 else
                 {

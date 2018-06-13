@@ -435,9 +435,9 @@ namespace Profunia.Inventory.Desktop.FinancialStatements
             {
                 FinancialStatementSP spFinancial = new FinancialStatementSP();
                 DataSet destBalance = getdataset();
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.BalanceSheetReportPrint(destBalance);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.BalanceSheetReportPrint(destBalance);
             }
             catch (Exception ex)
             {

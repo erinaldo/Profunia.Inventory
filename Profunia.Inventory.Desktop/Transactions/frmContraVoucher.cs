@@ -14,10 +14,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
-using System.Drawing;
+using System.Drawing;using Profunia.Inventory.Desktop.Company;using Profunia.Inventory.Desktop.FinancialStatements;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Payroll;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Reminder;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Search;using Profunia.Inventory.Desktop.Settings;using Profunia.Inventory.Desktop.Transactions;using Profunia.Inventory.Desktop.Transfer;using Profunia.Inventory.Desktop.Budget;
 using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
 using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Transactions
 {
     public partial class frmContraVoucher : Form
@@ -1381,9 +1383,9 @@ namespace Profunia.Inventory.Desktop.Transactions
             {
                 ContraMasterSP spContraMaster = new ContraMasterSP();
                 DataSet dsContraVoucher = spContraMaster.ContraVoucherPrinting(decContraMasterId, 1);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.ContraVoucherPrinting(dsContraVoucher);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.ContraVoucherPrinting(dsContraVoucher);
             }
             catch (Exception ex)
             {

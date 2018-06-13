@@ -18,6 +18,8 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Drawing;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+
 namespace Profunia.Inventory.Desktop.ClassFiles.General
 {
     class TransactionsGeneralFill : DBConnection

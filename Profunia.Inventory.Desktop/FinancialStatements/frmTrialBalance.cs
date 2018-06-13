@@ -18,6 +18,8 @@ using System.Drawing;
 using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
 using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
 using System.Data.SqlClient;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.FinancialStatements
 {
     public partial class frmTrialBalance : Form
@@ -432,9 +434,9 @@ namespace Profunia.Inventory.Desktop.FinancialStatements
             {
                 FinancialStatementSP spFinance = new FinancialStatementSP();
                 DataSet dsTrail = getdataset();
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.TrailBalanceReportPrinting(dsTrail);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.TrailBalanceReportPrinting(dsTrail);
             }
             catch (Exception ex)
             {

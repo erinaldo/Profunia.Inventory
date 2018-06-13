@@ -15,9 +15,12 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.Company;using Profunia.Inventory.Desktop.FinancialStatements;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Payroll;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Reminder;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Search;using Profunia.Inventory.Desktop.Settings;using Profunia.Inventory.Desktop.Transactions;using Profunia.Inventory.Desktop.Transfer;using Profunia.Inventory.Desktop.Budget;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Reports
 {
     public partial class frmPDCPayableReport : Form
@@ -205,9 +208,9 @@ namespace Profunia.Inventory.Desktop.Reports
                 decimal decLedgerId = Convert.ToDecimal(cmbAccountLedger.SelectedValue.ToString());
                 PDCPayableMasterSP sppdcpayable = new PDCPayableMasterSP();
                 DataSet dsPdcPayableReport = sppdcpayable.PdcpayableReportPrinting(Convert.ToDateTime(dtpFrmDate.Value.ToString()), Convert.ToDateTime(dtpTodate.Value.ToString()), cmbVoucherType.Text.ToString(), cmbAccountLedger.Text.ToString(), Convert.ToDateTime(dtpCheckDateFrom.Value.ToString()), Convert.ToDateTime(dtpCheckdateTo.Value.ToString()), txtcheckNo.Text.Trim(), txtVoucherNo.Text.Trim(), cmbStatus.Text.Trim(), 1);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.PdcpayablereportReportPrinting(dsPdcPayableReport);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.PdcpayablereportReportPrinting(dsPdcPayableReport);
             }
             catch (Exception ex)
             {

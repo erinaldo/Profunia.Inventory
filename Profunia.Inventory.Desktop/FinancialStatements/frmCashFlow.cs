@@ -17,6 +17,8 @@ using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Prof
 using System.Drawing;
 using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
 using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.FinancialStatements
 {
     public partial class frmCashFlow : Form
@@ -234,9 +236,9 @@ namespace Profunia.Inventory.Desktop.FinancialStatements
             try
             {
                 DataSet dsCashflow = GetDataSet();
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.CashflowReportPrinting(dsCashflow);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.CashflowReportPrinting(dsCashflow);
             }
             catch (Exception ex)
             {
