@@ -10,6 +10,10 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
+using Profunia.Inventory.Desktop.Transactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -188,9 +192,9 @@ namespace Profunia.Inventory.Desktop.Reports
                 {
                     PurchaseOrderMasterSP spPurchaseOrderMaster = new PurchaseOrderMasterSP();
                     DataSet dsPurchaseOrderReport = spPurchaseOrderMaster.PurchaseOrderReportPrinting(1, strInvoiceNo, decLedgerId, decVoucherTypeId, this.dtpFromDate.Value, this.dtpToDate.Value, strStatus);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.PurchaseOrderReportPrinting(dsPurchaseOrderReport, txtTotalAmount.Text);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.PurchaseOrderReportPrinting(dsPurchaseOrderReport, txtTotalAmount.Text);
                 }
                 else
                 {

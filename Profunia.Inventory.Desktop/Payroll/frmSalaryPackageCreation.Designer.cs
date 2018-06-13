@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Payroll
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Payroll
 {
     partial class frmSalaryPackageCreation
     {
@@ -40,7 +42,7 @@
             this.lblpackageName = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
-            this.dgvSalaryPackage = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvSalaryPackage = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.txtNarration = new System.Windows.Forms.TextBox();
             this.cmbActive = new System.Windows.Forms.ComboBox();
             this.lblSalary = new System.Windows.Forms.Label();

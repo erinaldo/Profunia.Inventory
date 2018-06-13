@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmPurchaseReturn
     {
@@ -59,9 +61,9 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtReturnNo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.dgvPurchaseReturn = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvPurchaseReturn = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.label3 = new System.Windows.Forms.Label();
-            this.dgvPurchaseReturnTax = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvPurchaseReturnTax = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtledgerId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtTaxName = new System.Windows.Forms.DataGridViewTextBoxColumn();

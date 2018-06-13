@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmContraVoucher
     {
@@ -53,7 +55,7 @@
             this.rbtnWithdrawal = new System.Windows.Forms.RadioButton();
             this.dtpContraVoucherDate = new System.Windows.Forms.DateTimePicker();
             this.txtContraVoucherDate = new System.Windows.Forms.TextBox();
-            this.dgvContraVoucher = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvContraVoucher = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtCheck = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtDetailsId = new System.Windows.Forms.DataGridViewTextBoxColumn();

@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmPhysicalStock
     {
@@ -46,7 +48,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtVoucherNo = new System.Windows.Forms.TextBox();
             this.lblVoucherNo = new System.Windows.Forms.Label();
-            this.dgvPhysicalStock = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvPhysicalStock = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.lblDate = new System.Windows.Forms.Label();
             this.cbxPrint = new System.Windows.Forms.CheckBox();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();

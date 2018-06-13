@@ -19,6 +19,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.Transactions;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Reports
 {
     public partial class frmDeliveryNoteReport : Form
@@ -330,9 +336,9 @@ namespace Profunia.Inventory.Desktop.Reports
                         decVoucherTypeId = Convert.ToDecimal(cmbVoucherType.SelectedValue.ToString());
                     }
                     DataSet dsDeliveryNoteReport = spDeliveryNoteMaster.DeliveryNoteReportPrinting(1, Convert.ToDecimal(cmbCashOrParty.SelectedValue.ToString()), decVoucherTypeId, this.dtpFromDate.Value, this.dtpToDate.Value, cmbStatus.Text, strDeliveryMode,strInvoiceNo);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.DeliveryNoteReportPrinting(dsDeliveryNoteReport);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.DeliveryNoteReportPrinting(dsDeliveryNoteReport);
                 }
                 else
                 {

@@ -25,6 +25,10 @@ using System.Drawing.Printing;
 using System.Drawing.Drawing2D;
 using iTextSharp.text.pdf;
 using iTextSharp.text;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+using Profunia.Inventory.Desktop.ClassFiles.General;
+
 namespace Profunia.Inventory.Desktop.Settings
 {
     public partial class frmBarcodePrinting : Form

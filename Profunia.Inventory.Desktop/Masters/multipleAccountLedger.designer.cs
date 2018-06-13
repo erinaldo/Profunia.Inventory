@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Masters
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Masters
 {
     partial class frmmultipleAccountLedger
     {
@@ -40,7 +42,7 @@
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.lnklblRemove = new System.Windows.Forms.LinkLabel();
             this.lblMultipleAccountledgerValidator = new System.Windows.Forms.Label();
-            this.dgvMultipleAccountLedger = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvMultipleAccountLedger = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtLedgerName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtOpeningBalance = new System.Windows.Forms.DataGridViewTextBoxColumn();

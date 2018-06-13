@@ -10,6 +10,9 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -213,9 +216,9 @@ namespace Profunia.Inventory.Desktop.Reports
                 {
                     AccountGroupSP spAccountGroup = new AccountGroupSP();
                     DataSet dsCashBankBook = spAccountGroup.CashBankBookPrinting(1, this.dtpFromDate.Value, this.dtpToDate.Value, true);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.CashBankBookPrinting(dsCashBankBook);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.CashBankBookPrinting(dsCashBankBook);
                 }
                 else
                 {

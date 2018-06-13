@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmSalesQuotation
     {
@@ -55,7 +57,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtQuotationNo = new System.Windows.Forms.TextBox();
             this.lblSalesQuotationNo = new System.Windows.Forms.Label();
-            this.dgvProduct = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProduct = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.lblDate = new System.Windows.Forms.Label();
             this.cbxPrintAfterSave = new System.Windows.Forms.CheckBox();
             this.dtpSalesQuotationDate = new System.Windows.Forms.DateTimePicker();

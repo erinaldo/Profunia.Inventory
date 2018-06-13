@@ -13,13 +13,14 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
+using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
 using System.Data.SqlClient;
 using System.Collections;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Transactions
 {
     public partial class frmPurchaseReturn : Form
@@ -2440,9 +2441,9 @@ namespace Profunia.Inventory.Desktop.Transactions
                 PurchaseReturnMasterInfo infoPurchaseReturnMaster = new PurchaseReturnMasterInfo();
                 PurchaseReturnMasterSP SPPurchaseReturnMaster = new PurchaseReturnMasterSP();
                 DataSet dsPurchaseReturn = SPPurchaseReturnMaster.PurchaseReturnPrinting(decPurchaseReturnMasterId, 1, infoPurchaseReturnMaster.PurchaseMasterId);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.PurchaseReturnPrinting(dsPurchaseReturn);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.PurchaseReturnPrinting(dsPurchaseReturn);
             }
             catch (Exception ex)
             {

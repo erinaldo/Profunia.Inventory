@@ -19,6 +19,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.Search;
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.Transactions;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Reports
 {
     public partial class frmSalesReturnReport : Form
@@ -171,9 +177,9 @@ namespace Profunia.Inventory.Desktop.Reports
             try
             {
                 DataSet dsSalesReturnReport = spSalesReturnMaster.SalesReturnReportPrinting(fromDate, toDate, decSalesMan, decCashOrParty, strVoucherNo, decVoucherTypeName, strProductCode);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.SalesReturnReportPrinting(dsSalesReturnReport);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.SalesReturnReportPrinting(dsSalesReturnReport);
             }
             catch (Exception ex)
             {

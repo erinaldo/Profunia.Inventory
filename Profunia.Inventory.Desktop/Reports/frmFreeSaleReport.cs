@@ -10,6 +10,9 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -389,11 +392,11 @@ namespace Profunia.Inventory.Desktop.Reports
                 decimal employeeId = Convert.ToDecimal(cmbSalesMan.SelectedValue.ToString());
                 string productCode = cmbProductCode.Text.ToString();
                 dsfree = spSalesMaster.FreeSaleReportPrint(fromDate, toDate, voucherNo, voucherTypeId, groupId, productCode, ledgerId, employeeId, companyId);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
                 if (dgvFreeSalesReport.Rows.Count > 0)
                 {
-                    frmReport.freeSaleReport(dsfree);
+                    frmRepor.freeSaleReport(dsfree);
                 }
                 else
                 {

@@ -11,6 +11,8 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

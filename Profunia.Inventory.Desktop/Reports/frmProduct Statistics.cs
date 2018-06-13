@@ -10,6 +10,9 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -280,9 +283,11 @@ namespace Profunia.Inventory.Desktop.Reports
                         strCriteria = "Slow Movings";
                     }
                     DataSet dsProductStatistics = spProduct.ProductStatisticsReport(1, Convert.ToDecimal(cmbBrand.SelectedValue), Convert.ToDecimal(cmbModelNo.SelectedValue), Convert.ToDecimal(cmbSize.SelectedValue), Convert.ToDecimal(cmbProductGroup.SelectedValue),/*decUnitId,*/strCriteria, txtBatchName.Text);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.ProductStatisticsReport(dsProductStatistics, strCriteria);
+                    frmReport frmRepor = new frmReport
+                    {
+                        MdiParent = formMDI.MDIObj
+                    };
+                    frmRepor.ProductStatisticsReport(dsProductStatistics, strCriteria);
                 }
                 else
                 {

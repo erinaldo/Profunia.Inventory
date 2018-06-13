@@ -10,6 +10,10 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.Transactions;
+using Profunia.Inventory.Desktop.Reports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,6 +22,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Reports
 {
     public partial class frmReceiptReport : Form
@@ -39,9 +45,11 @@ namespace Profunia.Inventory.Desktop.Reports
             {
                 ReceiptMasterSP SpReceiptMaster = new ReceiptMasterSP();
                 DataSet dsReceiptReport = SpReceiptMaster.ReceiptReportPrinting(Convert.ToDateTime(dtpFromDate.Value.ToString()), Convert.ToDateTime(dtpToDate.Value.ToString()), Convert.ToDecimal(cmbLedger.SelectedValue), Convert.ToDecimal(cmbVoucherType.SelectedValue), Convert.ToDecimal(cmbCashOrBank.SelectedValue), 1);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.ReceiptReportPrinting(dsReceiptReport);
+                frmReport frmRepor = new frmReport
+                {
+                    MdiParent = formMDI.MDIObj
+                };
+                frmRepor.ReceiptReportPrinting(dsReceiptReport);
             }
             catch (Exception ex)
             {

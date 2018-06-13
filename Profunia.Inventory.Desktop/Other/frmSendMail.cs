@@ -15,13 +15,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
-using System.Web.Mail;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
+using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
+//using System.Web.Mail;
 using System.Reflection;
+using Profunia.Inventory.Desktop.Transfer;
 
 namespace Profunia.Inventory.Desktop.Others
 {
@@ -82,42 +82,42 @@ namespace Profunia.Inventory.Desktop.Others
 
         public void SendAttachmentEmail()
         {
-            try
-            {
-                Cursor.Current = Cursors.WaitCursor;
-                MailMessage mailMsg = new MailMessage();
-                mailMsg.From = "openmiracleuserfeedback@gmail.com";
-                mailMsg.To = "openmiraclefeedback@gmail.com";
-                mailMsg.Subject = txtMailId.Text.Trim()+ "--" + txtSubjest.Text.Trim();
-                mailMsg.BodyFormat = MailFormat.Text;
-                mailMsg.Body = txtBody.Text;
-                foreach (string strPath in lstbxAttach.Items)
-                {
-                    MailAttachment attach = new MailAttachment(strPath);
-                    mailMsg.Attachments.Add(attach);
-                }
-                mailMsg.Priority = MailPriority.High;
-                SmtpMail.SmtpServer = "smtp.gmail.com";//smtp is :smtp.gmail.com
-               // SmtpMail.SmtpServer = "plus.smtp.mail.yahoo.com";//smtp is :smtp.yahoo.com
-                mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1");
-                mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", "openmiracleuserfeedback@gmail.com");
-                mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", "humanwayofaccounting");
-                // - smtp.gmail.com use port 465 or 587
-                // - plus.smtp.mail.yahoo.com use port 465 or 587
-                mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport", "465");
-                mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl", "true");
-                SmtpMail.Send(mailMsg);
-                Cursor.Current = Cursors.Default;
-                isSend = true;
-                isCheck = true;
-                MessageBox.Show("Mail sent successfully ", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception)
-            {
-                Cursor.Current = Cursors.Default;
-                isSend = true;
-                MessageBox.Show("Mail sending failed", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            //try
+            //{
+            //    Cursor.Current = Cursors.WaitCursor;
+            //    MailMessage mailMsg = new MailMessage();
+            //    mailMsg.From = "openmiracleuserfeedback@gmail.com";
+            //    mailMsg.To = "openmiraclefeedback@gmail.com";
+            //    mailMsg.Subject = txtMailId.Text.Trim()+ "--" + txtSubjest.Text.Trim();
+            //    mailMsg.BodyFormat = MailFormat.Text;
+            //    mailMsg.Body = txtBody.Text;
+            //    foreach (string strPath in lstbxAttach.Items)
+            //    {
+            //        MailAttachment attach = new MailAttachment(strPath);
+            //        mailMsg.Attachments.Add(attach);
+            //    }
+            //    mailMsg.Priority = MailPriority.High;
+            //    SmtpMail.SmtpServer = "smtp.gmail.com";//smtp is :smtp.gmail.com
+            //   // SmtpMail.SmtpServer = "plus.smtp.mail.yahoo.com";//smtp is :smtp.yahoo.com
+            //    mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpauthenticate", "1");
+            //    mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendusername", "openmiracleuserfeedback@gmail.com");
+            //    mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/sendpassword", "humanwayofaccounting");
+            //    // - smtp.gmail.com use port 465 or 587
+            //    // - plus.smtp.mail.yahoo.com use port 465 or 587
+            //    mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpserverport", "465");
+            //    mailMsg.Fields.Add("http://schemas.microsoft.com/cdo/configuration/smtpusessl", "true");
+            //    SmtpMail.Send(mailMsg);
+            //    Cursor.Current = Cursors.Default;
+            //    isSend = true;
+            //    isCheck = true;
+            //    MessageBox.Show("Mail sent successfully ", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
+            //catch (Exception)
+            //{
+            //    Cursor.Current = Cursors.Default;
+            //    isSend = true;
+            //    MessageBox.Show("Mail sending failed", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            //}
         }
         public void SendMail()
         {

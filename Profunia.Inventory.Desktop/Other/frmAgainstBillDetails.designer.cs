@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Others
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Others
 {
     partial class frmAgainstBillDetails
     {
@@ -33,7 +35,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmAgainstBillDetails));
             this.lblVoucherType = new System.Windows.Forms.Label();
-            this.dgvAgainstBillDetails = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvAgainstBillDetails = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtvoucherTypeId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtVoucherType = new System.Windows.Forms.DataGridViewTextBoxColumn();

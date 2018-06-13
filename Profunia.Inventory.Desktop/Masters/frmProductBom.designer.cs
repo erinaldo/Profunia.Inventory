@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Masters
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Masters
 {
     partial class frmProductBom
     {
@@ -35,7 +37,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmProductBom));
             this.lblProduct = new System.Windows.Forms.Label();
             this.txtProduct = new System.Windows.Forms.TextBox();
-            this.dgvProductBOM = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProductBOM = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbRawMaterial = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvtxtQty = new System.Windows.Forms.DataGridViewTextBoxColumn();

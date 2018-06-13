@@ -10,6 +10,9 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -266,9 +269,9 @@ namespace Profunia.Inventory.Desktop.Reports
             try
             {
                 DataSet dsoutstanding = spPartyBalance.OutstandingPrint(decledgerId, strAccountGroup, dtfromdate, dttodate, 1);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.OutstandingPrinting(dsoutstanding);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.OutstandingPrinting(dsoutstanding);
             }
             catch (Exception ex)
             {

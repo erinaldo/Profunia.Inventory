@@ -1454,7 +1454,7 @@ namespace Profunia.Inventory.Desktop
             BackgroundImageLayout = ImageLayout.Stretch;
             base.ClientSize = new Size(1078, 660);
             //base.Controls.Add(ucCalculator1);
-            //base.Controls.Add(ucQuickLaunch1);
+           // base.Controls.Add(ucQuickLaunch1);
             base.Controls.Add(statusStrip);
             base.Controls.Add(menuStrip);
             DoubleBuffered = true;

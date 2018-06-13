@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmRejectionOut
     {
@@ -56,7 +58,7 @@
             this.txtDate = new System.Windows.Forms.TextBox();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
             this.btnLedgerAdd = new System.Windows.Forms.Button();
-            this.dgvProduct = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProduct = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.txtTransportationCompany = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.cmbVoucherType = new System.Windows.Forms.ComboBox();

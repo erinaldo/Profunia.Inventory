@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Masters
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Masters
 {
     partial class frmMultipleProductCreation
     {
@@ -54,7 +56,7 @@
             this.lblTax = new System.Windows.Forms.Label();
             this.cmbProductGroup = new System.Windows.Forms.ComboBox();
             this.lblProductGroup = new System.Windows.Forms.Label();
-            this.dgvMultipleProductCreation = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvMultipleProductCreation = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtProductCode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtProductName = new System.Windows.Forms.DataGridViewTextBoxColumn();

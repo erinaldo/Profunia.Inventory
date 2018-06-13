@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmSalesInvoice
     {
@@ -52,7 +54,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmSalesInvoice));
             this.txtBillDiscount = new System.Windows.Forms.TextBox();
             this.lblBillDiscount = new System.Windows.Forms.Label();
-            this.dgvSalesInvoiceTax = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvSalesInvoiceTax = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtTSlno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtTtaxId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvTxtTtaxName = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,7 +83,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtInvoiceNo = new System.Windows.Forms.TextBox();
             this.lblInvoiceNo = new System.Windows.Forms.Label();
-            this.dgvSalesInvoice = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvSalesInvoice = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.lblDate = new System.Windows.Forms.Label();
             this.txtCreditPeriod = new System.Windows.Forms.TextBox();
             this.lblDays = new System.Windows.Forms.Label();
@@ -90,7 +92,7 @@
             this.txtCustomer = new System.Windows.Forms.TextBox();
             this.lblCustomer = new System.Windows.Forms.Label();
             this.lblTotalQuantity = new System.Windows.Forms.Label();
-            this.dgvSalesInvoiceLedger = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvSalesInvoiceLedger = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtAditionalCostSlno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtAdditionalCostId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvCmbAdditionalCostledgerName = new System.Windows.Forms.DataGridViewComboBoxColumn();

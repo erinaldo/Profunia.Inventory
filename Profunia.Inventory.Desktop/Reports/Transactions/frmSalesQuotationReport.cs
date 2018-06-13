@@ -10,6 +10,10 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
+using Profunia.Inventory.Desktop.Transactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -349,9 +353,9 @@ namespace Profunia.Inventory.Desktop.Reports
                 {
                     ds.Tables.Add(dtblCompany);
                     ds.Tables.Add(dtblDetails);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.SalesQuotationReportPrinting(ds, txtTotalAmount.Text);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.SalesQuotationReportPrinting(ds, txtTotalAmount.Text);
                 }
                 else
                 {

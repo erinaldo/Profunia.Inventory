@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmReceiptVoucher
     {
@@ -52,7 +54,7 @@
             this.btnLedgerAdd = new System.Windows.Forms.Button();
             this.txtDate = new System.Windows.Forms.TextBox();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();
-            this.dgvReceiptVoucher = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvReceiptVoucher = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtreceiptMasterId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtreceiptDetailsId = new System.Windows.Forms.DataGridViewTextBoxColumn();

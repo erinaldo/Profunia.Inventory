@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmStockJournal
     {
@@ -49,7 +51,7 @@
             this.txtVoucherNo = new System.Windows.Forms.TextBox();
             this.lblDate = new System.Windows.Forms.Label();
             this.lblConsumption = new System.Windows.Forms.Label();
-            this.dgvConsumption = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvConsumption = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtConsumptionSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtConsumptionBarcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtConsumptionStockJournalDetailsId = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -66,7 +68,7 @@
             this.dgvtxtConsumptionRate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtConsumptionAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.lblProduction = new System.Windows.Forms.Label();
-            this.dgvAdditionalCost = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvAdditionalCost = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtAdditionalCostSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtAdditionalCostAdditionalCostId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbAdditionalCostLedger = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -79,7 +81,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.lblAdditionalCost = new System.Windows.Forms.Label();
-            this.dgvProduction = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProduction = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtProductionSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtProductionBarcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtProductionStockJournalDetailsId = new System.Windows.Forms.DataGridViewTextBoxColumn();

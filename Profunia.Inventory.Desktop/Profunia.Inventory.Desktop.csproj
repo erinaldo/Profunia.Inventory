@@ -51,6 +51,10 @@
     <Reference Include="itextsharp">
       <HintPath>..\..\..\..\Downloads\openmiracle-Sourcecode-783497755f061913a8412b0e6f6810a86cb19ef1\openmiracle-Sourcecode-783497755f061913a8412b0e6f6810a86cb19ef1\Open Miracle\bin\Debug\itextsharp.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=12.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c">
+      <HintPath>..\packages\Microsoft.Office.Interop.Excel.12.0.4518.1014\lib\net20\Microsoft.Office.Interop.Excel.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
     <Reference Include="Microsoft.ReportViewer.Common, Version=12.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\Windows\assembly\GAC_MSIL\Microsoft.ReportViewer.Common\12.0.0.0__89845dcd8080cc91\Microsoft.ReportViewer.Common.dll</HintPath>
@@ -68,9 +72,16 @@
     <Reference Include="Microsoft.SqlServer.Smo, Version=11.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
       <HintPath>..\packages\Microsoft.SqlServer.Scripting.11.0.2100.61\lib\Microsoft.SqlServer.Smo.dll</HintPath>
     </Reference>
+    <Reference Include="MiracleIChart.resources">
+      <HintPath>..\..\..\..\..\..\Program Files (x86)\Openmiracle\Openmiracle\ru-ru\MiracleIChart.resources.dll</HintPath>
+    </Reference>
+    <Reference Include="Printer_Settings">
+      <HintPath>..\..\..\..\Downloads\openmiracle-Sourcecode-783497755f061913a8412b0e6f6810a86cb19ef1\openmiracle-Sourcecode-783497755f061913a8412b0e6f6810a86cb19ef1\OpenmiracleOld\Open Miracle\bin\Debug\Printer_Settings.exe</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.ServiceProcess" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -99,6 +110,7 @@
     <Compile Include="ClassFiles\General\CheckUserPrivilege.cs" />
     <Compile Include="ClassFiles\General\Class1.cs" />
     <Compile Include="ClassFiles\General\Common.cs" />
+    <Compile Include="ClassFiles\General\ControlMover.cs" />
     <Compile Include="ClassFiles\General\CurrencyToAmount.cs" />
     <Compile Include="ClassFiles\General\DataCopy.cs" />
     <Compile Include="ClassFiles\General\DateInGrid.cs" />
@@ -355,12 +367,6 @@
     <Compile Include="Company\frmCompanyCreation.designer.cs">
       <DependentUpon>frmCompanyCreation.cs</DependentUpon>
     </Compile>
-    <Compile Include="Controls\frmQuickLaunch.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Controls\frmQuickLaunch.designer.cs">
-      <DependentUpon>frmQuickLaunch.cs</DependentUpon>
-    </Compile>
     <Compile Include="Controls\UserControlQuickLaunch.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -370,759 +376,353 @@
     <Compile Include="CrystalReports\crptDayBookReportCondensed.cs">
       <SubType>Component</SubType>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountGroupReport.cs">
+    <Compile Include="CrystalReports\DataSets\DataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsAccountGroupReport.cs">
       <DependentUpon>dsAccountGroupReport.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountGroupReport.Designer.cs">
+    <Compile Include="CrystalReports\DataSets\dsAccountGroupReport.Designer.cs">
       <DependentUpon>dsAccountGroupReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountGroupReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsAccountGroupReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountLedgerReport.cs">
+    <Compile Include="CrystalReports\DataSets\dsAccountLedgerReport.cs">
       <DependentUpon>dsAccountLedgerReport.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountLedgerReport.Designer.cs">
+    <Compile Include="CrystalReports\DataSets\dsAccountLedgerReport.Designer.cs">
       <DependentUpon>dsAccountLedgerReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAccountLedgerReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsAccountLedgerReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAdvancePaymentReport.cs">
+    <Compile Include="CrystalReports\DataSets\dsAdvancePaymentReport.cs">
       <DependentUpon>dsAdvancePaymentReport.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAdvancePaymentReport.Designer.cs">
+    <Compile Include="CrystalReports\DataSets\dsAdvancePaymentReport.Designer.cs">
       <DependentUpon>dsAdvancePaymentReport.cs</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAdvancePaymentReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsAdvancePaymentReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAgeing.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsAgeing1.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsAgeing11.Designer.cs">
+    <Compile Include="CrystalReports\DataSets\dsAgeing1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsAgeing1.xsd</DependentUpon>
     </Compile>
-    <Compile Include="CrystalReports\DataSet\dsAgeing2.Designer.cs">
+    <Compile Include="CrystalReports\DataSets\dsBalanceSheet.cs">
+      <DependentUpon>dsBalanceSheet.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsBalanceSheet.Designer.cs">
+      <DependentUpon>dsBalanceSheet.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsBonusAndDeductionReport.cs">
+      <DependentUpon>dsBonusAndDeductionReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsBonusAndDeductionReport.Designer.cs">
+      <DependentUpon>dsBonusAndDeductionReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsBudget.cs">
+      <DependentUpon>dsBudget.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsBudget.Designer.cs">
+      <DependentUpon>dsBudget.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsCashBankBook.cs">
+      <DependentUpon>dsCashBankBook.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsCashBankBook.Designer.cs">
+      <DependentUpon>dsCashBankBook.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsCashFlow.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsChartOfAccount.cs">
+      <DependentUpon>dsChartOfAccount.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsChartOfAccount.Designer.cs">
+      <DependentUpon>dsChartOfAccount.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsChequeReport.cs">
+      <DependentUpon>dsChequeReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsChequeReport.Designer.cs">
+      <DependentUpon>dsChequeReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsContraCoucherReport.cs">
+      <DependentUpon>dsContraCoucherReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsContraCoucherReport.Designer.cs">
+      <DependentUpon>dsContraCoucherReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsContraVoucher.cs">
+      <DependentUpon>dsContraVoucher.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsContraVoucher.Designer.cs">
+      <DependentUpon>dsContraVoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsCreditNote.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsCreditNoteReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsDailyAttendanceReport.cs">
+      <DependentUpon>dsDailyAttendanceReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDailyAttendanceReport.Designer.cs">
+      <DependentUpon>dsDailyAttendanceReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDailySalaryReport.cs">
+      <DependentUpon>dsDailySalaryReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDailySalaryReport.Designer.cs">
+      <DependentUpon>dsDailySalaryReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDayBookReport.cs">
+      <DependentUpon>dsDayBookReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDayBookReport.Designer.cs">
+      <DependentUpon>dsDayBookReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDayBookReportCondensed.cs">
+      <DependentUpon>dsDayBookReportCondensed.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDayBookReportCondensed.Designer.cs">
+      <DependentUpon>dsDayBookReportCondensed.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDebitNote.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsDebitNoteReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsDeliveryNote.cs">
+      <DependentUpon>dsDeliveryNote.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsDeliveryNote.Designer.cs">
+      <DependentUpon>dsDeliveryNote.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsdeliveryNoteReport.cs">
+      <DependentUpon>dsdeliveryNoteReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsdeliveryNoteReport.Designer.cs">
+      <DependentUpon>dsdeliveryNoteReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsEmployeeAddressBook.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsEmployeeReport.cs">
+      <DependentUpon>dsEmployeeReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsEmployeeReport.Designer.cs">
+      <DependentUpon>dsEmployeeReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsFreeSaleReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsFundFlow.cs">
+      <DependentUpon>dsFundFlow.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsFundFlow.Designer.cs">
+      <DependentUpon>dsFundFlow.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsJournalReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsJournalVoucher.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsMaterialReceipt.cs">
+      <DependentUpon>dsMaterialReceipt.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsMaterialReceipt.Designer.cs">
+      <DependentUpon>dsMaterialReceipt.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsMaterialReceiptReport.cs">
+      <DependentUpon>dsMaterialReceiptReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsMaterialReceiptReport.designer.cs">
+      <DependentUpon>dsMaterialReceiptReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsMonthlyAttendance.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsMonthlySalaryReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsOutstanding.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPartyAddressBook.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPayHeadReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPaymentReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPaymentVoucher.cs">
+      <DependentUpon>dsPaymentVoucher.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPaymentVoucher.Designer.cs">
+      <DependentUpon>dsPaymentVoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPaySlip.cs">
+      <DependentUpon>dsPaySlip.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPaySlip.Designer.cs">
+      <DependentUpon>dsPaySlip.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPDCClearanceReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPDCClearanceVoucher.cs">
+      <DependentUpon>dsPDCClearanceVoucher.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPDCClearanceVoucher.Designer.cs">
+      <DependentUpon>dsPDCClearanceVoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPDCPayable.cs">
+      <DependentUpon>dsPDCPayable.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPDCPayable.Designer.cs">
+      <DependentUpon>dsPDCPayable.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPdcPayableReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPDCReceivable.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPDCReceivableReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPhysicalStock.cs">
+      <DependentUpon>dsPhysicalStock.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPhysicalStock.Designer.cs">
+      <DependentUpon>dsPhysicalStock.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPhysicalStockReport.cs">
+      <DependentUpon>dsPhysicalStockReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPhysicalStockReport.Designer.cs">
+      <DependentUpon>dsPhysicalStockReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPriceLIstReport.cs">
+      <DependentUpon>dsPriceLIstReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPriceLIstReport.Designer.cs">
+      <DependentUpon>dsPriceLIstReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProductBatchReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsProductSearch.cs">
+      <DependentUpon>dsProductSearch.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProductSearch.Designer.cs">
+      <DependentUpon>dsProductSearch.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProductStatistics.cs">
+      <DependentUpon>dsProductStatistics.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProductStatistics.Designer.cs">
+      <DependentUpon>dsProductStatistics.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProfitAndLossReport.cs">
+      <DependentUpon>dsProfitAndLossReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsProfitAndLossReport.Designer.cs">
+      <DependentUpon>dsProfitAndLossReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseInvoice.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPurchaseOrder.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPurchaseOrderReport.cs">
+      <DependentUpon>dsPurchaseOrderReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseOrderReport.Designer.cs">
+      <DependentUpon>dsPurchaseOrderReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsPurchaseReturn.cs">
+      <DependentUpon>dsPurchaseReturn.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseReturn.Designer.cs">
+      <DependentUpon>dsPurchaseReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseReturnReport.cs">
+      <DependentUpon>dsPurchaseReturnReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsPurchaseReturnReport.Designer.cs">
+      <DependentUpon>dsPurchaseReturnReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsReceiptReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsReceiptvoucher.cs">
+      <DependentUpon>dsReceiptvoucher.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsReceiptvoucher.Designer.cs">
+      <DependentUpon>dsReceiptvoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsRejectionIn.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsRejectionInReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsRejectionOut.cs">
+      <DependentUpon>dsRejectionOut.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsRejectionOut.Designer.cs">
+      <DependentUpon>dsRejectionOut.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsRejectionOutReport.cs">
+      <DependentUpon>dsRejectionOutReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsRejectionOutReport.Designer.cs">
+      <DependentUpon>dsRejectionOutReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalaryPackageDetailsReport.cs">
+      <DependentUpon>dsSalaryPackageDetailsReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalaryPackageDetailsReport.Designer.cs">
+      <DependentUpon>dsSalaryPackageDetailsReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalaryPackageReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsSalesInvoice.cs">
+      <DependentUpon>dsSalesInvoice.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesInvoice.Designer.cs">
+      <DependentUpon>dsSalesInvoice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesInvoiceReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsSalesOrder.cs">
+      <DependentUpon>dsSalesOrder.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesOrder.Designer.cs">
+      <DependentUpon>dsSalesOrder.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesOrderReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsSalesQuotation.cs">
+      <DependentUpon>dsSalesQuotation.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesQuotation.Designer.cs">
+      <DependentUpon>dsSalesQuotation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesQuotationReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsSalesReturn.cs">
+      <DependentUpon>dsSalesReturn.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesReturn.Designer.cs">
+      <DependentUpon>dsSalesReturn.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesReturnReport.cs">
+      <DependentUpon>dsSalesReturnReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsSalesReturnReport.Designer.cs">
+      <DependentUpon>dsSalesReturnReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsServiceVoucher.cs">
+      <DependentUpon>dsServiceVoucher.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsServiceVoucher.Designer.cs">
+      <DependentUpon>dsServiceVoucher.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsServiceVoucherReport.cs">
+      <DependentUpon>dsServiceVoucherReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsServiceVoucherReport.Designer.cs">
+      <DependentUpon>dsServiceVoucherReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsShortExpiryReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\dsStockJournal.cs">
+      <DependentUpon>dsStockJournal.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsStockJournal.Designer.cs">
+      <DependentUpon>dsStockJournal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsStockJournalReport.cs">
+      <DependentUpon>dsStockJournalReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsStockJournalReport.Designer.cs">
+      <DependentUpon>dsStockJournalReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsStockReport.cs">
+      <DependentUpon>dsStockReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsStockReport.Designer.cs">
+      <DependentUpon>dsStockReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsTaxReport.Designer.cs" />
+    <Compile Include="CrystalReports\DataSets\DSTrailBalance.cs">
+      <DependentUpon>DSTrailBalance.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\DSTrailBalance.Designer.cs">
+      <DependentUpon>DSTrailBalance.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsVatreturnReport.cs">
+      <DependentUpon>dsVatreturnReport.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\DataSets\dsVatreturnReport.Designer.cs">
+      <DependentUpon>dsVatreturnReport.cs</DependentUpon>
+    </Compile>
+    <Compile Include="CrystalReports\dsAgeing.Designer.cs" />
+    <Compile Include="CrystalReports\dsAgeing1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>dsAgeing.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBalanceSheet.cs">
-      <DependentUpon>dsBalanceSheet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBalanceSheet.Designer.cs">
-      <DependentUpon>dsBalanceSheet.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBalanceSheet1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsBalanceSheet.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBonusAndDeductionReport.cs">
-      <DependentUpon>dsBonusAndDeductionReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBonusAndDeductionReport.Designer.cs">
-      <DependentUpon>dsBonusAndDeductionReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBonusAndDeductionReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsBonusAndDeductionReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBudget.cs">
-      <DependentUpon>dsBudget.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBudget.Designer.cs">
-      <DependentUpon>dsBudget.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsBudget1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsBudget.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCashBankBook.cs">
-      <DependentUpon>dsCashBankBook.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCashBankBook.Designer.cs">
-      <DependentUpon>dsCashBankBook.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCashBankBook1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsCashBankBook.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCashFlow.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsCashFlow1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsCashFlow.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChartOfAccount.cs">
-      <DependentUpon>dsChartOfAccount.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChartOfAccount.Designer.cs">
-      <DependentUpon>dsChartOfAccount.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChartOfAccount1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsChartOfAccount.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChequeReport.cs">
-      <DependentUpon>dsChequeReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChequeReport.Designer.cs">
-      <DependentUpon>dsChequeReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsChequeReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsChequeReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraCoucherReport.cs">
-      <DependentUpon>dsContraCoucherReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraCoucherReport.Designer.cs">
-      <DependentUpon>dsContraCoucherReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraCoucherReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsContraCoucherReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraVoucher.cs">
-      <DependentUpon>dsContraVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraVoucher.Designer.cs">
-      <DependentUpon>dsContraVoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsContraVoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsContraVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCreditNote.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsCreditNote1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsCreditNote.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsCreditNoteReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsCreditNoteReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsCreditNoteReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailyAttendanceReport.cs">
-      <DependentUpon>dsDailyAttendanceReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailyAttendanceReport.Designer.cs">
-      <DependentUpon>dsDailyAttendanceReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailyAttendanceReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDailyAttendanceReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailySalaryReport.cs">
-      <DependentUpon>dsDailySalaryReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailySalaryReport.Designer.cs">
-      <DependentUpon>dsDailySalaryReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDailySalaryReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDailySalaryReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReport.cs">
-      <DependentUpon>dsDayBookReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReport.Designer.cs">
-      <DependentUpon>dsDayBookReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDayBookReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReportCondensed.cs">
-      <DependentUpon>dsDayBookReportCondensed.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReportCondensed.Designer.cs">
-      <DependentUpon>dsDayBookReportCondensed.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDayBookReportCondensed1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDayBookReportCondensed.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDebitNote.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsDebitNote1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDebitNote.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDebitNoteReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsDebitNoteReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDebitNoteReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDeliveryNote.cs">
-      <DependentUpon>dsDeliveryNote.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDeliveryNote.Designer.cs">
-      <DependentUpon>dsDeliveryNote.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsDeliveryNote1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsDeliveryNote.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsdeliveryNoteReport.cs">
-      <DependentUpon>dsdeliveryNoteReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsdeliveryNoteReport.Designer.cs">
-      <DependentUpon>dsdeliveryNoteReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsdeliveryNoteReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsdeliveryNoteReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsEmployeeAddressBook.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsEmployeeAddressBook1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsEmployeeAddressBook.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsEmployeeReport.cs">
-      <DependentUpon>dsEmployeeReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsEmployeeReport.Designer.cs">
-      <DependentUpon>dsEmployeeReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsEmployeeReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsEmployeeReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsFreeSaleReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsFreeSaleReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsFreeSaleReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsFundFlow.cs">
-      <DependentUpon>dsFundFlow.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsFundFlow.Designer.cs">
-      <DependentUpon>dsFundFlow.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsFundFlow1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsFundFlow.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsJournalReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsJournalReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsJournalReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsJournalVoucher.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsJournalVoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsJournalVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceipt.cs">
-      <DependentUpon>dsMaterialReceipt.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceipt.Designer.cs">
-      <DependentUpon>dsMaterialReceipt.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceipt1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsMaterialReceipt.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceiptReport.cs">
-      <DependentUpon>dsMaterialReceiptReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceiptReport.Designer.cs">
-      <DependentUpon>dsMaterialReceiptReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMaterialReceiptReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsMaterialReceiptReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMonthlyAttendance.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsMonthlyAttendance1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsMonthlyAttendance.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsMonthlySalaryReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsMonthlySalaryReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsMonthlySalaryReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsOutstanding.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsOutstanding1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsOutstanding.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPartyAddressBook.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPartyAddressBook1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPartyAddressBook.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPayHeadReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPayHeadReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPayHeadReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaymentReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPaymentReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPaymentReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaymentVoucher.cs">
-      <DependentUpon>dsPaymentVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaymentVoucher.Designer.cs">
-      <DependentUpon>dsPaymentVoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaymentVoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPaymentVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaySlip.cs">
-      <DependentUpon>dsPaySlip.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaySlip.Designer.cs">
-      <DependentUpon>dsPaySlip.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPaySlip1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPaySlip.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCClearanceReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPDCClearanceReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPDCClearanceReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCClearanceVoucher.cs">
-      <DependentUpon>dsPDCClearanceVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCClearanceVoucher.Designer.cs">
-      <DependentUpon>dsPDCClearanceVoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCClearanceVoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPDCClearanceVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCPayable.cs">
-      <DependentUpon>dsPDCPayable.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCPayable.Designer.cs">
-      <DependentUpon>dsPDCPayable.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCPayable1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPDCPayable.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPdcPayableReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPdcPayableReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPdcPayableReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCReceivable.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPDCReceivable1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPDCReceivable.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPDCReceivableReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPDCReceivableReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPDCReceivableReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStock.cs">
-      <DependentUpon>dsPhysicalStock.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStock.Designer.cs">
-      <DependentUpon>dsPhysicalStock.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStock1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPhysicalStock.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStockReport.cs">
-      <DependentUpon>dsPhysicalStockReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStockReport.Designer.cs">
-      <DependentUpon>dsPhysicalStockReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPhysicalStockReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPhysicalStockReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPriceLIstReport.cs">
-      <DependentUpon>dsPriceLIstReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPriceLIstReport.Designer.cs">
-      <DependentUpon>dsPriceLIstReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPriceLIstReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPriceLIstReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductBatchReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsProductBatchReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsProductBatchReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductSearch.cs">
-      <DependentUpon>dsProductSearch.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductSearch.Designer.cs">
-      <DependentUpon>dsProductSearch.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductSearch1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsProductSearch.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductStatistics.cs">
-      <DependentUpon>dsProductStatistics.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductStatistics.Designer.cs">
-      <DependentUpon>dsProductStatistics.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProductStatistics1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsProductStatistics.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProfitAndLossReport.cs">
-      <DependentUpon>dsProfitAndLossReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProfitAndLossReport.Designer.cs">
-      <DependentUpon>dsProfitAndLossReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsProfitAndLossReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsProfitAndLossReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseInvoice.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPurchaseInvoice1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseInvoice.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseOrder.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPurchaseOrder1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseOrderReport.cs">
-      <DependentUpon>dsPurchaseOrderReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseOrderReport.Designer.cs">
-      <DependentUpon>dsPurchaseOrderReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseOrderReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseOrderReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturn.cs">
-      <DependentUpon>dsPurchaseReturn.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturn.Designer.cs">
-      <DependentUpon>dsPurchaseReturn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturn1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseReturn.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturnReport.cs">
-      <DependentUpon>dsPurchaseReturnReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturnReport.Designer.cs">
-      <DependentUpon>dsPurchaseReturnReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsPurchaseReturnReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsPurchaseReturnReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsReceiptReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsReceiptReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsReceiptReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsReceiptvoucher.cs">
-      <DependentUpon>dsReceiptvoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsReceiptvoucher.Designer.cs">
-      <DependentUpon>dsReceiptvoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsReceiptvoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsReceiptvoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionIn.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsRejectionIn1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsRejectionIn.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionInReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsRejectionInReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsRejectionInReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOut.cs">
-      <DependentUpon>dsRejectionOut.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOut.Designer.cs">
-      <DependentUpon>dsRejectionOut.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOut1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsRejectionOut.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOutReport.cs">
-      <DependentUpon>dsRejectionOutReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOutReport.Designer.cs">
-      <DependentUpon>dsRejectionOutReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsRejectionOutReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsRejectionOutReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport.cs">
-      <DependentUpon>dsSalaryPackageDetailsReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport.Designer.cs">
-      <DependentUpon>dsSalaryPackageDetailsReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalaryPackageDetailsReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalaryPackageReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsSalaryPackageReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalaryPackageReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesInvoice.cs">
-      <DependentUpon>dsSalesInvoice.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesInvoice.Designer.cs">
-      <DependentUpon>dsSalesInvoice.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesInvoice1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesInvoice.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesInvoiceReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsSalesInvoiceReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesInvoiceReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesOrder.cs">
-      <DependentUpon>dsSalesOrder.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesOrder.Designer.cs">
-      <DependentUpon>dsSalesOrder.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesOrder1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesOrder.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesOrderReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsSalesOrderReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesOrderReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesQuotation.cs">
-      <DependentUpon>dsSalesQuotation.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesQuotation.Designer.cs">
-      <DependentUpon>dsSalesQuotation.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesQuotation1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesQuotation.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesQuotationReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsSalesQuotationReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesQuotationReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturn.cs">
-      <DependentUpon>dsSalesReturn.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturn.Designer.cs">
-      <DependentUpon>dsSalesReturn.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturn1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesReturn.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturnReport.cs">
-      <DependentUpon>dsSalesReturnReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturnReport.Designer.cs">
-      <DependentUpon>dsSalesReturnReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsSalesReturnReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsSalesReturnReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucher.cs">
-      <DependentUpon>dsServiceVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucher.Designer.cs">
-      <DependentUpon>dsServiceVoucher.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucher1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsServiceVoucher.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucherReport.cs">
-      <DependentUpon>dsServiceVoucherReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucherReport.Designer.cs">
-      <DependentUpon>dsServiceVoucherReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsServiceVoucherReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsServiceVoucherReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsShortExpiryReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsShortExpiryReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsShortExpiryReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournal.cs">
-      <DependentUpon>dsStockJournal.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournal.Designer.cs">
-      <DependentUpon>dsStockJournal.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournal1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsStockJournal.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournalReport.cs">
-      <DependentUpon>dsStockJournalReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournalReport.Designer.cs">
-      <DependentUpon>dsStockJournalReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockJournalReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsStockJournalReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockReport.cs">
-      <DependentUpon>dsStockReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockReport.Designer.cs">
-      <DependentUpon>dsStockReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsStockReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsStockReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsTaxReport.Designer.cs" />
-    <Compile Include="CrystalReports\DataSet\dsTaxReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsTaxReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\DSTrailBalance.cs">
-      <DependentUpon>DSTrailBalance.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\DSTrailBalance.Designer.cs">
-      <DependentUpon>DSTrailBalance.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\DSTrailBalance1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DSTrailBalance.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsVatreturnReport.cs">
-      <DependentUpon>dsVatreturnReport.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsVatreturnReport.Designer.cs">
-      <DependentUpon>dsVatreturnReport.cs</DependentUpon>
-    </Compile>
-    <Compile Include="CrystalReports\DataSet\dsVatreturnReport1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>dsVatreturnReport.xsd</DependentUpon>
     </Compile>
     <Compile Include="CrystalReports\frmReport.cs">
       <SubType>Form</SubType>
@@ -1161,9 +761,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptChartOfAccount.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CrystalReports\Reports\crptChartOfAccount1.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptChequeReport.cs">
@@ -1209,9 +806,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptDeliveryNote.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CrystalReports\Reports\crptDeliveryNote1.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptDeliveryNoteReport.cs">
@@ -1398,9 +992,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptStockJournalReport.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="CrystalReports\Reports\crptStockReport.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="CrystalReports\Reports\crptTaxReportBillWise.cs">
@@ -2700,9 +2291,6 @@
     <EmbeddedResource Include="Company\frmCompanyCreation.resx">
       <DependentUpon>frmCompanyCreation.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Controls\frmQuickLaunch.resx">
-      <DependentUpon>frmQuickLaunch.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="CrystalReports\frmReport.resx">
       <DependentUpon>frmReport.cs</DependentUpon>
     </EmbeddedResource>
@@ -3333,931 +2921,942 @@
     </EmbeddedResource>
     <None Include="ClassFiles\General\vssver2.scc" />
     <None Include="CrystalReports\crptDayBookReportCondensed.rpt" />
-    <None Include="CrystalReports\DataSet\dsAccountGroupReport.xsc">
+    <None Include="CrystalReports\DataSets\DataSet1.xsc">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="CrystalReports\DataSets\DataSet1.xsd">
+      <SubType>Designer</SubType>
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>DataSet1.Designer.cs</LastGenOutput>
+    </None>
+    <None Include="CrystalReports\DataSets\DataSet1.xss">
+      <DependentUpon>DataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="CrystalReports\DataSets\dsAccountGroupReport.xsc">
       <DependentUpon>dsAccountGroupReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAccountGroupReport.xsd">
+    <None Include="CrystalReports\DataSets\dsAccountGroupReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsAccountGroupReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsAccountGroupReport.xss">
+    <None Include="CrystalReports\DataSets\dsAccountGroupReport.xss">
       <DependentUpon>dsAccountGroupReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAccountLedgerReport.xsc">
+    <None Include="CrystalReports\DataSets\dsAccountLedgerReport.xsc">
       <DependentUpon>dsAccountLedgerReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAccountLedgerReport.xsd">
+    <None Include="CrystalReports\DataSets\dsAccountLedgerReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsAccountLedgerReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsAccountLedgerReport.xss">
+    <None Include="CrystalReports\DataSets\dsAccountLedgerReport.xss">
       <DependentUpon>dsAccountLedgerReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAdvancePaymentReport.xsc">
+    <None Include="CrystalReports\DataSets\dsAdvancePaymentReport.xsc">
       <DependentUpon>dsAdvancePaymentReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAdvancePaymentReport.xsd">
+    <None Include="CrystalReports\DataSets\dsAdvancePaymentReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsAdvancePaymentReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsAdvancePaymentReport.xss">
+    <None Include="CrystalReports\DataSets\dsAdvancePaymentReport.xss">
       <DependentUpon>dsAdvancePaymentReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAgeing.xsc">
-      <DependentUpon>dsAgeing.xsd</DependentUpon>
-    </None>
-    <None Include="CrystalReports\DataSet\dsAgeing.xsd">
-      <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsAgeing2.Designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="CrystalReports\DataSet\dsAgeing.xss">
-      <DependentUpon>dsAgeing.xsd</DependentUpon>
-    </None>
-    <None Include="CrystalReports\DataSet\dsAgeing1.xsc">
+    <None Include="CrystalReports\DataSets\dsAgeing1.xsc">
       <DependentUpon>dsAgeing1.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsAgeing1.xsd">
+    <None Include="CrystalReports\DataSets\dsAgeing1.xsd">
       <Generator>MSDataSetGenerator</Generator>
-      <LastGenOutput>dsAgeing11.Designer.cs</LastGenOutput>
+      <LastGenOutput>dsAgeing1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsAgeing1.xss">
+    <None Include="CrystalReports\DataSets\dsAgeing1.xss">
       <DependentUpon>dsAgeing1.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBalanceSheet.xsc">
+    <None Include="CrystalReports\DataSets\dsBalanceSheet.xsc">
       <DependentUpon>dsBalanceSheet.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBalanceSheet.xsd">
+    <None Include="CrystalReports\DataSets\dsBalanceSheet.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsBalanceSheet1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsBalanceSheet.xss">
+    <None Include="CrystalReports\DataSets\dsBalanceSheet.xss">
       <DependentUpon>dsBalanceSheet.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBonusAndDeductionReport.xsc">
+    <None Include="CrystalReports\DataSets\dsBonusAndDeductionReport.xsc">
       <DependentUpon>dsBonusAndDeductionReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBonusAndDeductionReport.xsd">
+    <None Include="CrystalReports\DataSets\dsBonusAndDeductionReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsBonusAndDeductionReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsBonusAndDeductionReport.xss">
+    <None Include="CrystalReports\DataSets\dsBonusAndDeductionReport.xss">
       <DependentUpon>dsBonusAndDeductionReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBudget.xsc">
+    <None Include="CrystalReports\DataSets\dsBudget.xsc">
       <DependentUpon>dsBudget.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsBudget.xsd">
+    <None Include="CrystalReports\DataSets\dsBudget.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsBudget1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsBudget.xss">
+    <None Include="CrystalReports\DataSets\dsBudget.xss">
       <DependentUpon>dsBudget.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashBankBook.xsc">
+    <None Include="CrystalReports\DataSets\dsCashBankBook.xsc">
       <DependentUpon>dsCashBankBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashBankBook.xsd">
+    <None Include="CrystalReports\DataSets\dsCashBankBook.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsCashBankBook1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashBankBook.xss">
+    <None Include="CrystalReports\DataSets\dsCashBankBook.xss">
       <DependentUpon>dsCashBankBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashFlow.xsc">
+    <None Include="CrystalReports\DataSets\dsCashFlow.xsc">
       <DependentUpon>dsCashFlow.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashFlow.xsd">
+    <None Include="CrystalReports\DataSets\dsCashFlow.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsCashFlow1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsCashFlow.xss">
+    <None Include="CrystalReports\DataSets\dsCashFlow.xss">
       <DependentUpon>dsCashFlow.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsChartOfAccount.xsc">
+    <None Include="CrystalReports\DataSets\dsChartOfAccount.xsc">
       <DependentUpon>dsChartOfAccount.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsChartOfAccount.xsd">
+    <None Include="CrystalReports\DataSets\dsChartOfAccount.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsChartOfAccount1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsChartOfAccount.xss">
+    <None Include="CrystalReports\DataSets\dsChartOfAccount.xss">
       <DependentUpon>dsChartOfAccount.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsChequeReport.xsc">
+    <None Include="CrystalReports\DataSets\dsChequeReport.xsc">
       <DependentUpon>dsChequeReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsChequeReport.xsd">
+    <None Include="CrystalReports\DataSets\dsChequeReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsChequeReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsChequeReport.xss">
+    <None Include="CrystalReports\DataSets\dsChequeReport.xss">
       <DependentUpon>dsChequeReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraCoucherReport.xsc">
+    <None Include="CrystalReports\DataSets\dsContraCoucherReport.xsc">
       <DependentUpon>dsContraCoucherReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraCoucherReport.xsd">
+    <None Include="CrystalReports\DataSets\dsContraCoucherReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsContraCoucherReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraCoucherReport.xss">
+    <None Include="CrystalReports\DataSets\dsContraCoucherReport.xss">
       <DependentUpon>dsContraCoucherReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraVoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsContraVoucher.xsc">
       <DependentUpon>dsContraVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraVoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsContraVoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsContraVoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsContraVoucher.xss">
+    <None Include="CrystalReports\DataSets\dsContraVoucher.xss">
       <DependentUpon>dsContraVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNote.xsc">
+    <None Include="CrystalReports\DataSets\dsCreditNote.xsc">
       <DependentUpon>dsCreditNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNote.xsd">
+    <None Include="CrystalReports\DataSets\dsCreditNote.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsCreditNote1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNote.xss">
+    <None Include="CrystalReports\DataSets\dsCreditNote.xss">
       <DependentUpon>dsCreditNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNoteReport.xsc">
+    <None Include="CrystalReports\DataSets\dsCreditNoteReport.xsc">
       <DependentUpon>dsCreditNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNoteReport.xsd">
+    <None Include="CrystalReports\DataSets\dsCreditNoteReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsCreditNoteReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsCreditNoteReport.xss">
+    <None Include="CrystalReports\DataSets\dsCreditNoteReport.xss">
       <DependentUpon>dsCreditNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailyAttendanceReport.xsc">
+    <None Include="CrystalReports\DataSets\dsDailyAttendanceReport.xsc">
       <DependentUpon>dsDailyAttendanceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailyAttendanceReport.xsd">
+    <None Include="CrystalReports\DataSets\dsDailyAttendanceReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDailyAttendanceReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailyAttendanceReport.xss">
+    <None Include="CrystalReports\DataSets\dsDailyAttendanceReport.xss">
       <DependentUpon>dsDailyAttendanceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailySalaryReport.xsc">
+    <None Include="CrystalReports\DataSets\dsDailySalaryReport.xsc">
       <DependentUpon>dsDailySalaryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailySalaryReport.xsd">
+    <None Include="CrystalReports\DataSets\dsDailySalaryReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDailySalaryReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDailySalaryReport.xss">
+    <None Include="CrystalReports\DataSets\dsDailySalaryReport.xss">
       <DependentUpon>dsDailySalaryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReport.xsc">
+    <None Include="CrystalReports\DataSets\dsDayBookReport.xsc">
       <DependentUpon>dsDayBookReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReport.xsd">
+    <None Include="CrystalReports\DataSets\dsDayBookReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDayBookReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReport.xss">
+    <None Include="CrystalReports\DataSets\dsDayBookReport.xss">
       <DependentUpon>dsDayBookReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReportCondensed.xsc">
+    <None Include="CrystalReports\DataSets\dsDayBookReportCondensed.xsc">
       <DependentUpon>dsDayBookReportCondensed.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReportCondensed.xsd">
+    <None Include="CrystalReports\DataSets\dsDayBookReportCondensed.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDayBookReportCondensed1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDayBookReportCondensed.xss">
+    <None Include="CrystalReports\DataSets\dsDayBookReportCondensed.xss">
       <DependentUpon>dsDayBookReportCondensed.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNote.xsc">
+    <None Include="CrystalReports\DataSets\dsDebitNote.xsc">
       <DependentUpon>dsDebitNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNote.xsd">
+    <None Include="CrystalReports\DataSets\dsDebitNote.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDebitNote1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNote.xss">
+    <None Include="CrystalReports\DataSets\dsDebitNote.xss">
       <DependentUpon>dsDebitNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNoteReport.xsc">
+    <None Include="CrystalReports\DataSets\dsDebitNoteReport.xsc">
       <DependentUpon>dsDebitNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNoteReport.xsd">
+    <None Include="CrystalReports\DataSets\dsDebitNoteReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDebitNoteReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDebitNoteReport.xss">
+    <None Include="CrystalReports\DataSets\dsDebitNoteReport.xss">
       <DependentUpon>dsDebitNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDeliveryNote.xsc">
+    <None Include="CrystalReports\DataSets\dsDeliveryNote.xsc">
       <DependentUpon>dsDeliveryNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsDeliveryNote.xsd">
+    <None Include="CrystalReports\DataSets\dsDeliveryNote.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsDeliveryNote1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsDeliveryNote.xss">
+    <None Include="CrystalReports\DataSets\dsDeliveryNote.xss">
       <DependentUpon>dsDeliveryNote.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsdeliveryNoteReport.xsc">
+    <None Include="CrystalReports\DataSets\dsdeliveryNoteReport.xsc">
       <DependentUpon>dsdeliveryNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsdeliveryNoteReport.xsd">
+    <None Include="CrystalReports\DataSets\dsdeliveryNoteReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsdeliveryNoteReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsdeliveryNoteReport.xss">
+    <None Include="CrystalReports\DataSets\dsdeliveryNoteReport.xss">
       <DependentUpon>dsdeliveryNoteReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeAddressBook.xsc">
+    <None Include="CrystalReports\DataSets\dsEmployeeAddressBook.xsc">
       <DependentUpon>dsEmployeeAddressBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeAddressBook.xsd">
+    <None Include="CrystalReports\DataSets\dsEmployeeAddressBook.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsEmployeeAddressBook1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeAddressBook.xss">
+    <None Include="CrystalReports\DataSets\dsEmployeeAddressBook.xss">
       <DependentUpon>dsEmployeeAddressBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeReport.xsc">
+    <None Include="CrystalReports\DataSets\dsEmployeeReport.xsc">
       <DependentUpon>dsEmployeeReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeReport.xsd">
+    <None Include="CrystalReports\DataSets\dsEmployeeReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsEmployeeReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsEmployeeReport.xss">
+    <None Include="CrystalReports\DataSets\dsEmployeeReport.xss">
       <DependentUpon>dsEmployeeReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsFreeSaleReport.xsc">
+    <None Include="CrystalReports\DataSets\dsFreeSaleReport.xsc">
       <DependentUpon>dsFreeSaleReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsFreeSaleReport.xsd">
+    <None Include="CrystalReports\DataSets\dsFreeSaleReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsFreeSaleReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsFreeSaleReport.xss">
+    <None Include="CrystalReports\DataSets\dsFreeSaleReport.xss">
       <DependentUpon>dsFreeSaleReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsFundFlow.xsc">
+    <None Include="CrystalReports\DataSets\dsFundFlow.xsc">
       <DependentUpon>dsFundFlow.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsFundFlow.xsd">
+    <None Include="CrystalReports\DataSets\dsFundFlow.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsFundFlow1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsFundFlow.xss">
+    <None Include="CrystalReports\DataSets\dsFundFlow.xss">
       <DependentUpon>dsFundFlow.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalReport.xsc">
+    <None Include="CrystalReports\DataSets\dsJournalReport.xsc">
       <DependentUpon>dsJournalReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalReport.xsd">
+    <None Include="CrystalReports\DataSets\dsJournalReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsJournalReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalReport.xss">
+    <None Include="CrystalReports\DataSets\dsJournalReport.xss">
       <DependentUpon>dsJournalReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalVoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsJournalVoucher.xsc">
       <DependentUpon>dsJournalVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalVoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsJournalVoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsJournalVoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsJournalVoucher.xss">
+    <None Include="CrystalReports\DataSets\dsJournalVoucher.xss">
       <DependentUpon>dsJournalVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceipt.xsc">
+    <None Include="CrystalReports\DataSets\dsMaterialReceipt.xsc">
       <DependentUpon>dsMaterialReceipt.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceipt.xsd">
+    <None Include="CrystalReports\DataSets\dsMaterialReceipt.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsMaterialReceipt1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceipt.xss">
+    <None Include="CrystalReports\DataSets\dsMaterialReceipt.xss">
       <DependentUpon>dsMaterialReceipt.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceiptReport.xsc">
+    <None Include="CrystalReports\DataSets\dsMaterialReceiptReport.xsc">
       <DependentUpon>dsMaterialReceiptReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceiptReport.xsd">
+    <None Include="CrystalReports\DataSets\dsMaterialReceiptReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsMaterialReceiptReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsMaterialReceiptReport.xss">
+    <None Include="CrystalReports\DataSets\dsMaterialReceiptReport.xss">
       <DependentUpon>dsMaterialReceiptReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlyAttendance.xsc">
+    <None Include="CrystalReports\DataSets\dsMonthlyAttendance.xsc">
       <DependentUpon>dsMonthlyAttendance.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlyAttendance.xsd">
+    <None Include="CrystalReports\DataSets\dsMonthlyAttendance.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsMonthlyAttendance1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlyAttendance.xss">
+    <None Include="CrystalReports\DataSets\dsMonthlyAttendance.xss">
       <DependentUpon>dsMonthlyAttendance.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlySalaryReport.xsc">
+    <None Include="CrystalReports\DataSets\dsMonthlySalaryReport.xsc">
       <DependentUpon>dsMonthlySalaryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlySalaryReport.xsd">
+    <None Include="CrystalReports\DataSets\dsMonthlySalaryReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsMonthlySalaryReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsMonthlySalaryReport.xss">
+    <None Include="CrystalReports\DataSets\dsMonthlySalaryReport.xss">
       <DependentUpon>dsMonthlySalaryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsOutstanding.xsc">
+    <None Include="CrystalReports\DataSets\dsOutstanding.xsc">
       <DependentUpon>dsOutstanding.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsOutstanding.xsd">
+    <None Include="CrystalReports\DataSets\dsOutstanding.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsOutstanding1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsOutstanding.xss">
+    <None Include="CrystalReports\DataSets\dsOutstanding.xss">
       <DependentUpon>dsOutstanding.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPartyAddressBook.xsc">
+    <None Include="CrystalReports\DataSets\dsPartyAddressBook.xsc">
       <DependentUpon>dsPartyAddressBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPartyAddressBook.xsd">
+    <None Include="CrystalReports\DataSets\dsPartyAddressBook.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPartyAddressBook1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPartyAddressBook.xss">
+    <None Include="CrystalReports\DataSets\dsPartyAddressBook.xss">
       <DependentUpon>dsPartyAddressBook.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPayHeadReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPayHeadReport.xsc">
       <DependentUpon>dsPayHeadReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPayHeadReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPayHeadReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPayHeadReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPayHeadReport.xss">
+    <None Include="CrystalReports\DataSets\dsPayHeadReport.xss">
       <DependentUpon>dsPayHeadReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPaymentReport.xsc">
       <DependentUpon>dsPaymentReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPaymentReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPaymentReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentReport.xss">
+    <None Include="CrystalReports\DataSets\dsPaymentReport.xss">
       <DependentUpon>dsPaymentReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentVoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsPaymentVoucher.xsc">
       <DependentUpon>dsPaymentVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentVoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsPaymentVoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPaymentVoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaymentVoucher.xss">
+    <None Include="CrystalReports\DataSets\dsPaymentVoucher.xss">
       <DependentUpon>dsPaymentVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaySlip.xsc">
+    <None Include="CrystalReports\DataSets\dsPaySlip.xsc">
       <DependentUpon>dsPaySlip.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaySlip.xsd">
+    <None Include="CrystalReports\DataSets\dsPaySlip.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPaySlip1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPaySlip.xss">
+    <None Include="CrystalReports\DataSets\dsPaySlip.xss">
       <DependentUpon>dsPaySlip.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceReport.xsc">
       <DependentUpon>dsPDCClearanceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPDCClearanceReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceReport.xss">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceReport.xss">
       <DependentUpon>dsPDCClearanceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceVoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceVoucher.xsc">
       <DependentUpon>dsPDCClearanceVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceVoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceVoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPDCClearanceVoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCClearanceVoucher.xss">
+    <None Include="CrystalReports\DataSets\dsPDCClearanceVoucher.xss">
       <DependentUpon>dsPDCClearanceVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCPayable.xsc">
+    <None Include="CrystalReports\DataSets\dsPDCPayable.xsc">
       <DependentUpon>dsPDCPayable.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCPayable.xsd">
+    <None Include="CrystalReports\DataSets\dsPDCPayable.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPDCPayable1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCPayable.xss">
+    <None Include="CrystalReports\DataSets\dsPDCPayable.xss">
       <DependentUpon>dsPDCPayable.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPdcPayableReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPdcPayableReport.xsc">
       <DependentUpon>dsPdcPayableReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPdcPayableReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPdcPayableReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPdcPayableReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPdcPayableReport.xss">
+    <None Include="CrystalReports\DataSets\dsPdcPayableReport.xss">
       <DependentUpon>dsPdcPayableReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivable.xsc">
+    <None Include="CrystalReports\DataSets\dsPDCReceivable.xsc">
       <DependentUpon>dsPDCReceivable.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivable.xsd">
+    <None Include="CrystalReports\DataSets\dsPDCReceivable.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPDCReceivable1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivable.xss">
+    <None Include="CrystalReports\DataSets\dsPDCReceivable.xss">
       <DependentUpon>dsPDCReceivable.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivableReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPDCReceivableReport.xsc">
       <DependentUpon>dsPDCReceivableReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivableReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPDCReceivableReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPDCReceivableReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPDCReceivableReport.xss">
+    <None Include="CrystalReports\DataSets\dsPDCReceivableReport.xss">
       <DependentUpon>dsPDCReceivableReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStock.xsc">
+    <None Include="CrystalReports\DataSets\dsPhysicalStock.xsc">
       <DependentUpon>dsPhysicalStock.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStock.xsd">
+    <None Include="CrystalReports\DataSets\dsPhysicalStock.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPhysicalStock1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStock.xss">
+    <None Include="CrystalReports\DataSets\dsPhysicalStock.xss">
       <DependentUpon>dsPhysicalStock.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStockReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPhysicalStockReport.xsc">
       <DependentUpon>dsPhysicalStockReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStockReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPhysicalStockReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPhysicalStockReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPhysicalStockReport.xss">
+    <None Include="CrystalReports\DataSets\dsPhysicalStockReport.xss">
       <DependentUpon>dsPhysicalStockReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPriceLIstReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPriceLIstReport.xsc">
       <DependentUpon>dsPriceLIstReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPriceLIstReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPriceLIstReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPriceLIstReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPriceLIstReport.xss">
+    <None Include="CrystalReports\DataSets\dsPriceLIstReport.xss">
       <DependentUpon>dsPriceLIstReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductBatchReport.xsc">
+    <None Include="CrystalReports\DataSets\dsProductBatchReport.xsc">
       <DependentUpon>dsProductBatchReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductBatchReport.xsd">
+    <None Include="CrystalReports\DataSets\dsProductBatchReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsProductBatchReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductBatchReport.xss">
+    <None Include="CrystalReports\DataSets\dsProductBatchReport.xss">
       <DependentUpon>dsProductBatchReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductSearch.xsc">
+    <None Include="CrystalReports\DataSets\dsProductSearch.xsc">
       <DependentUpon>dsProductSearch.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductSearch.xsd">
+    <None Include="CrystalReports\DataSets\dsProductSearch.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsProductSearch1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductSearch.xss">
+    <None Include="CrystalReports\DataSets\dsProductSearch.xss">
       <DependentUpon>dsProductSearch.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductStatistics.xsc">
+    <None Include="CrystalReports\DataSets\dsProductStatistics.xsc">
       <DependentUpon>dsProductStatistics.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductStatistics.xsd">
+    <None Include="CrystalReports\DataSets\dsProductStatistics.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsProductStatistics1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsProductStatistics.xss">
+    <None Include="CrystalReports\DataSets\dsProductStatistics.xss">
       <DependentUpon>dsProductStatistics.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProfitAndLossReport.xsc">
+    <None Include="CrystalReports\DataSets\dsProfitAndLossReport.xsc">
       <DependentUpon>dsProfitAndLossReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsProfitAndLossReport.xsd">
+    <None Include="CrystalReports\DataSets\dsProfitAndLossReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsProfitAndLossReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsProfitAndLossReport.xss">
+    <None Include="CrystalReports\DataSets\dsProfitAndLossReport.xss">
       <DependentUpon>dsProfitAndLossReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseInvoice.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseInvoice.xsc">
       <DependentUpon>dsPurchaseInvoice.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseInvoice.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseInvoice.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseInvoice1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseInvoice.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseInvoice.xss">
       <DependentUpon>dsPurchaseInvoice.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrder.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrder.xsc">
       <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrder.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrder.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseOrder1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrder.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrder.xss">
       <DependentUpon>dsPurchaseOrder.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrderReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrderReport.xsc">
       <DependentUpon>dsPurchaseOrderReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrderReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrderReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseOrderReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseOrderReport.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseOrderReport.xss">
       <DependentUpon>dsPurchaseOrderReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseReport.xsc">
       <DependentUpon>dsPurchaseReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReport.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseReport.xss">
       <DependentUpon>dsPurchaseReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturn.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturn.xsc">
       <DependentUpon>dsPurchaseReturn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturn.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturn.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseReturn1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturn.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturn.xss">
       <DependentUpon>dsPurchaseReturn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturnReport.xsc">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturnReport.xsc">
       <DependentUpon>dsPurchaseReturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturnReport.xsd">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturnReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsPurchaseReturnReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsPurchaseReturnReport.xss">
+    <None Include="CrystalReports\DataSets\dsPurchaseReturnReport.xss">
       <DependentUpon>dsPurchaseReturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptReport.xsc">
+    <None Include="CrystalReports\DataSets\dsReceiptReport.xsc">
       <DependentUpon>dsReceiptReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptReport.xsd">
+    <None Include="CrystalReports\DataSets\dsReceiptReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReceiptReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptReport.xss">
+    <None Include="CrystalReports\DataSets\dsReceiptReport.xss">
       <DependentUpon>dsReceiptReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptvoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsReceiptvoucher.xsc">
       <DependentUpon>dsReceiptvoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptvoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsReceiptvoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsReceiptvoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsReceiptvoucher.xss">
+    <None Include="CrystalReports\DataSets\dsReceiptvoucher.xss">
       <DependentUpon>dsReceiptvoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionIn.xsc">
+    <None Include="CrystalReports\DataSets\dsRejectionIn.xsc">
       <DependentUpon>dsRejectionIn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionIn.xsd">
+    <None Include="CrystalReports\DataSets\dsRejectionIn.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsRejectionIn1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionIn.xss">
+    <None Include="CrystalReports\DataSets\dsRejectionIn.xss">
       <DependentUpon>dsRejectionIn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionInReport.xsc">
+    <None Include="CrystalReports\DataSets\dsRejectionInReport.xsc">
       <DependentUpon>dsRejectionInReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionInReport.xsd">
+    <None Include="CrystalReports\DataSets\dsRejectionInReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsRejectionInReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionInReport.xss">
+    <None Include="CrystalReports\DataSets\dsRejectionInReport.xss">
       <DependentUpon>dsRejectionInReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOut.xsc">
+    <None Include="CrystalReports\DataSets\dsRejectionOut.xsc">
       <DependentUpon>dsRejectionOut.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOut.xsd">
+    <None Include="CrystalReports\DataSets\dsRejectionOut.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsRejectionOut1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOut.xss">
+    <None Include="CrystalReports\DataSets\dsRejectionOut.xss">
       <DependentUpon>dsRejectionOut.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOutReport.xsc">
+    <None Include="CrystalReports\DataSets\dsRejectionOutReport.xsc">
       <DependentUpon>dsRejectionOutReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOutReport.xsd">
+    <None Include="CrystalReports\DataSets\dsRejectionOutReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsRejectionOutReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsRejectionOutReport.xss">
+    <None Include="CrystalReports\DataSets\dsRejectionOutReport.xss">
       <DependentUpon>dsRejectionOutReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageDetailsReport.xsc">
       <DependentUpon>dsSalaryPackageDetailsReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageDetailsReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalaryPackageDetailsReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageDetailsReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageDetailsReport.xss">
       <DependentUpon>dsSalaryPackageDetailsReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageReport.xsc">
       <DependentUpon>dsSalaryPackageReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalaryPackageReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalaryPackageReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalaryPackageReport.xss">
       <DependentUpon>dsSalaryPackageReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoice.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesInvoice.xsc">
       <DependentUpon>dsSalesInvoice.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoice.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesInvoice.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesInvoice1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoice.xss">
+    <None Include="CrystalReports\DataSets\dsSalesInvoice.xss">
       <DependentUpon>dsSalesInvoice.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoiceReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesInvoiceReport.xsc">
       <DependentUpon>dsSalesInvoiceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoiceReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesInvoiceReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesInvoiceReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesInvoiceReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalesInvoiceReport.xss">
       <DependentUpon>dsSalesInvoiceReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrder.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesOrder.xsc">
       <DependentUpon>dsSalesOrder.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrder.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesOrder.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesOrder1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrder.xss">
+    <None Include="CrystalReports\DataSets\dsSalesOrder.xss">
       <DependentUpon>dsSalesOrder.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrderReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesOrderReport.xsc">
       <DependentUpon>dsSalesOrderReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrderReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesOrderReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesOrderReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesOrderReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalesOrderReport.xss">
       <DependentUpon>dsSalesOrderReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotation.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesQuotation.xsc">
       <DependentUpon>dsSalesQuotation.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotation.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesQuotation.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesQuotation1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotation.xss">
+    <None Include="CrystalReports\DataSets\dsSalesQuotation.xss">
       <DependentUpon>dsSalesQuotation.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotationReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesQuotationReport.xsc">
       <DependentUpon>dsSalesQuotationReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotationReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesQuotationReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesQuotationReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesQuotationReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalesQuotationReport.xss">
       <DependentUpon>dsSalesQuotationReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturn.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesReturn.xsc">
       <DependentUpon>dsSalesReturn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturn.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesReturn.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesReturn1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturn.xss">
+    <None Include="CrystalReports\DataSets\dsSalesReturn.xss">
       <DependentUpon>dsSalesReturn.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturnReport.xsc">
+    <None Include="CrystalReports\DataSets\dsSalesReturnReport.xsc">
       <DependentUpon>dsSalesReturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturnReport.xsd">
+    <None Include="CrystalReports\DataSets\dsSalesReturnReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsSalesReturnReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsSalesReturnReport.xss">
+    <None Include="CrystalReports\DataSets\dsSalesReturnReport.xss">
       <DependentUpon>dsSalesReturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucher.xsc">
+    <None Include="CrystalReports\DataSets\dsServiceVoucher.xsc">
       <DependentUpon>dsServiceVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucher.xsd">
+    <None Include="CrystalReports\DataSets\dsServiceVoucher.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsServiceVoucher1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucher.xss">
+    <None Include="CrystalReports\DataSets\dsServiceVoucher.xss">
       <DependentUpon>dsServiceVoucher.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucherReport.xsc">
+    <None Include="CrystalReports\DataSets\dsServiceVoucherReport.xsc">
       <DependentUpon>dsServiceVoucherReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucherReport.xsd">
+    <None Include="CrystalReports\DataSets\dsServiceVoucherReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsServiceVoucherReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsServiceVoucherReport.xss">
+    <None Include="CrystalReports\DataSets\dsServiceVoucherReport.xss">
       <DependentUpon>dsServiceVoucherReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsShortExpiryReport.xsc">
+    <None Include="CrystalReports\DataSets\dsShortExpiryReport.xsc">
       <DependentUpon>dsShortExpiryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsShortExpiryReport.xsd">
+    <None Include="CrystalReports\DataSets\dsShortExpiryReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsShortExpiryReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsShortExpiryReport.xss">
+    <None Include="CrystalReports\DataSets\dsShortExpiryReport.xss">
       <DependentUpon>dsShortExpiryReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournal.xsc">
+    <None Include="CrystalReports\DataSets\dsStockJournal.xsc">
       <DependentUpon>dsStockJournal.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournal.xsd">
+    <None Include="CrystalReports\DataSets\dsStockJournal.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsStockJournal1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournal.xss">
+    <None Include="CrystalReports\DataSets\dsStockJournal.xss">
       <DependentUpon>dsStockJournal.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournalReport.xsc">
+    <None Include="CrystalReports\DataSets\dsStockJournalReport.xsc">
       <DependentUpon>dsStockJournalReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournalReport.xsd">
+    <None Include="CrystalReports\DataSets\dsStockJournalReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsStockJournalReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockJournalReport.xss">
+    <None Include="CrystalReports\DataSets\dsStockJournalReport.xss">
       <DependentUpon>dsStockJournalReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockReport.xsc">
+    <None Include="CrystalReports\DataSets\dsStockReport.xsc">
       <DependentUpon>dsStockReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockReport.xsd">
+    <None Include="CrystalReports\DataSets\dsStockReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsStockReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsStockReport.xss">
+    <None Include="CrystalReports\DataSets\dsStockReport.xss">
       <DependentUpon>dsStockReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsTaxReport.xsc">
+    <None Include="CrystalReports\DataSets\dsTaxReport.xsc">
       <DependentUpon>dsTaxReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsTaxReport.xsd">
+    <None Include="CrystalReports\DataSets\dsTaxReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsTaxReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsTaxReport.xss">
+    <None Include="CrystalReports\DataSets\dsTaxReport.xss">
       <DependentUpon>dsTaxReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\DSTrailBalance.xsc">
+    <None Include="CrystalReports\DataSets\DSTrailBalance.xsc">
       <DependentUpon>DSTrailBalance.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\DSTrailBalance.xsd">
+    <None Include="CrystalReports\DataSets\DSTrailBalance.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>DSTrailBalance1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\DSTrailBalance.xss">
+    <None Include="CrystalReports\DataSets\DSTrailBalance.xss">
       <DependentUpon>DSTrailBalance.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsVatreturnReport.xsc">
+    <None Include="CrystalReports\DataSets\dsVatreturnReport.xsc">
       <DependentUpon>dsVatreturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\dsVatreturnReport.xsd">
+    <None Include="CrystalReports\DataSets\dsVatreturnReport.xsd">
       <Generator>MSDataSetGenerator</Generator>
       <LastGenOutput>dsVatreturnReport1.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-    <None Include="CrystalReports\DataSet\dsVatreturnReport.xss">
+    <None Include="CrystalReports\DataSets\dsVatreturnReport.xss">
       <DependentUpon>dsVatreturnReport.xsd</DependentUpon>
     </None>
-    <None Include="CrystalReports\DataSet\vssver2.scc" />
+    <None Include="CrystalReports\DataSets\vssver2.scc" />
+    <None Include="CrystalReports\dsAgeing.xsc">
+      <DependentUpon>dsAgeing.xsd</DependentUpon>
+    </None>
+    <None Include="CrystalReports\dsAgeing.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>dsAgeing1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="CrystalReports\dsAgeing.xss">
+      <DependentUpon>dsAgeing.xsd</DependentUpon>
+    </None>
     <None Include="CrystalReports\Reports\crptAccountGroupReport.rpt" />
     <None Include="CrystalReports\Reports\crptAccountLedgerReport.rpt" />
     <None Include="CrystalReports\Reports\crptAdvancePayment.rpt" />
@@ -4346,7 +3945,6 @@
     <None Include="CrystalReports\Reports\crptShortExpiryReport.rpt" />
     <None Include="CrystalReports\Reports\crptStockJournal.rpt" />
     <None Include="CrystalReports\Reports\crptStockJournalReport.rpt" />
-    <None Include="CrystalReports\Reports\crptStockReport.rpt" />
     <None Include="CrystalReports\Reports\crptTaxReportBillWise.rpt" />
     <None Include="CrystalReports\Reports\crptTaxReportProductWise.rpt" />
     <None Include="CrystalReports\Reports\crptTrailBalance.rpt" />
@@ -4364,7 +3962,6 @@
     <None Include="CrystalReports\Reports\ProductStatisticsReports\crptProductStatisticsSlowMoving.rpt" />
     <None Include="CrystalReports\Reports\ProductStatisticsReports\crptProductStatisticsUnUsed.rpt" />
     <None Include="CrystalReports\Reports\ProductStatisticsReports\crptStockReport.rpt" />
-    <None Include="CrystalReports\Reports\ProductStatisticsReports\vssver2.scc" />
     <None Include="CrystalReports\Reports\vssver2.scc" />
     <None Include="Masters\vssver2.scc" />
     <None Include="packages.config" />
@@ -4378,11 +3975,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <None Include="Registers\vssver2.scc" />
     <None Include="Reminder\vssver2.scc" />
     <None Include="Reports\Payroll\vssver2.scc" />
     <None Include="Reports\Transactions\vssver2.scc" />
-    <None Include="Reports\vssver2.scc" />
     <None Include="Resources\Thumbs.db" />
     <None Include="Search\vssver2.scc" />
     <None Include="Transfer\vssver2.scc" />

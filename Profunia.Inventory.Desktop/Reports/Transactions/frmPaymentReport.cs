@@ -10,6 +10,10 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
+using Profunia.Inventory.Desktop.Transactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -36,9 +40,9 @@ namespace Profunia.Inventory.Desktop.Reports
             {
                 PaymentMasterSP SpPaymentMaster = new PaymentMasterSP();
                 DataSet dsPaymentReport = SpPaymentMaster.PaymentReportPrinting(Convert.ToDateTime(dtpFromDate.Value.ToString()), Convert.ToDateTime(dtpToDate.Value.ToString()), Convert.ToDecimal(cmbLedger.SelectedValue), Convert.ToDecimal(cmbVoucherType.SelectedValue), Convert.ToDecimal(cmbBankOrCash.SelectedValue), 1);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.PaymentReportPrinting(dsPaymentReport);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.PaymentReportPrinting(dsPaymentReport);
             }
             catch (Exception ex)
             {

@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmCreditNote
     {
@@ -46,7 +48,7 @@
             this.btnDelete = new System.Windows.Forms.Button();
             this.btnClear = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.dgvCreditNote = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvCreditNote = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbAccountLedger = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvcmbDrOrCr = new System.Windows.Forms.DataGridViewComboBoxColumn();

@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Budget
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Budget
 {
     partial class frmBudget
     {
@@ -59,7 +61,7 @@
             this.label14 = new System.Windows.Forms.Label();
             this.txtNarration = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
-            this.dgvBudget = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvBudget = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.budgetDetailsId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.check = new System.Windows.Forms.DataGridViewTextBoxColumn();

@@ -10,6 +10,9 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -400,8 +403,8 @@ namespace Profunia.Inventory.Desktop.Reports
             {
                 if (dgvPriceList.Rows.Count > 0)
                 {
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
                     DataTable dtblOption = new DataTable();
                     dtblOption.Columns.Add("PurchaseRate", typeof(String));
                     dtblOption.Columns.Add("SalesRate", typeof(String));
@@ -426,8 +429,8 @@ namespace Profunia.Inventory.Desktop.Reports
                     ds.Tables.Add(dtblCompanyReport);
                     ds.Tables.Add(dtblPriceList);
                     ds.Tables.Add(dtblOption);
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.PriceListReportPrinting(ds);
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.PriceListReportPrinting(ds);
                 }
                 else
                 {

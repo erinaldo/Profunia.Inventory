@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmPartyBalance
     {
@@ -37,7 +39,7 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmPartyBalance));
             this.btnClose = new System.Windows.Forms.Button();
             this.btnSave = new System.Windows.Forms.Button();
-            this.dgvPartyBalance = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvPartyBalance = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.txtTotalAmount = new System.Windows.Forms.TextBox();
             this.lblTotalAmount = new System.Windows.Forms.Label();
             this.lnklblRemove = new System.Windows.Forms.LinkLabel();

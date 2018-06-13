@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmPurchaseInvoice
     {
@@ -80,7 +82,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtVoucherNo = new System.Windows.Forms.TextBox();
             this.lblVoucherNo = new System.Windows.Forms.Label();
-            this.dgvProductDetails = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProductDetails = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.lblVoucherDate = new System.Windows.Forms.Label();
             this.txtVendorInvoiceNo = new System.Windows.Forms.TextBox();
             this.cmbPurchaseMode = new System.Windows.Forms.ComboBox();
@@ -91,7 +93,7 @@
             this.lblDays = new System.Windows.Forms.Label();
             this.cmbOrderNo = new System.Windows.Forms.ComboBox();
             this.lblOrderNo = new System.Windows.Forms.Label();
-            this.dgvAdditionalCost = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvAdditionalCost = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNoAdditionalCost = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtAdditionalCostId = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbLedger = new System.Windows.Forms.DataGridViewComboBoxColumn();

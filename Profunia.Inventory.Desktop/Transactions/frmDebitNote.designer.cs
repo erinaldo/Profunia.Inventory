@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmDebitNote
     {
@@ -50,7 +52,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtNarration = new System.Windows.Forms.TextBox();
             this.lnklblRemove = new System.Windows.Forms.LinkLabel();
-            this.dgvDebitNote = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvDebitNote = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbAccountLedger = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvcmbDrOrCr = new System.Windows.Forms.DataGridViewComboBoxColumn();

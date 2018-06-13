@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Masters
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Masters
 {
     partial class frmProductCreation
     {
@@ -54,7 +56,7 @@
             this.lblProductCode = new System.Windows.Forms.Label();
             this.btnSave = new System.Windows.Forms.Button();
             this.lblName = new System.Windows.Forms.Label();
-            this.dgvProductCreation = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProductCreation = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtslno = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbtgodown = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvcmbrack = new System.Windows.Forms.DataGridViewComboBoxColumn();

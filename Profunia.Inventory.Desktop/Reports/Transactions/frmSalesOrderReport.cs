@@ -10,6 +10,10 @@
 //GNU General Public License for more details.
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
+using Profunia.Inventory.Desktop.Transactions;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -44,6 +48,8 @@ namespace Profunia.Inventory.Desktop.Reports
         DataTable dtblSalesOrderReport = new DataTable();
         ProductSP spProduct = new ProductSP();
         DataTable dtbl = new DataTable();
+
+        internal SalesQuotationMasterSP SPSalesQuotationMaster1 { get => SPSalesQuotationMaster; set => SPSalesQuotationMaster = value; }
         #endregion
         #region Functions
         /// <summary>
@@ -494,9 +500,9 @@ namespace Profunia.Inventory.Desktop.Reports
                 {
                     dsSalesOrderReport.Tables.Add(dtblCompany);
                     dsSalesOrderReport.Tables.Add(dtblDetails);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.SalesOrderReportPrinting(dsSalesOrderReport, txtTotalAmount.Text);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.SalesOrderReportPrinting(dsSalesOrderReport, txtTotalAmount.Text);
                 }
                 else
                 {

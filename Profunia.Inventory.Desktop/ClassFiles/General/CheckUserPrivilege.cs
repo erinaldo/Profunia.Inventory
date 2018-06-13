@@ -16,6 +16,8 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using System.Data.SqlClient;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+
 namespace Profunia.Inventory.Desktop.ClassFiles.General
 {
     class CheckUserPrivilege : DBConnection

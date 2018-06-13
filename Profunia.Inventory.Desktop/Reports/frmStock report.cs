@@ -11,6 +11,10 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -382,9 +386,9 @@ namespace Profunia.Inventory.Desktop.Reports
                     decimal decrackId = 0;
                     DataSet dsStockReport = spStock.StockReportPrint(txtproductName.Text, Convert.ToDecimal(cmbBrand.SelectedValue.ToString()), Convert.ToDecimal(cmbModel.SelectedValue.ToString()), txtProductCode.Text, Convert.ToDecimal(cmbGodown.SelectedValue.ToString()), decrackId, Convert.ToDecimal(cmbSize.SelectedValue.ToString()), Convert.ToDecimal(cmbTax.SelectedValue.ToString()), Convert.ToDecimal(cmbProductgroup.SelectedValue.ToString()), txtBatchName.Text);
 
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.StockReportPrinting(dsStockReport, txtTotal.Text);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.StockReportPrinting(dsStockReport, txtTotal.Text);
                 }
                 else
                 {

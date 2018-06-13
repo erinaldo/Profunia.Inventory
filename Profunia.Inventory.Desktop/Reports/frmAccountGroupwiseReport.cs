@@ -19,6 +19,12 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.FinancialStatements;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+using Profunia.Inventory.Desktop.Others;
+using Profunia.Inventory.Desktop.ClassFiles.General;
+
 namespace Profunia.Inventory.Desktop.Reports
 {
     public partial class frmAccountGroupwiseReport : Form

@@ -19,6 +19,11 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+using Profunia.Inventory.Desktop.Transactions;
+using Profunia.Inventory.Desktop.CrystalReports;
 
 namespace Profunia.Inventory.Desktop.Reports
 {
@@ -443,9 +448,9 @@ namespace Profunia.Inventory.Desktop.Reports
                         DataTable dtblCompany = spCompany.CompanyViewDataTable(1);
                         dsPurchaseReturnReport.Tables.Add(dtblGrid);
                         dsPurchaseReturnReport.Tables.Add(dtblCompany);
-                        frmReport frmReport = new frmReport();
-                        frmReport.MdiParent = formMDI.MDIObj;
-                        frmReport.PurchaseReturnReportPrinting(dsPurchaseReturnReport, txtTotalAmount.Text);
+                        frmReport frmRepor = new frmReport();
+                        frmRepor.MdiParent = formMDI.MDIObj;
+                        frmRepor.PurchaseReturnReportPrinting(dsPurchaseReturnReport, txtTotalAmount.Text);
                     }
                 }
                 else

@@ -14,12 +14,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
+using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
 using System.Data.SqlClient;
+using Profunia.Inventory.Desktop.CrystalReports;
+using PrintWorks;
+
 namespace Profunia.Inventory.Desktop.Transactions
 {
     public partial class frmPOS : Form
@@ -85,7 +87,7 @@ namespace Profunia.Inventory.Desktop.Transactions
         frmProductSearchPopup frmProductSearchPopupObj = new frmProductSearchPopup();
         frmLedgerDetails frmledgerDetailsObj;
         #endregion
-        #region Functions
+       
         /// <summary>
         /// Create an instance for frmPOS Class
         /// </summary>
@@ -93,36 +95,29 @@ namespace Profunia.Inventory.Desktop.Transactions
         {
             InitializeComponent();
         }
-        /// <summary>
-        /// Function to call this form from VoucherType Selection form
-        /// </summary>
-        /// <param name="decPOSVoucherTypeId"></param>
-        /// <param name="strPOSVoucheTypeName"></param>
         public void CallFromVoucherTypeSelection(decimal decPOSVoucherTypeId, string strPOSVoucheTypeName)
         {
-            decimal decDailySuffixPrefixId = 0;
+            decimal decDailySuffixPrefixId = 0m;
             try
             {
                 VoucherTypeSP spVoucherType = new VoucherTypeSP();
                 DecPOSVoucherTypeId = decPOSVoucherTypeId;
                 isAutomatic = spVoucherType.CheckMethodOfVoucherNumbering(DecPOSVoucherTypeId);
                 SuffixPrefixSP spSuffisprefix = new SuffixPrefixSP();
-                SuffixPrefixInfo infoSuffixPrefix = new SuffixPrefixInfo();
-                infoSuffixPrefix = spSuffisprefix.GetSuffixPrefixDetails(DecPOSVoucherTypeId, dtpDate.Value);
-                decDailySuffixPrefixId = infoSuffixPrefix.SuffixprefixId;
-                strPrefix = infoSuffixPrefix.Prefix;
-                strSuffix = infoSuffixPrefix.Suffix;
-                this.Text = strPOSVoucheTypeName;
+                SuffixPrefixInfo infoSuffixPrefix2 = new SuffixPrefixInfo();
+                infoSuffixPrefix2 = spSuffisprefix.GetSuffixPrefixDetails(DecPOSVoucherTypeId, dtpDate.Value);
+                decDailySuffixPrefixId = infoSuffixPrefix2.SuffixprefixId;
+                strPrefix = infoSuffixPrefix2.Prefix;
+                strSuffix = infoSuffixPrefix2.Suffix;
+                Text = strPOSVoucheTypeName;
                 base.Show();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 01" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS1:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Functions to clear the form controls based on the settings
-        /// </summary>
+
         public void ClearFunctions()
         {
             try
@@ -268,12 +263,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 02" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS2:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Clear function to reset the form
-        /// </summary>
+
         public void Clear()
         {
             try
@@ -306,27 +299,22 @@ namespace Profunia.Inventory.Desktop.Transactions
                     txtVoucherNo.Clear();
                     txtVoucherNo.Focus();
                 }
+                else if (spSettings.SettingsStatusCheck("Barcode") == "Yes")
+                {
+                    txtBarcode.Select();
+                }
                 else
                 {
-                    if (spSettings.SettingsStatusCheck("Barcode") == "Yes")
-                    {
-                        txtBarcode.Select();
-                    }
-                    else
-                    {
-                        txtProductCode.Select();
-                    }
+                    txtProductCode.Select();
                 }
                 ClearGroupbox();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 03" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS3:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Clear the form Groupbox controls
-        /// </summary>
+
         public void ClearGroupbox()
         {
             try
@@ -354,12 +342,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 04" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS4:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to generate Voucher number as per settings
-        /// </summary>
+
         public void VoucherNumberGeneration()
         {
             try
@@ -369,11 +355,11 @@ namespace Profunia.Inventory.Desktop.Transactions
                     strVoucherNo = "0";
                 }
                 strVoucherNo = TransactionGeneralFillObj.VoucherNumberAutomaicGeneration(DecPOSVoucherTypeId, Convert.ToDecimal(strVoucherNo), dtpDate.Value, strTableName);
-                if (Convert.ToDecimal(strVoucherNo) != (spSalesMaster.SalesMasterVoucherMax(DecPOSVoucherTypeId)))
+                if (Convert.ToDecimal(strVoucherNo) != spSalesMaster.SalesMasterVoucherMax(DecPOSVoucherTypeId))
                 {
                     strVoucherNo = spSalesMaster.SalesMasterVoucherMax(DecPOSVoucherTypeId).ToString();
                     strVoucherNo = TransactionGeneralFillObj.VoucherNumberAutomaicGeneration(DecPOSVoucherTypeId, Convert.ToDecimal(strVoucherNo), dtpDate.Value, strTableName);
-                    if (spSalesMaster.SalesMasterVoucherMax(DecPOSVoucherTypeId) == 0)
+                    if (spSalesMaster.SalesMasterVoucherMax(DecPOSVoucherTypeId) == 0m)
                     {
                         strVoucherNo = "0";
                         strVoucherNo = TransactionGeneralFillObj.VoucherNumberAutomaicGeneration(DecPOSVoucherTypeId, Convert.ToDecimal(strVoucherNo), dtpDate.Value, strTableName);
@@ -382,11 +368,11 @@ namespace Profunia.Inventory.Desktop.Transactions
                 if (isAutomatic)
                 {
                     SuffixPrefixSP spSuffisprefix = new SuffixPrefixSP();
-                    SuffixPrefixInfo infoSuffixPrefix = new SuffixPrefixInfo();
-                    infoSuffixPrefix = spSuffisprefix.GetSuffixPrefixDetails(DecPOSVoucherTypeId, dtpDate.Value);
-                    strPrefix = infoSuffixPrefix.Prefix;
-                    strSuffix = infoSuffixPrefix.Suffix;
-                    decPOSSuffixPrefixId = infoSuffixPrefix.SuffixprefixId;
+                    SuffixPrefixInfo infoSuffixPrefix2 = new SuffixPrefixInfo();
+                    infoSuffixPrefix2 = spSuffisprefix.GetSuffixPrefixDetails(DecPOSVoucherTypeId, dtpDate.Value);
+                    strPrefix = infoSuffixPrefix2.Prefix;
+                    strSuffix = infoSuffixPrefix2.Suffix;
+                    decPOSSuffixPrefixId = infoSuffixPrefix2.SuffixprefixId;
                     txtVoucherNo.Text = strPrefix + strVoucherNo + strSuffix;
                     txtVoucherNo.ReadOnly = true;
                 }
@@ -399,13 +385,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 05" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS5:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill the cash or party combobox
-        /// </summary>
-        /// <param name="cmbCashOrParty"></param>
+
         public void CashorPartyComboFill(ComboBox cmbCashOrParty)
         {
             try
@@ -414,12 +397,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:06" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS6:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill the cash or party combobox in Edit mode
-        /// </summary>
+
         public void CashorPartyComboFill()
         {
             try
@@ -428,12 +409,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :07" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS7:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Pricing Level Combo Fill
-        /// </summary>
+
         public void PricingLevelComboFill()
         {
             try
@@ -442,12 +421,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 08" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS8:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the salesMan Combo Fill
-        /// </summary>
+
         public void salesManComboFill()
         {
             try
@@ -461,12 +438,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 09" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS9:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Sales Account Combo Fill
-        /// </summary>
+
         public void SalesAccountComboFill()
         {
             DataTable dtbl = new DataTable();
@@ -479,50 +454,44 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 10" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS10:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Counter Combo Fill
-        /// </summary>
+
         public void CounterComboFill()
         {
             CounterSP SpCounter = new CounterSP();
-            DataTable dtbl = new DataTable();
+            DataTable dtbl2 = new DataTable();
             try
             {
-                dtbl = SpCounter.CounterOnlyViewAll();
-                cmbCounter.DataSource = dtbl;
+                dtbl2 = SpCounter.CounterOnlyViewAll();
+                cmbCounter.DataSource = dtbl2;
                 cmbCounter.DisplayMember = "counterName";
                 cmbCounter.ValueMember = "counterId";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 11" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS11:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Unit Combo Fill
-        /// </summary>
+
         public void UnitComboFill()
         {
             try
             {
                 UnitSP spUnit = new UnitSP();
-                DataTable dtblUnit = new DataTable();
-                dtblUnit = spUnit.UnitViewAllByProductId(decProductId); ;
-                cmbUnit.DataSource = dtblUnit;
+                DataTable dtblUnit2 = new DataTable();
+                dtblUnit2 = spUnit.UnitViewAllByProductId(decProductId);
+                cmbUnit.DataSource = dtblUnit2;
                 cmbUnit.ValueMember = "unitId";
                 cmbUnit.DisplayMember = "unitName";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:12" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS12:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Godown Combo Fill
-        /// </summary>
+
         public void GodownComboFill()
         {
             try
@@ -536,12 +505,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:13" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS13:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Rack Combo Fill
-        /// </summary>
+
         public void RackComboFill()
         {
             try
@@ -555,13 +522,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:14" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS14:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Rack Combo Fill by under the Godown
-        /// </summary>
-        /// <param name="dcGodownId"></param>
+
         public void RackComboFillByGodownId(decimal dcGodownId)
         {
             try
@@ -575,110 +539,98 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:15" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS15:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Tax Combo Fill 
-        /// </summary>
+
         public void cmbTaxComboFill()
         {
             try
             {
                 TaxSP spTax = new TaxSP();
-                DataTable dtblTax = new DataTable();
-                dtblTax = spTax.TaxViewAllByVoucherTypeIdApplicaleForProduct(DecPOSVoucherTypeId);
-                cmbTax.DataSource = dtblTax;
-                DataRow dr = dtblTax.NewRow();
+                DataTable dtblTax2 = new DataTable();
+                dtblTax2 = spTax.TaxViewAllByVoucherTypeIdApplicaleForProduct(DecPOSVoucherTypeId);
+                cmbTax.DataSource = dtblTax2;
+                DataRow dr = dtblTax2.NewRow();
                 dr[1] = "NA";
-                dtblTax.Rows.InsertAt(dr, 0);
+                dtblTax2.Rows.InsertAt(dr, 0);
                 cmbTax.ValueMember = "taxId";
                 cmbTax.DisplayMember = "taxName";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:16" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS16:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Items Combo Fill 
-        /// </summary>
+
         public void ItemComboFill()
         {
             try
             {
                 ProductSP spProduct = new ProductSP();
-                DataTable dtbl = new DataTable();
-                dtbl = spProduct.ProductViewAll();
-                cmbItem.DataSource = dtbl;
+                DataTable dtbl2 = new DataTable();
+                dtbl2 = spProduct.ProductViewAll();
+                cmbItem.DataSource = dtbl2;
                 cmbItem.ValueMember = "productId";
                 cmbItem.DisplayMember = "productName";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:17" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS17:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Tax Combo Fill 
-        /// </summary>
+
         public void ComboTaxFill()
         {
             try
             {
                 TaxSP spTax = new TaxSP();
-                DataTable dtbl = new DataTable();
-                dtbl = spTax.TaxViewByProductIdApplicableForProduct(decProductId);
-                cmbTax.DataSource = dtbl;
+                DataTable dtbl2 = new DataTable();
+                dtbl2 = spTax.TaxViewByProductIdApplicableForProduct(decProductId);
+                cmbTax.DataSource = dtbl2;
                 cmbTax.ValueMember = "taxId";
                 cmbTax.DisplayMember = "taxName";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:18" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS18:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to use the Batch Combo Fill based on the product
-        /// </summary>
+
         public void batchcombofill()
         {
             try
             {
                 BatchSP spBatch = new BatchSP();
-                DataTable dtblBatch = new DataTable();
-                dtblBatch = spBatch.BatchNoViewByProductId(decProductId);
-                cmbBatch.DataSource = dtblBatch;
+                DataTable dtblBatch2 = new DataTable();
+                dtblBatch2 = spBatch.BatchNoViewByProductId(decProductId);
+                cmbBatch.DataSource = dtblBatch2;
                 cmbBatch.ValueMember = "batchId";
                 cmbBatch.DisplayMember = "batchNo";
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:19" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS19:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill the Tax grid
-        /// </summary>
+
         public void taxGridFill()
         {
             try
             {
                 TaxSP spTax = new TaxSP();
-                DataTable dtblTax = new DataTable();
+                DataTable dtblTax2 = new DataTable();
                 SalesBillTaxSP spSalesbillTax = new SalesBillTaxSP();
-                dtblTax = spTax.TaxViewAllByVoucherTypeId(DecPOSVoucherTypeId);
-                dgvPOSTax.DataSource = dtblTax;
-                this.dgvPOSTax.Columns["dgvtxtTaxAmt"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
+                dtblTax2 = spTax.TaxViewAllByVoucherTypeId(DecPOSVoucherTypeId);
+                dgvPOSTax.DataSource = dtblTax2;
+                dgvPOSTax.Columns["dgvtxtTaxAmt"].DefaultCellStyle.Alignment = DataGridViewContentAlignment.TopRight;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:20" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS20:" + ex.Message;
             }
         }
-        /// <summary>
-        /// To create one account ledger from this form
-        /// </summary>
+
         public void AccountLedgerCreation()
         {
             try
@@ -720,29 +672,26 @@ namespace Profunia.Inventory.Desktop.Transactions
                             open.WindowState = FormWindowState.Normal;
                         }
                     }
-                    this.Enabled = false;
+                    base.Enabled = false;
                 }
                 else
                 {
-                    MessageBox.Show("You don’t have privilege", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("You don’t have privilege", "Openmiracle", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 21" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS21:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill Account ledger combobox while return from Account ledger creation when creating new ledger 
-        /// </summary>
-        /// <param name="decAccountLedgerId"></param>
+
         public void ReturnFromAccountLedgerForm(decimal decAccountLedgerId)
         {
             try
             {
-                this.Enabled = true;
+                base.Enabled = true;
                 CashorPartyComboFill(cmbCashOrParty);
-                if (decAccountLedgerId != 0)
+                if (decAccountLedgerId != 0m)
                 {
                     cmbCashOrParty.SelectedValue = decAccountLedgerId;
                 }
@@ -755,45 +704,38 @@ namespace Profunia.Inventory.Desktop.Transactions
                     cmbCashOrParty.SelectedValue = -1;
                 }
                 cmbCashOrParty.Focus();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                base.WindowState = FormWindowState.Normal;
+                base.Activate();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 22" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS22:" + ex.Message;
             }
         }
-        /// <summary>
-        /// function to fill the Salesman combofill
-        /// </summary>
-        /// <param name="cmbSalesAccount"></param>
+
         public void SalesAccountComboFill(ComboBox cmbSalesAccount)
         {
-            DataTable dtbl = new DataTable();
+            DataTable dtbl2 = new DataTable();
             try
             {
-                dtbl = spSalesMaster.SalesInvoiceSalesAccountModeComboFill();
-                cmbSalesAccount.DataSource = dtbl;
+                dtbl2 = (DataTable)(cmbSalesAccount.DataSource = spSalesMaster.SalesInvoiceSalesAccountModeComboFill());
                 cmbSalesAccount.DisplayMember = "ledgerName";
                 cmbSalesAccount.ValueMember = "ledgerId";
                 cmbSalesAccount.SelectedIndex = 0;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :22 " + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS23:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill SalesAccount combobox while return from SalesAccount creation when creating new SalesAccount 
-        /// </summary>
-        /// <param name="decAccountLedgerId"></param>
+
         public void ReturnFromSalesAccount(decimal decAccountLedgerId)
         {
             try
             {
-                this.Enabled = true;
+                base.Enabled = true;
                 SalesAccountComboFill(cmbSalesAccount);
-                if (decAccountLedgerId != 0)
+                if (decAccountLedgerId != 0m)
                 {
                     cmbSalesAccount.SelectedValue = decAccountLedgerId;
                 }
@@ -806,25 +748,22 @@ namespace Profunia.Inventory.Desktop.Transactions
                     cmbSalesAccount.SelectedValue = -1;
                 }
                 cmbSalesAccount.Focus();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                base.WindowState = FormWindowState.Normal;
+                base.Activate();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 23" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS24:" + ex.Message;
             }
         }
-        /// <summary>
-        ///  Function to fill Counter combobox while return from Counter creation when creating new Counter 
-        /// </summary>
-        /// <param name="decCounterId"></param>
+
         public void ReturnFromCounter(decimal decCounterId)
         {
             try
             {
-                this.Enabled = true;
+                base.Enabled = true;
                 CounterComboFill();
-                if (decCounterId != 0)
+                if (decCounterId != 0m)
                 {
                     cmbCounter.SelectedValue = decCounterId;
                 }
@@ -837,55 +776,52 @@ namespace Profunia.Inventory.Desktop.Transactions
                     cmbCounter.SelectedValue = -1;
                 }
                 cmbCounter.Focus();
-                this.WindowState = FormWindowState.Normal;
-                this.Activate();
+                base.WindowState = FormWindowState.Normal;
+                base.Activate();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 24" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS25:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fil Controls based on the barcode
-        /// </summary>
-        /// <param name="strBarcode"></param>
+
         public void FillControlsByBarcode(string strBarcode)
         {
             try
             {
                 BatchInfo infoBatch = new BatchInfo();
                 BatchSP spBatch = new BatchSP();
-                PriceListInfo InfoPriceList = new PriceListInfo();
+                PriceListInfo InfoPriceList2 = new PriceListInfo();
                 PriceListSP spPriceList = new PriceListSP();
                 infoBatch = spBatch.BatchAndProductViewByBarcode(strBarcode);
                 cmbBatch.Text = infoBatch.BatchNo;
                 decProductId = infoBatch.ProductId;
                 decBatchId = infoBatch.BatchId;
-                InfoPriceList = spPriceList.PriceListViewByBatchIdORProduct(decBatchId);
-                ProductInfo infoProduct = new ProductInfo();
+                InfoPriceList2 = spPriceList.PriceListViewByBatchIdORProduct(decBatchId);
+                ProductInfo infoProduct2 = new ProductInfo();
                 ProductSP spProduct = new ProductSP();
-                infoProduct = spProduct.ProductView(decProductId);
-                txtProductCode.Text = infoProduct.ProductCode;
-                string strProductCode = infoProduct.ProductCode;
+                infoProduct2 = spProduct.ProductView(decProductId);
+                txtProductCode.Text = infoProduct2.ProductCode;
+                string strProductCode = infoProduct2.ProductCode;
                 isFromBarcode = true;
-                cmbItem.Text = infoProduct.ProductName;
+                cmbItem.Text = infoProduct2.ProductName;
                 isFromBarcode = false;
-                cmbGodown.SelectedValue = infoProduct.GodownId;
-                cmbRack.SelectedValue = infoProduct.RackId;
+                cmbGodown.SelectedValue = infoProduct2.GodownId;
+                cmbRack.SelectedValue = infoProduct2.RackId;
                 UnitComboFill();
-                UnitInfo infoUnit = new UnitInfo();
-                infoUnit = new UnitSP().unitVieWForStandardRate(decProductId);
-                cmbUnit.SelectedValue = infoUnit.UnitId;
-                if (InfoPriceList.PricinglevelId != 0)
+                UnitInfo infoUnit2 = new UnitInfo();
+                infoUnit2 = new UnitSP().unitVieWForStandardRate(decProductId);
+                cmbUnit.SelectedValue = infoUnit2.UnitId;
+                if (InfoPriceList2.PricinglevelId != 0m)
                 {
-                    cmbPricingLevel.SelectedValue = InfoPriceList.PricinglevelId;
+                    cmbPricingLevel.SelectedValue = InfoPriceList2.PricinglevelId;
                 }
                 else
                 {
                     cmbPricingLevel.SelectedIndex = 0;
                 }
                 ComboTaxFill();
-                cmbTax.SelectedValue = infoProduct.TaxId;
+                cmbTax.SelectedValue = infoProduct2.TaxId;
                 if (txtProductCode.Text.Trim() != string.Empty && cmbItem.SelectedIndex != -1)
                 {
                     decimal decNodecplaces = PublicVariables._inNoOfDecimalPlaces;
@@ -893,12 +829,16 @@ namespace Profunia.Inventory.Desktop.Transactions
                     txtRate.Text = dcRate.ToString();
                     try
                     {
-                        if (decimal.Parse(txtQuantity.Text) == 0)
+                        if (decimal.Parse(txtQuantity.Text) == 0m)
+                        {
                             txtQuantity.Text = "1";
+                        }
                     }
-                    catch { txtQuantity.Text = "1"; }
+                    catch
+                    {
+                        txtQuantity.Text = "1";
+                    }
                     txtQuantity.Focus();
-
                 }
                 else
                 {
@@ -907,13 +847,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:25" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS26:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fil Controls based on the ProductCode
-        /// </summary>
-        /// <param name="isCode"></param>
+
         public void FillControlByProductCode(bool isCode)
         {
             decimal decNodecplaces = PublicVariables._inNoOfDecimalPlaces;
@@ -921,89 +858,91 @@ namespace Profunia.Inventory.Desktop.Transactions
             {
                 if (isCode)
                 {
-                    PriceListInfo InfoPriceList = new PriceListInfo();
-                    ProductInfo infoProduct = new ProductInfo();
-                    ProductBatchInfo infoProductBatch = new ProductBatchInfo();
+                    PriceListInfo InfoPriceList2 = new PriceListInfo();
+                    ProductInfo infoProduct2 = new ProductInfo();
+                    ProductBatchInfo infoProductBatch2 = new ProductBatchInfo();
                     ProductSP spProduct = new ProductSP();
                     PriceListSP spPriceList = new PriceListSP();
-                    infoProduct = new ProductSP().ProductViewByCode(txtProductCode.Text.Trim());
-                    infoProductBatch = spProduct.BarcodeViewByProductCode(txtProductCode.Text);
-                    decProductId = infoProductBatch.ProductId;
-                    decBatchId = infoProductBatch.BatchId;
-                    InfoPriceList = spPriceList.PriceListViewByBatchIdORProduct(decBatchId);
+                    infoProduct2 = new ProductSP().ProductViewByCode(txtProductCode.Text.Trim());
+                    infoProductBatch2 = spProduct.BarcodeViewByProductCode(txtProductCode.Text);
+                    decProductId = infoProductBatch2.ProductId;
+                    decBatchId = infoProductBatch2.BatchId;
+                    InfoPriceList2 = spPriceList.PriceListViewByBatchIdORProduct(decBatchId);
                     batchcombofill();
-                    txtBarcode.Text = infoProductBatch.Barcode;
-                    cmbItem.Text = infoProduct.ProductName;
-                    cmbGodown.SelectedValue = infoProduct.GodownId;
-                    cmbRack.SelectedValue = infoProduct.RackId;
+                    txtBarcode.Text = infoProductBatch2.Barcode;
+                    cmbItem.Text = infoProduct2.ProductName;
+                    cmbGodown.SelectedValue = infoProduct2.GodownId;
+                    cmbRack.SelectedValue = infoProduct2.RackId;
                     UnitComboFill();
-                    UnitInfo infoUnit = new UnitInfo();
-                    infoUnit = new UnitSP().unitVieWForStandardRate(decProductId);
-                    cmbUnit.SelectedValue = infoUnit.UnitId;
-                    if (InfoPriceList.PricinglevelId != 0)
+                    UnitInfo infoUnit2 = new UnitInfo();
+                    infoUnit2 = new UnitSP().unitVieWForStandardRate(decProductId);
+                    cmbUnit.SelectedValue = infoUnit2.UnitId;
+                    if (InfoPriceList2.PricinglevelId != 0m)
                     {
-                        cmbPricingLevel.SelectedValue = InfoPriceList.PricinglevelId;
+                        cmbPricingLevel.SelectedValue = InfoPriceList2.PricinglevelId;
                     }
                     else
                     {
                         cmbPricingLevel.SelectedIndex = 0;
                     }
                     ComboTaxFill();
-                    cmbTax.SelectedValue = infoProduct.TaxId;
-                    if (txtProductCode.Text.Trim() != String.Empty && cmbItem.SelectedIndex != -1)
+                    cmbTax.SelectedValue = infoProduct2.TaxId;
+                    decimal dcRate;
+                    if (txtProductCode.Text.Trim() != string.Empty && cmbItem.SelectedIndex != -1)
                     {
-                        decimal dcRate = new ProductSP().ProductRateForSales(decProductId, Convert.ToDateTime(txtDate.Text), decBatchId, decNodecplaces);
+                        dcRate = new ProductSP().ProductRateForSales(decProductId, Convert.ToDateTime(txtDate.Text), decBatchId, decNodecplaces);
                         txtRate.Text = dcRate.ToString();
                         try
                         {
-                            if (decimal.Parse(txtQuantity.Text) == 0)
+                            if (decimal.Parse(txtQuantity.Text) == 0m)
+                            {
                                 txtQuantity.Text = "1";
+                            }
                         }
-                        catch { txtQuantity.Text = "1"; }
+                        catch
+                        {
+                            txtQuantity.Text = "1";
+                        }
                         txtQuantity.Focus();
-
                     }
                     else
                     {
-                        decimal dcRate = new ProductSP().ProductRateForSales(decProductId, Convert.ToDateTime(txtDate.Text), decBatchId, decNodecplaces);
+                        dcRate = new ProductSP().ProductRateForSales(decProductId, Convert.ToDateTime(txtDate.Text), decBatchId, decNodecplaces);
                         txtRate.Text = dcRate.ToString();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:26" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS27:" + ex.Message;
             }
         }
-        /// <summary>
-        ///  Function to fil Controls based on the ProductName
-        /// </summary>
-        /// <param name="decProductId"></param>
+
         public void FillControlsByProductName(decimal decProductId)
         {
             try
             {
                 PriceListInfo InfoPriceList = new PriceListInfo();
-                ProductInfo infoProduct = new ProductInfo();
+                ProductInfo infoProduct2 = new ProductInfo();
                 ProductSP spProduct = new ProductSP();
                 PriceListSP spPriceList = new PriceListSP();
-                ProductBatchInfo infoProductBatch = new ProductBatchInfo();
-                infoProduct = new ProductSP().ProductView(decProductId);
-                txtProductCode.Text = infoProduct.ProductCode;
-                infoProductBatch = spProduct.BarcodeViewByProductCode(txtProductCode.Text);
-                decProductId = infoProductBatch.ProductId;
-                decBatchId = infoProductBatch.BatchId;
+                ProductBatchInfo infoProductBatch2 = new ProductBatchInfo();
+                infoProduct2 = new ProductSP().ProductView(decProductId);
+                txtProductCode.Text = infoProduct2.ProductCode;
+                infoProductBatch2 = spProduct.BarcodeViewByProductCode(txtProductCode.Text);
+                decProductId = infoProductBatch2.ProductId;
+                decBatchId = infoProductBatch2.BatchId;
                 InfoPriceList = spPriceList.PriceListViewByBatchIdORProduct(decBatchId);
                 batchcombofill();
-                txtBarcode.Text = infoProductBatch.Barcode;
-                cmbItem.Text = infoProduct.ProductName;
-                cmbGodown.SelectedValue = infoProduct.GodownId;
-                cmbRack.SelectedValue = infoProduct.RackId;
+                txtBarcode.Text = infoProductBatch2.Barcode;
+                cmbItem.Text = infoProduct2.ProductName;
+                cmbGodown.SelectedValue = infoProduct2.GodownId;
+                cmbRack.SelectedValue = infoProduct2.RackId;
                 UnitComboFill();
-                UnitInfo infoUnit = new UnitInfo();
-                infoUnit = new UnitSP().unitVieWForStandardRate(decProductId);
-                cmbUnit.SelectedValue = infoUnit.UnitId;
-                if (InfoPriceList.PricinglevelId != 0)
+                UnitInfo infoUnit2 = new UnitInfo();
+                infoUnit2 = new UnitSP().unitVieWForStandardRate(decProductId);
+                cmbUnit.SelectedValue = infoUnit2.UnitId;
+                if (InfoPriceList.PricinglevelId != 0m)
                 {
                     cmbPricingLevel.SelectedValue = InfoPriceList.PricinglevelId;
                 }
@@ -1012,7 +951,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     cmbPricingLevel.SelectedIndex = 0;
                 }
                 ComboTaxFill();
-                cmbTax.SelectedValue = infoProduct.TaxId;
+                cmbTax.SelectedValue = infoProduct2.TaxId;
                 if (txtProductCode.Text.Trim() != string.Empty && cmbItem.SelectedIndex != -1)
                 {
                     decimal decNodecplaces = PublicVariables._inNoOfDecimalPlaces;
@@ -1020,45 +959,47 @@ namespace Profunia.Inventory.Desktop.Transactions
                     txtRate.Text = dcRate.ToString();
                     try
                     {
-                        if (decimal.Parse(txtQuantity.Text) == 0)
+                        if (decimal.Parse(txtQuantity.Text) == 0m)
+                        {
                             txtQuantity.Text = "1";
+                        }
                     }
-                    catch { txtQuantity.Text = "1"; }
+                    catch
+                    {
+                        txtQuantity.Text = "1";
+                    }
                     txtQuantity.Focus();
-
                 }
                 TaxAmountCalculation();
                 isAfterFillControls = true;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:27" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS28:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to calculate the gross amount
-        /// </summary>
+
         public void GrossValueCalculation()
         {
-            decimal dcRate = 0;
-            decimal dcQty = 0;
-            decimal dcGrossValue = 0;
+            decimal dcRate = 0m;
+            decimal dcQty2 = 0m;
+            decimal dcGrossValue2 = 0m;
             try
             {
-                if (txtQuantity.Text.Trim() == String.Empty)
+                if (txtQuantity.Text.Trim() == string.Empty)
                 {
                     txtQuantity.Text = "0";
                 }
-                dcQty = Convert.ToDecimal(txtQuantity.Text.Trim());
+                dcQty2 = Convert.ToDecimal(txtQuantity.Text.Trim());
                 if (txtRate.Text.Trim() == string.Empty)
                 {
                     txtRate.Text = "0";
                 }
                 dcRate = Convert.ToDecimal(txtRate.Text.Trim());
-                if (dcRate > 0)
+                if (dcRate > 0m)
                 {
-                    dcGrossValue = dcQty * dcRate;
-                    txtGrossValue.Text = Math.Round(dcGrossValue, PublicVariables._inNoOfDecimalPlaces).ToString();
+                    dcGrossValue2 = dcQty2 * dcRate;
+                    txtGrossValue.Text = Math.Round(dcGrossValue2, PublicVariables._inNoOfDecimalPlaces).ToString();
                 }
                 else
                 {
@@ -1067,50 +1008,46 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:28" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS29:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to Tax Amount Calculation
-        /// </summary>
+
         public void TaxAmountCalculation()
         {
-            decimal dcVatAmount = 0;
-            decimal dTaxAmt = 0;
-            decimal dcTotal = 0;
-            decimal dcNetAmount = 0;
-            dcNetAmount = Convert.ToDecimal(txtNetAmount.Text.Trim());
+            decimal dcVatAmount = 0m;
+            decimal dTaxAmt = 0m;
+            decimal dcTotal = 0m;
+            decimal dcNetAmount2 = 0m;
+            dcNetAmount2 = Convert.ToDecimal(txtNetAmount.Text.Trim());
             TaxSP SpTax = new TaxSP();
             try
             {
-                if (dcNetAmount != 0 && cmbTax.Visible && cmbTax.SelectedValue != null)
+                if (dcNetAmount2 != 0m && cmbTax.Visible && cmbTax.SelectedValue != null)
                 {
                     TaxInfo InfoTaxMaster = SpTax.TaxView(Convert.ToDecimal(cmbTax.SelectedValue.ToString()));
-                    dcVatAmount = dTaxAmt = Math.Round(((dcNetAmount * InfoTaxMaster.Rate) / (100)), PublicVariables._inNoOfDecimalPlaces);
+                    dcVatAmount = (dTaxAmt = Math.Round(dcNetAmount2 * InfoTaxMaster.Rate / 100m, PublicVariables._inNoOfDecimalPlaces));
                     txtTaxAmount.Text = dTaxAmt.ToString();
                 }
                 else
                 {
-                    dTaxAmt = 0;
+                    dTaxAmt = 0m;
                     txtTaxAmount.Text = "0";
                 }
-                dcTotal = dcNetAmount + dTaxAmt;
+                dcTotal = dcNetAmount2 + dTaxAmt;
                 txtAmount.Text = dcTotal.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:29" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS30:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to Discount Calculation
-        /// </summary>
+
         public void DiscountCalculation()
         {
-            decimal dcDiscountAmount = 0;
-            decimal dcDiscountPercentage = 0;
-            decimal dcGrossValue = 0;
-            decimal dcNetValue = 0;
+            decimal dcDiscountAmount = 0m;
+            decimal dcDiscountPercentage = 0m;
+            decimal dcGrossValue = 0m;
+            decimal dcNetValue = 0m;
             try
             {
                 if (txtGrossValue.Text.Trim() != null && txtGrossValue.Text.Trim() != string.Empty)
@@ -1121,27 +1058,32 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     dcDiscountPercentage = Convert.ToDecimal(txtDiscountPercentage.Text.Trim());
                 }
-                if (dcDiscountPercentage > 100)
+                if (dcDiscountPercentage > 100m)
                 {
-                    dcDiscountPercentage = 100;
+                    dcDiscountPercentage = 100m;
                     txtDiscountPercentage.Text = dcDiscountPercentage.ToString();
                 }
-                if (dcDiscountPercentage != 0)
+                decimal num;
+                if (dcDiscountPercentage != 0m)
                 {
-                    dcDiscountAmount = dcGrossValue * dcDiscountPercentage / 100;
-                    txtDiscountAmount.Text = Math.Round(dcDiscountAmount, PublicVariables._inNoOfDecimalPlaces).ToString();
+                    dcDiscountAmount = dcGrossValue * dcDiscountPercentage / 100m;
+                    TextBox textBox = txtDiscountAmount;
+                    num = Math.Round(dcDiscountAmount, PublicVariables._inNoOfDecimalPlaces);
+                    textBox.Text = num.ToString();
                 }
                 else
                 {
                     txtDiscountAmount.Text = "0";
                 }
                 dcNetValue = dcGrossValue;
-                if (dcGrossValue > 0)
+                if (dcGrossValue > 0m)
                 {
                     if (txtDiscountPercentage.Text.Trim() != null && txtDiscountPercentage.Text.Trim() != string.Empty)
                     {
                         dcNetValue = dcGrossValue - dcDiscountAmount;
-                        txtNetAmount.Text = Math.Round(dcNetValue, PublicVariables._inNoOfDecimalPlaces).ToString();
+                        TextBox textBox2 = txtNetAmount;
+                        num = Math.Round(dcNetValue, PublicVariables._inNoOfDecimalPlaces);
+                        textBox2.Text = num.ToString();
                     }
                     else
                     {
@@ -1155,20 +1097,17 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:30" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS31:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to Discount Percentage Calculation
-        /// </summary>
+
         public void DiscountPerCalculation()
         {
-            decimal dcGrossValue = 0;
-            decimal dcDiscountAmount = 0;
-            decimal dcDiscountPercentage = 0;
+            decimal dcGrossValue = 0m;
+            decimal dcDiscountAmount = 0m;
+            decimal dcDiscountPercentage2 = 0m;
             try
             {
-
                 if (txtGrossValue.Text.Trim() != null && txtGrossValue.Text.Trim() != string.Empty)
                 {
                     dcGrossValue = Convert.ToDecimal(txtGrossValue.Text.Trim());
@@ -1177,63 +1116,52 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     dcDiscountAmount = Convert.ToDecimal(txtDiscountAmount.Text.Trim());
                 }
-                if (dcGrossValue > 0)
+                if (dcGrossValue > 0m && txtDiscountAmount.Text.Trim() != null && txtDiscountAmount.Text.Trim() != string.Empty)
                 {
-                    if (txtDiscountAmount.Text.Trim() != null && txtDiscountAmount.Text.Trim() != string.Empty)
-                    {
-                        dcDiscountPercentage = dcDiscountAmount * 100 / dcGrossValue;
-                        txtDiscountPercentage.Text = Math.Round(dcDiscountPercentage, PublicVariables._inNoOfDecimalPlaces).ToString();
-                    }
+                    dcDiscountPercentage2 = dcDiscountAmount * 100m / dcGrossValue;
+                    txtDiscountPercentage.Text = Math.Round(dcDiscountPercentage2, PublicVariables._inNoOfDecimalPlaces).ToString();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:31" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS32:" + ex.Message;
             }
         }
 
-
-        /// <summary>
-        /// Function to Serial No for POS Tax
-        /// </summary>
         public void SerialNoforPOSTax()
         {
             try
             {
                 int inCount = 1;
-                foreach (DataGridViewRow row in dgvPOSTax.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    row.Cells["dgvtxtSINO"].Value = inCount.ToString();
+                    item.Cells["dgvtxtSINO"].Value = inCount.ToString();
                     inCount++;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:32" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS33:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to Serial No for POS 
-        /// </summary>
+
         public void SerialNo()
         {
             try
             {
                 int inCount = 1;
-                foreach (DataGridViewRow row in dgvPointOfSales.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPointOfSales.Rows)
                 {
-                    row.Cells["dgvtxtSlNo"].Value = inCount.ToString();
+                    item.Cells["dgvtxtSlNo"].Value = inCount.ToString();
                     inCount++;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:33" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS34:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to add the products to grid
-        /// </summary>
+
         public void AddToGrid()
         {
             try
@@ -1249,7 +1177,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     Messages.InformationMessage("Select a product");
                     cmbItem.Focus();
                 }
-                else if (Convert.ToDecimal(txtQuantity.Text.Trim()) <= 0 || txtQuantity.Text.Trim() == string.Empty)
+                else if (Convert.ToDecimal(txtQuantity.Text.Trim()) <= 0m || txtQuantity.Text.Trim() == string.Empty)
                 {
                     Messages.InformationMessage("Enter quantity");
                     txtQuantity.Focus();
@@ -1259,14 +1187,14 @@ namespace Profunia.Inventory.Desktop.Transactions
                     Messages.InformationMessage("Select a unit");
                     cmbUnit.Focus();
                 }
-                else if (spSettings.SettingsStatusCheck("AllowZeroValueEntry") == "No" && decimal.Parse(txtRate.Text.Trim()) <= 0 || txtRate.Text.Trim() == string.Empty)
+                else if ((spSettings.SettingsStatusCheck("AllowZeroValueEntry") == "No" && decimal.Parse(txtRate.Text.Trim()) <= 0m) || txtRate.Text.Trim() == string.Empty)
                 {
                     Messages.InformationMessage("Enter rate");
                     txtRate.Focus();
                 }
                 else
                 {
-                    int inCurrentRowIndex = new int();
+                    int inCurrentRowIndex = 0;
                     bool isExecutef = false;
                     if (rowIdToEdit == 0)
                     {
@@ -1276,14 +1204,17 @@ namespace Profunia.Inventory.Desktop.Transactions
                     }
                     else
                     {
-                        for (int i = 0; i < dgvPointOfSales.Rows.Count; ++i)
+                        int i = 0;
+                        while (i < dgvPointOfSales.Rows.Count)
                         {
-                            if (dgvPointOfSales.Rows[i].Cells["rowId"].Value.ToString() == rowIdToEdit.ToString())
+                            if (!(dgvPointOfSales.Rows[i].Cells["rowId"].Value.ToString() == rowIdToEdit.ToString()))
                             {
-                                isExecutef = true;
-                                inCurrentRowIndex = i;
-                                break;
+                                i++;
+                                continue;
                             }
+                            isExecutef = true;
+                            inCurrentRowIndex = i;
+                            break;
                         }
                     }
                     if (!isExecutef)
@@ -1291,19 +1222,19 @@ namespace Profunia.Inventory.Desktop.Transactions
                         dgvPointOfSales.Rows.Add();
                         inCurrentRowIndex = dgvPointOfSales.Rows.Count - 1;
                     }
-                    ProductInfo infoProduct = new ProductInfo();
-                    BatchInfo infoBatch = new BatchInfo();
-                    RackInfo infoRack = new RackInfo();
-                    UnitConvertionInfo InfoUnitConvertion = new UnitConvertionInfo();
-                    infoProduct = new ProductSP().ProductView(decProductId);
+                    ProductInfo infoProduct2 = new ProductInfo();
+                    BatchInfo infoBatch2 = new BatchInfo();
+                    RackInfo infoRack2 = new RackInfo();
+                    UnitConvertionInfo InfoUnitConvertion2 = new UnitConvertionInfo();
+                    infoProduct2 = new ProductSP().ProductView(decProductId);
                     decimal dcProductBatch = new BatchSP().BatchIdViewByProductId(decProductId);
-                    InfoUnitConvertion = new UnitConvertionSP().UnitViewAllByProductId(decProductId);
-                    infoBatch = new BatchSP().BatchView(dcProductBatch);
-                    decimal dcGodownId = infoProduct.GodownId;
-                    GodownInfo infoGodown = new GodownInfo();
-                    infoGodown = new GodownSP().GodownView(dcGodownId);
-                    decimal dcRackId = infoProduct.RackId;
-                    infoRack = new RackSP().RackView(dcRackId);
+                    InfoUnitConvertion2 = new UnitConvertionSP().UnitViewAllByProductId(decProductId);
+                    infoBatch2 = new BatchSP().BatchView(dcProductBatch);
+                    decimal dcGodownId = infoProduct2.GodownId;
+                    GodownInfo infoGodown2 = new GodownInfo();
+                    infoGodown2 = new GodownSP().GodownView(dcGodownId);
+                    decimal dcRackId = infoProduct2.RackId;
+                    infoRack2 = new RackSP().RackView(dcRackId);
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtProductCode"].Value = txtProductCode.Text;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtProductName"].Value = cmbItem.Text;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtQuantity"].Value = txtQuantity.Text;
@@ -1316,16 +1247,16 @@ namespace Profunia.Inventory.Desktop.Transactions
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtDiscount"].Value = txtDiscountAmount.Text;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtTotalAmount"].Value = txtAmount.Text;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxttaxid"].Value = Convert.ToDecimal(cmbTax.SelectedValue);
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtProductId"].Value = infoProduct.ProductId;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtProductId"].Value = infoProduct2.ProductId;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtBatchId"].Value = dcProductBatch;
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtRackId"].Value = infoProduct.RackId;
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtGodownId"].Value = infoProduct.GodownId;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtRackId"].Value = infoProduct2.RackId;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtGodownId"].Value = infoProduct2.GodownId;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtUnitId"].Value = Convert.ToDecimal(cmbUnit.SelectedValue);
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtunitconversionId"].Value = InfoUnitConvertion.UnitconvertionId;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtunitconversionId"].Value = InfoUnitConvertion2.UnitconvertionId;
                     dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtBarcode"].Value = txtBarcode.Text;
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtBatchno"].Value = infoBatch.BatchNo;
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtGodownName"].Value = infoGodown.GodownName;
-                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtRackName"].Value = infoRack.RackName;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtBatchno"].Value = infoBatch2.BatchNo;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtGodownName"].Value = infoGodown2.GodownName;
+                    dgvPointOfSales.Rows[inCurrentRowIndex].Cells["dgvtxtRackName"].Value = infoRack2.RackName;
                     TotalAmountCalculation();
                     ClearGroupbox();
                     dgvPointOfSales.CurrentCell = dgvPointOfSales[0, dgvPointOfSales.Rows.Count - 1];
@@ -1334,40 +1265,38 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:34" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS35:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to calculate the Total amount
-        /// </summary>
+
         public void TotalAmountCalculation()
         {
             TaxGridAmountCalculation();
             TaxTotal();
-            decimal dTotal = 0;
-            decimal dcTotal = 0;
-            decimal dcTaxTotal = 0;
-            decimal dcTotalAmount = 0;
+            decimal dTotal = 0m;
+            decimal dcTotal = 0m;
+            decimal dcTaxTotal2 = 0m;
+            decimal dcTotalAmount = 0m;
             try
             {
-                foreach (DataGridViewRow dgvrow in dgvPointOfSales.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPointOfSales.Rows)
                 {
-                    if (dgvrow.Cells["dgvtxtTaxAmount"].Value != null)
+                    if (item.Cells["dgvtxtTaxAmount"].Value != null)
                     {
-                        dcTotal = dcTotal + decimal.Parse(dgvrow.Cells["dgvtxtTaxAmount"].Value.ToString());
+                        dcTotal += decimal.Parse(item.Cells["dgvtxtTaxAmount"].Value.ToString());
                     }
                 }
-                foreach (DataGridViewRow dgvrow in dgvPointOfSales.Rows)
+                foreach (DataGridViewRow item2 in (IEnumerable)dgvPointOfSales.Rows)
                 {
-                    if (dgvrow.Cells["dgvtxtTotalAmount"].Value != null && dgvrow.Cells["dgvtxtTotalAmount"].Value.ToString() != string.Empty)
+                    if (item2.Cells["dgvtxtTotalAmount"].Value != null && item2.Cells["dgvtxtTotalAmount"].Value.ToString() != string.Empty)
                     {
-                        dcTotalAmount = dcTotalAmount + Convert.ToDecimal(dgvrow.Cells["dgvtxtTotalAmount"].Value.ToString());
+                        dcTotalAmount += Convert.ToDecimal(item2.Cells["dgvtxtTotalAmount"].Value.ToString());
                     }
                 }
                 if (dgvPOSTax.Rows.Count > 0)
                 {
-                    dcTaxTotal = Convert.ToDecimal(lblTaxTotalAmount.Text.Trim());
-                    dTotal = dcTaxTotal - dcTotal;
+                    dcTaxTotal2 = Convert.ToDecimal(lblTaxTotalAmount.Text.Trim());
+                    dTotal = dcTaxTotal2 - dcTotal;
                     txtTotalAmount.Text = (dcTotalAmount + dTotal).ToString();
                 }
                 else
@@ -1385,35 +1314,26 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 decimal dcGrandTotal = dcTOT - Convert.ToDecimal(txtBillDiscount.Text);
                 txtGrandTotal.Text = dcGrandTotal.ToString();
-                decimal dcBalance = 0;
-                if (txtPaidAmount.Text != string.Empty)
-                {
-                    dcBalance = Convert.ToDecimal(txtPaidAmount.Text) - dcGrandTotal;
-                }
-                else
-                {
-                    dcBalance = dcBalance - dcGrandTotal;
-                }
+                decimal dcBalance = 0m;
+                dcBalance = ((!(txtPaidAmount.Text != string.Empty)) ? (dcBalance - dcGrandTotal) : (Convert.ToDecimal(txtPaidAmount.Text) - dcGrandTotal));
                 txtBalance.Text = dcBalance.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:35" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS36:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to calculate the total amount
-        /// </summary>
+
         public void TaxTotal()
         {
             try
             {
-                decimal dTaxTot = 0;
-                foreach (DataGridViewRow dgvrow in dgvPOSTax.Rows)
+                decimal dTaxTot = 0m;
+                foreach (DataGridViewRow item in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    if (dgvrow.Cells["dgvtxtTaxAmt"].Value != null && dgvrow.Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty && dgvrow.Cells["dgvtxtTaxAmt"].Value.ToString() != "0")
+                    if (item.Cells["dgvtxtTaxAmt"].Value != null && item.Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty && item.Cells["dgvtxtTaxAmt"].Value.ToString() != "0")
                     {
-                        dTaxTot = dTaxTot + Convert.ToDecimal(dgvrow.Cells["dgvtxtTaxAmt"].Value.ToString());
+                        dTaxTot += Convert.ToDecimal(item.Cells["dgvtxtTaxAmt"].Value.ToString());
                     }
                 }
                 dTaxTot = Math.Round(dTaxTot, PublicVariables._inNoOfDecimalPlaces);
@@ -1421,117 +1341,91 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:36" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS37:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to get the tax amount under tax type
-        /// </summary>
+
         public void TaxAmountForTaxType()
         {
-            decimal dTotal = 0;
+            decimal dTotal = 0m;
             try
             {
-                foreach (DataGridViewRow dgvrowTax in dgvPOSTax.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    foreach (DataGridViewRow dgvrowProduct in dgvPointOfSales.Rows)
+                    foreach (DataGridViewRow item2 in (IEnumerable)dgvPointOfSales.Rows)
                     {
-                        if (dgvrowProduct.Cells["dgvtxtTaxPercentage"].Value != null && dgvrowProduct.Cells["dgvtxtTaxAmount"].Value != null)
+                        if (item2.Cells["dgvtxtTaxPercentage"].Value != null && item2.Cells["dgvtxtTaxAmount"].Value != null && item2.Cells["dgvtxtTaxPercentage"].Value.ToString() != string.Empty && item2.Cells["dgvtxtTaxAmount"].Value.ToString() != string.Empty && item2.Cells["dgvtxttaxid"].Value.ToString() == item.Cells["dgvtxttax"].Value.ToString())
                         {
-                            if (dgvrowProduct.Cells["dgvtxtTaxPercentage"].Value.ToString() != string.Empty && dgvrowProduct.Cells["dgvtxtTaxAmount"].Value.ToString() != string.Empty)
-                            {
-                                if (dgvrowProduct.Cells["dgvtxttaxid"].Value.ToString() == dgvrowTax.Cells["dgvtxttax"].Value.ToString())
-                                {
-                                    dTotal = dTotal + Convert.ToDecimal(dgvrowProduct.Cells["dgvtxtTaxAmount"].Value.ToString());
-                                    dTotal = Math.Round(dTotal, PublicVariables._inNoOfDecimalPlaces);
-                                }
-                            }
+                            dTotal += Convert.ToDecimal(item2.Cells["dgvtxtTaxAmount"].Value.ToString());
+                            dTotal = Math.Round(dTotal, PublicVariables._inNoOfDecimalPlaces);
                         }
                     }
-                    dgvrowTax.Cells["dgvtxtTaxAmt"].Value = dTotal.ToString();
-                    dTotal = 0;
+                    item.Cells["dgvtxtTaxAmt"].Value = dTotal.ToString();
+                    dTotal = 0m;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:37" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS38:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to get tax grid total amount calculation
-        /// </summary>
+
         public void TaxGridAmountCalculation()
         {
-            decimal dTotal = 0;
-            decimal decTaxId = 0;
-            decimal decTaxRate = 0;
-            decimal dcTCessTotal = 0;
-            decimal decTaxTotal;
+            decimal dTotal = 0m;
+            decimal decTaxId = 0m;
+            decimal decTaxRate = 0m;
+            decimal dcTCessTotal = 0m;
             try
             {
                 TaxAmountForTaxType();
-                foreach (DataGridViewRow dgvrow in dgvPointOfSales.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPointOfSales.Rows)
                 {
-                    if (dgvrow.Cells["dgvtxtTotalAmount"].Value != null && dgvrow.Cells["dgvtxtTotalAmount"].Value.ToString() != string.Empty)
+                    if (item.Cells["dgvtxtTotalAmount"].Value != null && item.Cells["dgvtxtTotalAmount"].Value.ToString() != string.Empty)
                     {
-                        dTotal = dTotal + Convert.ToDecimal(dgvrow.Cells["dgvtxtTotalAmount"].Value.ToString());
+                        dTotal += Convert.ToDecimal(item.Cells["dgvtxtTotalAmount"].Value.ToString());
                     }
                 }
-                foreach (DataGridViewRow dgvrowTax in dgvPOSTax.Rows)
+                foreach (DataGridViewRow item2 in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    if (dgvrowTax.Cells["dgvtxttax"].Value != null)
+                    if (item2.Cells["dgvtxttax"].Value != null && item2.Cells["dgvtxtTaxApplicableOn"].Value != null && item2.Cells["dgvtxttaxCalculateMode"].Value != null && item2.Cells["dgvtxtTaxApplicableOn"].Value.ToString() == "Bill" && item2.Cells["dgvtxttaxCalculateMode"].Value.ToString() == "Bill Amount")
                     {
-                        if (dgvrowTax.Cells["dgvtxtTaxApplicableOn"].Value != null && dgvrowTax.Cells["dgvtxttaxCalculateMode"].Value != null)
-                        {
-                            if (dgvrowTax.Cells["dgvtxtTaxApplicableOn"].Value.ToString() == "Bill" && dgvrowTax.Cells["dgvtxttaxCalculateMode"].Value.ToString() == "Bill Amount")
-                            {
-                                decTaxRate = Convert.ToDecimal(dgvrowTax.Cells["dgvtxttaxrate"].Value.ToString());
-                                decTaxTotal = (dTotal * decTaxRate / 100);
-                                dgvrowTax.Cells["dgvtxtTaxAmt"].Value = Math.Round(decTaxTotal, PublicVariables._inNoOfDecimalPlaces);
-                            }
-                        }
+                        decTaxRate = Convert.ToDecimal(item2.Cells["dgvtxttaxrate"].Value.ToString());
+                        decimal decTaxTotal = dTotal * decTaxRate / 100m;
+                        item2.Cells["dgvtxtTaxAmt"].Value = Math.Round(decTaxTotal, PublicVariables._inNoOfDecimalPlaces);
                     }
                 }
-                foreach (DataGridViewRow dgvRow1 in dgvPOSTax.Rows)
+                foreach (DataGridViewRow item3 in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    if (dgvRow1.Cells["dgvtxttax"].Value != null)
+                    if (item3.Cells["dgvtxttax"].Value != null && item3.Cells["dgvtxtTaxApplicableOn"].Value != null && item3.Cells["dgvtxttaxCalculateMode"].Value != null && item3.Cells["dgvtxtTaxApplicableOn"].Value.ToString() == "Bill" && item3.Cells["dgvtxttaxCalculateMode"].Value.ToString() == "Tax Amount")
                     {
-                        if (dgvRow1.Cells["dgvtxtTaxApplicableOn"].Value != null && dgvRow1.Cells["dgvtxttaxCalculateMode"].Value != null)
+                        decTaxId = Convert.ToDecimal(item3.Cells["dgvtxttax"].Value.ToString());
+                        DataTable dtbl2 = new DataTable();
+                        TaxDetailsSP spTaxDetails = new TaxDetailsSP();
+                        dtbl2 = spTaxDetails.TaxDetailsViewallByTaxId(decTaxId);
+                        foreach (DataGridViewRow item4 in (IEnumerable)dgvPOSTax.Rows)
                         {
-                            if (dgvRow1.Cells["dgvtxtTaxApplicableOn"].Value.ToString() == "Bill" && dgvRow1.Cells["dgvtxttaxCalculateMode"].Value.ToString() == "Tax Amount")
+                            foreach (DataRow row in dtbl2.Rows)
                             {
-                                decTaxId = Convert.ToDecimal(dgvRow1.Cells["dgvtxttax"].Value.ToString());
-                                DataTable dtbl = new DataTable();
-                                TaxDetailsSP spTaxDetails = new TaxDetailsSP();
-                                dtbl = spTaxDetails.TaxDetailsViewallByTaxId(decTaxId);
-                                foreach (DataGridViewRow dgvRow2 in dgvPOSTax.Rows)
+                                if (item4.Cells["dgvtxtTaxAmt"].Value != null)
                                 {
-                                    foreach (DataRow drow in dtbl.Rows)
+                                    decimal deca2 = 0m;
+                                    deca2 = Convert.ToDecimal(item4.Cells["dgvtxtTaxAmt"].Value.ToString());
+                                    if (item4.Cells["dgvtxttax"].Value != null && deca2 != 0m && item4.Cells["dgvtxttax"].Value.ToString() == row.ItemArray[0].ToString())
                                     {
-                                        if (dgvRow2.Cells["dgvtxtTaxAmt"].Value != null)
+                                        decTaxRate = Convert.ToDecimal(item3.Cells["dgvtxttaxrate"].Value.ToString());
+                                        dTotal = Convert.ToDecimal(item4.Cells["dgvtxtTaxAmt"].Value.ToString());
+                                        dcTCessTotal = dTotal * decTaxRate / 100m;
+                                        item3.Cells["temp"].Value = Math.Round(dcTCessTotal, PublicVariables._inNoOfDecimalPlaces);
+                                        if (item3.Cells["dgvtxttax"].Value.ToString() == decTaxId.ToString())
                                         {
-                                            decimal deca = 0;
-                                            deca = Convert.ToDecimal(dgvRow2.Cells["dgvtxtTaxAmt"].Value.ToString());
-                                            if (dgvRow2.Cells["dgvtxttax"].Value != null && deca != 0)
-                                            {
-                                                if (dgvRow2.Cells["dgvtxttax"].Value.ToString() == drow.ItemArray[0].ToString())
-                                                {
-                                                    decTaxRate = Convert.ToDecimal(dgvRow1.Cells["dgvtxttaxrate"].Value.ToString());
-                                                    dTotal = Convert.ToDecimal(dgvRow2.Cells["dgvtxtTaxAmt"].Value.ToString());
-                                                    dcTCessTotal = (dTotal * decTaxRate / 100);
-                                                    dgvRow1.Cells["temp"].Value = Math.Round(dcTCessTotal, PublicVariables._inNoOfDecimalPlaces);
-                                                    if (dgvRow1.Cells["dgvtxttax"].Value.ToString() == decTaxId.ToString())
-                                                    {
-                                                        dgvRow1.Cells["dgvtxtTaxAmt"].Value = dgvRow1.Cells["temp"].Value;
-                                                    }
-                                                }
-                                            }
-                                        }
-                                        else
-                                        {
-                                            dgvRow1.Cells["dgvtxtTaxAmt"].Value = 0;
+                                            item3.Cells["dgvtxtTaxAmt"].Value = item3.Cells["temp"].Value;
                                         }
                                     }
+                                }
+                                else
+                                {
+                                    item3.Cells["dgvtxtTaxAmt"].Value = 0;
                                 }
                             }
                         }
@@ -1540,18 +1434,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:38" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS39:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to remove a row from grid
-        /// </summary>
+
         public void RemoveRow()
         {
             try
             {
-                bool isok = true;
-                if (isok)
+                if (true)
                 {
                     dgvPointOfSales.Rows.RemoveAt(dgvPointOfSales.CurrentRow.Index);
                     SerialNo();
@@ -1560,18 +1451,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:39" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS40:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill Salesman  while return from Product creation when creating new Salesman 
-        /// </summary>
-        /// <param name="decSalesmanId"></param>
+
         public void ReturnFromSalesman(decimal decSalesmanId)
         {
             try
             {
-                if (decSalesmanId != 0)
+                if (decSalesmanId != 0m)
                 {
                     salesManComboFill();
                     cmbSalesMan.SelectedValue = decSalesmanId;
@@ -1584,24 +1472,21 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     cmbSalesMan.SelectedValue = -1;
                 }
-                this.Enabled = true;
+                base.Enabled = true;
                 cmbSalesMan.Focus();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:40 " + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS41:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill product Details while return from Product creation when creating new Product 
-        /// </summary>
-        /// <param name="decProductId"></param>
+
         public void ReturnFromProductCreation(decimal decProductId)
         {
             try
             {
                 ItemComboFill();
-                if (decProductId != 0)
+                if (decProductId != 0m)
                 {
                     cmbItem.SelectedValue = decProductId;
                 }
@@ -1612,19 +1497,17 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:41 " + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS42:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to Quantity Status Check
-        /// </summary>
+
         public void QuantityStatusCheck()
         {
             try
             {
-                decimal decProductId = 0;
-                decimal decBatchId = 0;
-                decimal decCalcQty = 0;
+                decimal decProductId = 0m;
+                decimal decBatchId2 = 0m;
+                decimal decCalcQty = 0m;
                 StockPostingSP spStockPosting = new StockPostingSP();
                 SettingsSP spSettings = new SettingsSP();
                 string strStatus = spSettings.SettingsStatusCheck("NegativeStockStatus");
@@ -1633,13 +1516,13 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     decProductId = Convert.ToDecimal(cmbItem.SelectedValue.ToString());
                     batchcombofill();
-                    decBatchId = Convert.ToDecimal(cmbBatch.SelectedValue.ToString());
-                    decimal decCurrentStock = spStockPosting.StockCheckForProductSale(decProductId, decBatchId);
+                    decBatchId2 = Convert.ToDecimal(cmbBatch.SelectedValue.ToString());
+                    decimal decCurrentStock = spStockPosting.StockCheckForProductSale(decProductId, decBatchId2);
                     if (txtQuantity.Text != null || txtQuantity.Text != string.Empty)
                     {
                         decCalcQty = decCurrentStock - Convert.ToDecimal(txtQuantity.Text.Trim().ToString());
                     }
-                    if (decCalcQty < 0)
+                    if (decCalcQty < 0m)
                     {
                         isNegativeLedger = true;
                     }
@@ -1648,7 +1531,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     if (strStatus == "Warn")
                     {
-                        if (MessageBox.Show("Negative Stock balance exists,Do you want to Continue", "Open miracle", MessageBoxButtons.YesNo, MessageBoxIcon.Information) == DialogResult.Yes)
+                        if (MessageBox.Show("Negative Stock balance exists,Do you want to Continue", "Openmiracle", MessageBoxButtons.YesNo, MessageBoxIcon.Asterisk) == DialogResult.Yes)
                         {
                             AddToGrid();
                         }
@@ -1659,7 +1542,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     }
                     else if (strStatus == "Block")
                     {
-                        MessageBox.Show("Cannot continue ,due to negative stock balance", "Open miracle", MessageBoxButtons.OK, MessageBoxIcon.Stop);
+                        MessageBox.Show("Cannot continue ,due to negative stock balance", "Openmiracle", MessageBoxButtons.OK, MessageBoxIcon.Hand);
                         cmbItem.Focus();
                     }
                     else
@@ -1674,13 +1557,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :42 " + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS43:" + ex.Message;
             }
         }
 
-        /// <summary>
-        /// Function to Save or edit and checking the invalid entries
-        /// </summary>
         public void SaveOrEdit()
         {
             bool isAllOk = true;
@@ -1693,7 +1573,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     Messages.InformationMessage("Enter voucher number");
                     txtVoucherNo.Focus();
                 }
-                else if (spSalesMaster.SalesInvoiceInvoiceNumberCheckExistence(txtVoucherNo.Text.Trim(), 0, DecPOSVoucherTypeId) && btnSave.Text == "Save")
+                else if (spSalesMaster.SalesInvoiceInvoiceNumberCheckExistence(txtVoucherNo.Text.Trim(), 0m, DecPOSVoucherTypeId) && btnSave.Text == "Save")
                 {
                     Messages.InformationMessage("Invoice number already exist");
                     txtVoucherNo.Focus();
@@ -1718,83 +1598,72 @@ namespace Profunia.Inventory.Desktop.Transactions
                     Messages.InformationMessage("Can't save sales invoice without atleast one product with complete details");
                     txtBarcode.Focus();
                 }
-                else
+                else if (btnSave.Text == "Save")
                 {
-                    if (btnSave.Text == "Save")
+                    if (dgvPointOfSales.Rows.Count > 0)
                     {
-                        if (dgvPointOfSales.Rows.Count > 0)
+                        isAllOk = true;
+                    }
+                    if (isAllOk)
+                    {
+                        TotalAmountCalculation();
+                        decimal dcGrandTot2 = Convert.ToDecimal(txtTotalAmount.Text.ToString());
+                        if (Convert.ToDecimal(txtBillDiscount.Text.ToString()) >= dcGrandTot2)
                         {
-                            isAllOk = true;
+                            Messages.InformationMessage("Bill discount cannot be greater than net amount");
+                            txtBillDiscount.Focus();
                         }
-                        if (isAllOk)
+                        else if (PublicVariables.isMessageAdd)
                         {
-                            TotalAmountCalculation();
-                            decimal dcGrandTot = Convert.ToDecimal(txtGrandTotal.Text.ToString());
-                            if (Convert.ToDecimal(txtBillDiscount.Text.ToString()) > dcGrandTot)
+                            if (Messages.SaveMessage())
                             {
-                                Messages.InformationMessage("Bill discount cannot be greater than net amount");
+                                SaveFunction();
+                            }
+                            else
+                            {
                                 txtBillDiscount.Focus();
                             }
-                            else
-                            {
-                                if (PublicVariables.isMessageAdd)
-                                {
-                                    if (Messages.SaveMessage())
-                                    {
-                                        SaveFunction();
-                                    }
-                                    else
-                                    {
-                                        txtBillDiscount.Focus();
-                                    }
-                                }
-                                else
-                                {
-                                    SaveFunction();
-                                }
-                            }
+                        }
+                        else
+                        {
+                            SaveFunction();
                         }
                     }
-                    else if (btnSave.Text == "Update")
+                }
+                else if (btnSave.Text == "Update")
+                {
+                    if (dgvPointOfSales.Rows.Count > 0)
                     {
-                        if (dgvPointOfSales.Rows.Count > 0)
+                        isAllOk = true;
+                    }
+                    if (isAllOk)
+                    {
+                        TotalAmountCalculation();
+                        decimal dcGrandTot2 = Convert.ToDecimal(txtGrandTotal.Text.ToString());
+                        if (Convert.ToDecimal(txtBillDiscount.Text.ToString()) > dcGrandTot2)
                         {
-                            isAllOk = true;
+                            Messages.InformationMessage("Bill discount cannot be greater than net amount");
                         }
-                        if (isAllOk)
+                        else if (PublicVariables.isMessageEdit)
                         {
-                            TotalAmountCalculation();
-                            decimal dcGrandTot = Convert.ToDecimal(txtGrandTotal.Text.ToString());
-                            if (Convert.ToDecimal(txtBillDiscount.Text.ToString()) > dcGrandTot)
+                            if (Messages.UpdateMessage())
                             {
-                                Messages.InformationMessage("Bill discount cannot be greater than net amount");
+                                EditFunction();
                             }
-                            else
-                            {
-                                if (PublicVariables.isMessageEdit)
-                                {
-                                    if (Messages.UpdateMessage())
-                                    {
-                                        EditFunction();
-                                    }
-                                }
-                                else
-                                {
-                                    EditFunction();
-                                }
-                            }
+                        }
+                        else
+                        {
+                            EditFunction();
                         }
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:43" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS44:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to save An items to table 
-        /// </summary>
+
         public void SaveFunction()
         {
             LedgerPostingInfo infoLedgerPosting = new LedgerPostingInfo();
@@ -1804,7 +1673,7 @@ namespace Profunia.Inventory.Desktop.Transactions
             try
             {
                 InfoSalesMaster.InvoiceNo = txtVoucherNo.Text.Trim();
-                InfoSalesMaster.AdditionalCost = 0;
+                InfoSalesMaster.AdditionalCost = 0m;
                 InfoSalesMaster.LedgerId = Convert.ToDecimal(cmbCashOrParty.SelectedValue.ToString());
                 InfoSalesMaster.BillDiscount = Convert.ToDecimal(txtBillDiscount.Text);
                 if (cmbCounter.SelectedIndex > -1)
@@ -1813,19 +1682,19 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    InfoSalesMaster.CounterId = 0;
+                    InfoSalesMaster.CounterId = 0m;
                 }
                 InfoSalesMaster.CreditPeriod = 0;
                 InfoSalesMaster.CustomerName = string.Empty;
                 InfoSalesMaster.Date = Convert.ToDateTime(txtDate.Text);
-                InfoSalesMaster.DeliveryNoteMasterId = 0;
+                InfoSalesMaster.DeliveryNoteMasterId = 0m;
                 if (cmbSalesMan.SelectedValue.ToString() != null)
                 {
                     InfoSalesMaster.EmployeeId = Convert.ToDecimal(cmbSalesMan.SelectedValue.ToString());
                 }
                 else
                 {
-                    InfoSalesMaster.EmployeeId = 0;
+                    InfoSalesMaster.EmployeeId = 0m;
                 }
                 decimal decExachangeRateId = spExchangeRate.ExchangerateViewByCurrencyId(PublicVariables._decCurrencyId);
                 InfoSalesMaster.ExchangeRateId = decExachangeRateId;
@@ -1833,7 +1702,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                 InfoSalesMaster.GrandTotal = Convert.ToDecimal(txtGrandTotal.Text.Trim());
                 InfoSalesMaster.LrNo = string.Empty;
                 InfoSalesMaster.Narration = txtNarration.Text.Trim();
-                InfoSalesMaster.OrderMasterId = 0;
+                InfoSalesMaster.OrderMasterId = 0m;
                 InfoSalesMaster.POS = true;
                 if (cmbPricingLevel.SelectedValue.ToString() != null)
                 {
@@ -1841,9 +1710,9 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    InfoSalesMaster.PricinglevelId = 0;
+                    InfoSalesMaster.PricinglevelId = 0m;
                 }
-                InfoSalesMaster.QuotationMasterId = 0;
+                InfoSalesMaster.QuotationMasterId = 0m;
                 InfoSalesMaster.SalesAccount = Convert.ToDecimal(cmbSalesAccount.SelectedValue.ToString());
                 InfoSalesMaster.TaxAmount = Convert.ToDecimal(lblTaxTotalAmount.Text.ToString());
                 InfoSalesMaster.TotalAmount = Convert.ToDecimal(txtTotalAmount.Text);
@@ -1857,7 +1726,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    InfoSalesMaster.SuffixPrefixId = 0;
+                    InfoSalesMaster.SuffixPrefixId = 0m;
                     InfoSalesMaster.VoucherNo = txtVoucherNo.Text;
                 }
                 InfoSalesMaster.ExtraDate = DateTime.Now;
@@ -1869,48 +1738,45 @@ namespace Profunia.Inventory.Desktop.Transactions
                 InfoSalesDetails.ExtraDate = DateTime.Now;
                 InfoSalesDetails.Extra1 = string.Empty;
                 InfoSalesDetails.Extra2 = string.Empty;
-                for (int inI = 0; inI < inRowCount; inI++)
+                for (int inI2 = 0; inI2 < inRowCount; inI2++)
                 {
-                    if (dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value.ToString() != string.Empty)
+                    if (dgvPointOfSales.Rows[inI2].Cells["dgvtxtProductName"].Value != null && dgvPointOfSales.Rows[inI2].Cells["dgvtxtProductName"].Value.ToString() != string.Empty && dgvPointOfSales.Rows[inI2].Cells["dgvtxtQuantity"].Value != null && dgvPointOfSales.Rows[inI2].Cells["dgvtxtQuantity"].Value.ToString() != string.Empty)
                     {
-                        if (dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString() != string.Empty)
-                        {
-                            InfoSalesDetails.SlNo = Convert.ToInt32(dgvPointOfSales.Rows[inI].Cells["dgvtxtSlNo"].Value.ToString());
-                            InfoSalesDetails.ProductId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtProductId"].Value.ToString());
-                            InfoSalesDetails.Qty = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString());
-                            InfoSalesDetails.Rate = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRate"].Value.ToString());
-                            InfoSalesDetails.UnitId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtUnitId"].Value.ToString());
-                            InfoSalesDetails.UnitConversionId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtunitconversionId"].Value.ToString());
-                            InfoSalesDetails.Discount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtDiscount"].Value.ToString());
-                            InfoSalesDetails.TaxId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxttaxid"].Value.ToString());
-                            InfoSalesDetails.BatchId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtBatchId"].Value.ToString());
-                            InfoSalesDetails.GodownId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGodownId"].Value.ToString());
-                            InfoSalesDetails.RackId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRackId"].Value.ToString());
-                            InfoSalesDetails.TaxAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTaxAmount"].Value.ToString());
-                            InfoSalesDetails.GrossAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGrossValue"].Value.ToString());
-                            InfoSalesDetails.NetAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtNetAmount"].Value.ToString());
-                            InfoSalesDetails.Amount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTotalAmount"].Value.ToString());
-                            spSalesDetails.SalesDetailsAdd(InfoSalesDetails);
-                            infoStockPosting.Date = InfoSalesMaster.Date;
-                            infoStockPosting.VoucherTypeId = DecPOSVoucherTypeId;
-                            infoStockPosting.VoucherNo = strVoucherNo;
-                            infoStockPosting.InvoiceNo = txtVoucherNo.Text.Trim();
-                            infoStockPosting.AgainstVoucherTypeId = 0;
-                            infoStockPosting.AgainstVoucherNo = "NA";
-                            infoStockPosting.AgainstInvoiceNo = "NA";
-                            infoStockPosting.ProductId = InfoSalesDetails.ProductId;
-                            infoStockPosting.BatchId = InfoSalesDetails.BatchId;
-                            infoStockPosting.UnitId = InfoSalesDetails.UnitId;
-                            infoStockPosting.GodownId = InfoSalesDetails.GodownId;
-                            infoStockPosting.RackId = InfoSalesDetails.RackId;
-                            infoStockPosting.InwardQty = 0;
-                            infoStockPosting.OutwardQty = InfoSalesDetails.Qty / SPUnitConversion.UnitConversionRateByUnitConversionId(InfoSalesDetails.UnitConversionId); ;
-                            infoStockPosting.Rate = InfoSalesDetails.Rate;
-                            infoStockPosting.FinancialYearId = InfoSalesMaster.FinancialYearId;
-                            infoStockPosting.Extra1 = string.Empty;
-                            infoStockPosting.Extra2 = string.Empty;
-                            spStockPosting.StockPostingAdd(infoStockPosting);
-                        }
+                        InfoSalesDetails.SlNo = Convert.ToInt32(dgvPointOfSales.Rows[inI2].Cells["dgvtxtSlNo"].Value.ToString());
+                        InfoSalesDetails.ProductId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtProductId"].Value.ToString());
+                        InfoSalesDetails.Qty = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtQuantity"].Value.ToString());
+                        InfoSalesDetails.Rate = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtRate"].Value.ToString());
+                        InfoSalesDetails.UnitId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtUnitId"].Value.ToString());
+                        InfoSalesDetails.UnitConversionId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtunitconversionId"].Value.ToString());
+                        InfoSalesDetails.Discount = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtDiscount"].Value.ToString());
+                        InfoSalesDetails.TaxId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxttaxid"].Value.ToString());
+                        InfoSalesDetails.BatchId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtBatchId"].Value.ToString());
+                        InfoSalesDetails.GodownId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtGodownId"].Value.ToString());
+                        InfoSalesDetails.RackId = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtRackId"].Value.ToString());
+                        InfoSalesDetails.TaxAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtTaxAmount"].Value.ToString());
+                        InfoSalesDetails.GrossAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtGrossValue"].Value.ToString());
+                        InfoSalesDetails.NetAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtNetAmount"].Value.ToString());
+                        InfoSalesDetails.Amount = Convert.ToDecimal(dgvPointOfSales.Rows[inI2].Cells["dgvtxtTotalAmount"].Value.ToString());
+                        spSalesDetails.SalesDetailsAdd(InfoSalesDetails);
+                        infoStockPosting.Date = InfoSalesMaster.Date;
+                        infoStockPosting.VoucherTypeId = DecPOSVoucherTypeId;
+                        infoStockPosting.VoucherNo = strVoucherNo;
+                        infoStockPosting.InvoiceNo = txtVoucherNo.Text.Trim();
+                        infoStockPosting.AgainstVoucherTypeId = 0m;
+                        infoStockPosting.AgainstVoucherNo = "NA";
+                        infoStockPosting.AgainstInvoiceNo = "NA";
+                        infoStockPosting.ProductId = InfoSalesDetails.ProductId;
+                        infoStockPosting.BatchId = InfoSalesDetails.BatchId;
+                        infoStockPosting.UnitId = InfoSalesDetails.UnitId;
+                        infoStockPosting.GodownId = InfoSalesDetails.GodownId;
+                        infoStockPosting.RackId = InfoSalesDetails.RackId;
+                        infoStockPosting.InwardQty = 0m;
+                        infoStockPosting.OutwardQty = InfoSalesDetails.Qty / SPUnitConversion.UnitConversionRateByUnitConversionId(InfoSalesDetails.UnitConversionId);
+                        infoStockPosting.Rate = InfoSalesDetails.Rate;
+                        infoStockPosting.FinancialYearId = InfoSalesMaster.FinancialYearId;
+                        infoStockPosting.Extra1 = string.Empty;
+                        infoStockPosting.Extra2 = string.Empty;
+                        spStockPosting.StockPostingAdd(infoStockPosting);
                     }
                 }
                 int inTaxRowCount = dgvPOSTax.RowCount;
@@ -1918,16 +1784,13 @@ namespace Profunia.Inventory.Desktop.Transactions
                 InfoSalesBillTax.ExtraDate = DateTime.Now;
                 InfoSalesBillTax.Extra1 = string.Empty;
                 InfoSalesBillTax.Extra2 = string.Empty;
-                for (int inI = 0; inI < inTaxRowCount; inI++)
+                for (int inI2 = 0; inI2 < inTaxRowCount; inI2++)
                 {
-                    if (dgvPOSTax.Rows[inI].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[inI].Cells["dgvtxttax"].Value.ToString() != string.Empty)
+                    if (dgvPOSTax.Rows[inI2].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[inI2].Cells["dgvtxttax"].Value.ToString() != string.Empty && dgvPOSTax.Rows[inI2].Cells["dgvtxtTaxAmt"].Value != null && dgvPOSTax.Rows[inI2].Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty)
                     {
-                        if (dgvPOSTax.Rows[inI].Cells["dgvtxtTaxAmt"].Value != null && dgvPOSTax.Rows[inI].Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty)
-                        {
-                            InfoSalesBillTax.TaxId = Convert.ToInt32(dgvPOSTax.Rows[inI].Cells["dgvtxttax"].Value.ToString());
-                            InfoSalesBillTax.TaxAmount = Convert.ToDecimal(dgvPOSTax.Rows[inI].Cells["dgvtxtTaxAmt"].Value.ToString());
-                            spSalesBillTax.SalesBillTaxAdd(InfoSalesBillTax);
-                        }
+                        InfoSalesBillTax.TaxId = Convert.ToInt32(dgvPOSTax.Rows[inI2].Cells["dgvtxttax"].Value.ToString());
+                        InfoSalesBillTax.TaxAmount = Convert.ToDecimal(dgvPOSTax.Rows[inI2].Cells["dgvtxtTaxAmt"].Value.ToString());
+                        spSalesBillTax.SalesBillTaxAdd(InfoSalesBillTax);
                     }
                 }
                 ledgerPostingAdd();
@@ -1952,12 +1815,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:44" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS45:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to add ledger Posting table
-        /// </summary>
+
         public void ledgerPostingAdd()
         {
             try
@@ -1965,15 +1826,15 @@ namespace Profunia.Inventory.Desktop.Transactions
                 LedgerPostingInfo infoLedgerPosting = new LedgerPostingInfo();
                 infoLedgerPosting.Date = Convert.ToDateTime(txtDate.Text.ToString());
                 infoLedgerPosting.ChequeDate = DateTime.Now;
-                infoLedgerPosting.ChequeNo = String.Empty;
+                infoLedgerPosting.ChequeNo = string.Empty;
                 infoLedgerPosting.VoucherTypeId = DecPOSVoucherTypeId;
                 infoLedgerPosting.VoucherNo = strVoucherNo;
                 infoLedgerPosting.InvoiceNo = txtVoucherNo.Text.Trim();
                 infoLedgerPosting.LedgerId = Convert.ToDecimal(cmbCashOrParty.SelectedValue);
-                infoLedgerPosting.Debit = Convert.ToDecimal(txtGrandTotal.Text); ;
-                infoLedgerPosting.Credit = 0;
+                infoLedgerPosting.Debit = Convert.ToDecimal(txtGrandTotal.Text);
+                infoLedgerPosting.Credit = 0m;
                 infoLedgerPosting.YearId = PublicVariables._decCurrentFinancialYearId;
-                infoLedgerPosting.DetailsId = 0;
+                infoLedgerPosting.DetailsId = 0m;
                 infoLedgerPosting.Extra1 = string.Empty;
                 infoLedgerPosting.Extra2 = string.Empty;
                 spLedgerPosting.LedgerPostingAdd(infoLedgerPosting);
@@ -1984,26 +1845,26 @@ namespace Profunia.Inventory.Desktop.Transactions
                 infoLedgerPosting.VoucherNo = strVoucherNo;
                 infoLedgerPosting.InvoiceNo = txtVoucherNo.Text.Trim();
                 infoLedgerPosting.LedgerId = Convert.ToDecimal(cmbSalesAccount.SelectedValue.ToString());
-                infoLedgerPosting.Debit = 0;
+                infoLedgerPosting.Debit = 0m;
                 infoLedgerPosting.Credit = Convert.ToDecimal(txtTotalAmount.Text);
                 infoLedgerPosting.YearId = PublicVariables._decCurrentFinancialYearId;
-                infoLedgerPosting.DetailsId = 0;
+                infoLedgerPosting.DetailsId = 0m;
                 infoLedgerPosting.Extra1 = string.Empty;
                 infoLedgerPosting.Extra2 = string.Empty;
                 spLedgerPosting.LedgerPostingAdd(infoLedgerPosting);
-                decimal decBillDis = 0;
+                decimal decBillDis = 0m;
                 decBillDis = Convert.ToDecimal(txtBillDiscount.Text.Trim().ToString());
-                if (decBillDis > 0)
+                if (decBillDis > 0m)
                 {
                     infoLedgerPosting.Debit = decBillDis;
-                    infoLedgerPosting.Credit = 0;
+                    infoLedgerPosting.Credit = 0m;
                     infoLedgerPosting.Date = Convert.ToDateTime(txtDate.Text.ToString());
                     infoLedgerPosting.VoucherTypeId = DecPOSVoucherTypeId;
                     infoLedgerPosting.VoucherNo = strVoucherNo;
                     infoLedgerPosting.InvoiceNo = txtVoucherNo.Text.Trim();
-                    infoLedgerPosting.LedgerId = 8;
+                    infoLedgerPosting.LedgerId = 8m;
                     infoLedgerPosting.YearId = PublicVariables._decCurrentFinancialYearId;
-                    infoLedgerPosting.DetailsId = 0;
+                    infoLedgerPosting.DetailsId = 0m;
                     infoLedgerPosting.ChequeNo = string.Empty;
                     infoLedgerPosting.ChequeDate = DateTime.Now;
                     infoLedgerPosting.Extra1 = string.Empty;
@@ -2012,23 +1873,23 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 if (dgvPointOfSales.Columns["dgvtxtTaxPercentage"].Visible)
                 {
-                    foreach (DataGridViewRow dgvrow in dgvPOSTax.Rows)
+                    foreach (DataGridViewRow item in (IEnumerable)dgvPOSTax.Rows)
                     {
-                        if (dgvrow.Cells["dgvtxttax"].Value != null && dgvrow.Cells["dgvtxttax"].Value.ToString() != string.Empty)
+                        if (item.Cells["dgvtxttax"].Value != null && item.Cells["dgvtxttax"].Value.ToString() != string.Empty)
                         {
-                            decimal decTaxAmount = 0;
-                            decTaxAmount = Convert.ToDecimal(dgvrow.Cells["dgvtxtTaxAmt"].Value.ToString());
-                            if (decTaxAmount > 0)
+                            decimal decTaxAmount2 = 0m;
+                            decTaxAmount2 = Convert.ToDecimal(item.Cells["dgvtxtTaxAmt"].Value.ToString());
+                            if (decTaxAmount2 > 0m)
                             {
-                                infoLedgerPosting.Debit = 0;
-                                infoLedgerPosting.Credit = Convert.ToDecimal(dgvrow.Cells["dgvtxtTaxAmt"].Value.ToString());
+                                infoLedgerPosting.Debit = 0m;
+                                infoLedgerPosting.Credit = Convert.ToDecimal(item.Cells["dgvtxtTaxAmt"].Value.ToString());
                                 infoLedgerPosting.Date = Convert.ToDateTime(txtDate.Text.ToString());
                                 infoLedgerPosting.VoucherTypeId = DecPOSVoucherTypeId;
                                 infoLedgerPosting.VoucherNo = strVoucherNo;
                                 infoLedgerPosting.InvoiceNo = txtVoucherNo.Text.Trim();
-                                infoLedgerPosting.LedgerId = Convert.ToDecimal(dgvrow.Cells["dgvtxtTaxLedgerId"].Value.ToString());
+                                infoLedgerPosting.LedgerId = Convert.ToDecimal(item.Cells["dgvtxtTaxLedgerId"].Value.ToString());
                                 infoLedgerPosting.YearId = PublicVariables._decCurrentFinancialYearId;
-                                infoLedgerPosting.DetailsId = 0;
+                                infoLedgerPosting.DetailsId = 0m;
                                 infoLedgerPosting.ChequeNo = string.Empty;
                                 infoLedgerPosting.ChequeDate = DateTime.Now;
                                 infoLedgerPosting.Extra1 = string.Empty;
@@ -2041,12 +1902,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 45" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS46:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to add Party balance table
-        /// </summary>
+
         public void partyBalanceAdd()
         {
             try
@@ -2056,12 +1915,12 @@ namespace Profunia.Inventory.Desktop.Transactions
                 infoPartyBalance.VoucherNo = strVoucherNo;
                 infoPartyBalance.InvoiceNo = txtVoucherNo.Text.Trim();
                 infoPartyBalance.VoucherTypeId = DecPOSVoucherTypeId;
-                infoPartyBalance.AgainstVoucherTypeId = 0;
+                infoPartyBalance.AgainstVoucherTypeId = 0m;
                 infoPartyBalance.AgainstVoucherNo = "NA";
                 infoPartyBalance.AgainstInvoiceNo = "NA";
                 infoPartyBalance.ReferenceType = "New";
                 infoPartyBalance.Debit = InfoSalesMaster.GrandTotal;
-                infoPartyBalance.Credit = 0;
+                infoPartyBalance.Credit = 0m;
                 infoPartyBalance.CreditPeriod = 0;
                 infoPartyBalance.ExchangeRateId = InfoSalesMaster.ExchangeRateId;
                 infoPartyBalance.FinancialYearId = PublicVariables._decCurrentFinancialYearId;
@@ -2072,31 +1931,25 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 46" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS47:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to print
-        /// </summary>
-        /// <param name="decSalesMasterId"></param>
+
         public void Print(decimal decSalesMasterId)
         {
             try
             {
-                DataSet dsSalesInvoiceTest = spSalesMaster.salesInvoicePrintAfterSave(decSalesMasterId, 1, InfoSalesMaster.OrderMasterId, InfoSalesMaster.DeliveryNoteMasterId, InfoSalesMaster.QuotationMasterId);
+                DataSet dsSalesInvoiceTest = spSalesMaster.salesInvoicePrintAfterSave(decSalesMasterId, 1m, InfoSalesMaster.OrderMasterId, InfoSalesMaster.DeliveryNoteMasterId, InfoSalesMaster.QuotationMasterId);
                 frmReport frmReport = new frmReport();
                 frmReport.MdiParent = formMDI.MDIObj;
                 frmReport.SalesInvoicePrinting(dsSalesInvoiceTest);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 47" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS48:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to print an item in a dotmatrix
-        /// </summary>
-        /// <param name="decSalesMasterId"></param>
+
         public void PrintForDotMatrix(decimal decSalesMasterId)
         {
             try
@@ -2126,51 +1979,51 @@ namespace Profunia.Inventory.Desktop.Transactions
                 dtblGridDetails.Columns.Add("Rate");
                 dtblGridDetails.Columns.Add("Amount");
                 int inRowCount = 0;
-                foreach (DataGridViewRow dRow in dgvPointOfSales.Rows)
+                foreach (DataGridViewRow item in (IEnumerable)dgvPointOfSales.Rows)
                 {
-                    if (!dRow.IsNewRow)
+                    if (!item.IsNewRow)
                     {
                         DataRow dr = dtblGridDetails.NewRow();
                         dr["SlNo"] = ++inRowCount;
-                        if (dRow.Cells["dgvtxtBarcode"].Value != null)
+                        if (item.Cells["dgvtxtBarcode"].Value != null)
                         {
-                            dr["BarCode"] = dRow.Cells["dgvtxtBarcode"].Value.ToString();
+                            dr["BarCode"] = item.Cells["dgvtxtBarcode"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtProductCode"].Value != null)
+                        if (item.Cells["dgvtxtProductCode"].Value != null)
                         {
-                            dr["ProductCode"] = dRow.Cells["dgvtxtProductCode"].Value.ToString();
+                            dr["ProductCode"] = item.Cells["dgvtxtProductCode"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtProductName"].Value != null)
+                        if (item.Cells["dgvtxtProductName"].Value != null)
                         {
-                            dr["ProductName"] = dRow.Cells["dgvtxtProductName"].Value.ToString();
+                            dr["ProductName"] = item.Cells["dgvtxtProductName"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtQuantity"].Value != null)
+                        if (item.Cells["dgvtxtQuantity"].Value != null)
                         {
-                            dr["Qty"] = dRow.Cells["dgvtxtQuantity"].Value.ToString();
+                            dr["Qty"] = item.Cells["dgvtxtQuantity"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtUnit"].Value != null)
+                        if (item.Cells["dgvtxtUnit"].Value != null)
                         {
-                            dr["Unit"] = dRow.Cells["dgvtxtUnit"].Value.ToString();
+                            dr["Unit"] = item.Cells["dgvtxtUnit"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtRate"].Value != null)
+                        if (item.Cells["dgvtxtRate"].Value != null)
                         {
-                            dr["Rate"] = dRow.Cells["dgvtxtRate"].Value.ToString();
+                            dr["Rate"] = item.Cells["dgvtxtRate"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtTotalAmount"].Value != null)
+                        if (item.Cells["dgvtxtTotalAmount"].Value != null)
                         {
-                            dr["Amount"] = dRow.Cells["dgvtxtTotalAmount"].Value.ToString();
+                            dr["Amount"] = item.Cells["dgvtxtTotalAmount"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtTaxAmount"].Value != null)
+                        if (item.Cells["dgvtxtTaxAmount"].Value != null)
                         {
-                            dr["TaxAmount"] = dRow.Cells["dgvtxtTaxAmount"].Value.ToString();
+                            dr["TaxAmount"] = item.Cells["dgvtxtTaxAmount"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtNetAmount"].Value != null)
+                        if (item.Cells["dgvtxtNetAmount"].Value != null)
                         {
-                            dr["NetAmount"] = dRow.Cells["dgvtxtNetAmount"].Value.ToString();
+                            dr["NetAmount"] = item.Cells["dgvtxtNetAmount"].Value.ToString();
                         }
-                        if (dRow.Cells["dgvtxtDiscount"].Value != null)
+                        if (item.Cells["dgvtxtDiscount"].Value != null)
                         {
-                            dr["DiscountAmount"] = dRow.Cells["dgvtxtDiscount"].Value.ToString();
+                            dr["DiscountAmount"] = item.Cells["dgvtxtDiscount"].Value.ToString();
                         }
                         dtblGridDetails.Rows.Add(dr);
                     }
@@ -2210,13 +2063,13 @@ namespace Profunia.Inventory.Desktop.Transactions
                 dRowOther["BillDiscount"] = txtBillDiscount.Text;
                 dRowOther["GrandTotal"] = txtGrandTotal.Text;
                 dRowOther["TotalAmount"] = txtTotalAmount.Text;
-                dRowOther["address"] = (dtblOtherDetails.Rows[0]["address"].ToString().Replace("\n", ", ")).Replace("\r", "");
+                dRowOther["address"] = dtblOtherDetails.Rows[0]["address"].ToString().Replace("\n", ", ").Replace("\r", "");
                 AccountLedgerSP spAccountLedger = new AccountLedgerSP();
-                AccountLedgerInfo infoAccountLedger = new AccountLedgerInfo();
-                infoAccountLedger = spAccountLedger.AccountLedgerView(Convert.ToDecimal(cmbCashOrParty.SelectedValue));
-                dRowOther["CustomerAddress"] = (infoAccountLedger.Address.ToString().Replace("\n", ", ")).Replace("\r", "");
-                dRowOther["CustomerTIN"] = infoAccountLedger.Tin;
-                dRowOther["CustomerCST"] = infoAccountLedger.Cst;
+                AccountLedgerInfo infoAccountLedger2 = new AccountLedgerInfo();
+                infoAccountLedger2 = spAccountLedger.AccountLedgerView(Convert.ToDecimal(cmbCashOrParty.SelectedValue));
+                dRowOther["CustomerAddress"] = infoAccountLedger2.Address.ToString().Replace("\n", ", ").Replace("\r", "");
+                dRowOther["CustomerTIN"] = infoAccountLedger2.Tin;
+                dRowOther["CustomerCST"] = infoAccountLedger2.Cst;
                 dRowOther["AmountInWords"] = new NumToText().AmountWords(Convert.ToDecimal(txtGrandTotal.Text), PublicVariables._decCurrencyId);
                 VoucherTypeSP spVoucherType = new VoucherTypeSP();
                 DataTable dtblDeclaration = spVoucherType.DeclarationAndHeadingGetByVoucherTypeId(DecPOSVoucherTypeId);
@@ -2226,17 +2079,14 @@ namespace Profunia.Inventory.Desktop.Transactions
                 dRowOther["Heading3"] = dtblDeclaration.Rows[0]["Heading3"].ToString();
                 dRowOther["Heading4"] = dtblDeclaration.Rows[0]["Heading4"].ToString();
                 int inFormId = spVoucherType.FormIdGetForPrinterSettings(Convert.ToInt32(dtblDeclaration.Rows[0]["masterId"].ToString()));
-                PrintWorks.DotMatrixPrint.PrintDesign(inFormId, dtblOtherDetails, dtblGridDetails, dtblOtherDetails);
+                DotMatrixPrint.PrintDesign(inFormId, dtblOtherDetails, dtblGridDetails, dtblOtherDetails);
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 48" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS49:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to set the status of Print Afetr Save checkbox
-        /// </summary>
-        /// <returns></returns>
+
         public bool PrintAfetrSave()
         {
             bool isTick = false;
@@ -2246,15 +2096,11 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 49" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS50:" + ex.Message;
             }
             return isTick;
         }
 
-
-        /// <summary>
-        /// Function to update the details
-        /// </summary>
         public void EditFunction()
         {
             try
@@ -2262,21 +2108,21 @@ namespace Profunia.Inventory.Desktop.Transactions
                 ExchangeRateSP spExchangeRate = new ExchangeRateSP();
                 InfoSalesMaster.SalesMasterId = decSalesMasterId;
                 InfoSalesMaster.InvoiceNo = txtVoucherNo.Text.Trim();
-                InfoSalesMaster.AdditionalCost = 0;
+                InfoSalesMaster.AdditionalCost = 0m;
                 InfoSalesMaster.LedgerId = Convert.ToDecimal(cmbCashOrParty.SelectedValue.ToString());
                 InfoSalesMaster.BillDiscount = Convert.ToDecimal(txtBillDiscount.Text);
                 InfoSalesMaster.CounterId = Convert.ToDecimal(cmbCounter.SelectedValue.ToString());
                 InfoSalesMaster.CreditPeriod = 0;
                 InfoSalesMaster.CustomerName = "";
                 InfoSalesMaster.Date = Convert.ToDateTime(txtDate.Text.Trim());
-                InfoSalesMaster.DeliveryNoteMasterId = 0;
+                InfoSalesMaster.DeliveryNoteMasterId = 0m;
                 if (cmbSalesMan.SelectedValue.ToString() != null)
                 {
                     InfoSalesMaster.EmployeeId = Convert.ToDecimal(cmbSalesMan.SelectedValue.ToString());
                 }
                 else
                 {
-                    InfoSalesMaster.EmployeeId = 0;
+                    InfoSalesMaster.EmployeeId = 0m;
                 }
                 decimal decExachangeRateId = spExchangeRate.ExchangerateViewByCurrencyId(PublicVariables._decCurrencyId);
                 InfoSalesMaster.ExchangeRateId = decExachangeRateId;
@@ -2284,10 +2130,10 @@ namespace Profunia.Inventory.Desktop.Transactions
                 InfoSalesMaster.GrandTotal = Convert.ToDecimal(txtGrandTotal.Text.Trim());
                 InfoSalesMaster.LrNo = string.Empty;
                 InfoSalesMaster.Narration = txtNarration.Text.Trim();
-                InfoSalesMaster.OrderMasterId = 0;
+                InfoSalesMaster.OrderMasterId = 0m;
                 InfoSalesMaster.POS = true;
                 InfoSalesMaster.PricinglevelId = Convert.ToDecimal(cmbPricingLevel.SelectedValue.ToString());
-                InfoSalesMaster.QuotationMasterId = 0;
+                InfoSalesMaster.QuotationMasterId = 0m;
                 InfoSalesMaster.SalesAccount = Convert.ToDecimal(cmbSalesAccount.SelectedValue.ToString());
                 InfoSalesMaster.TaxAmount = Convert.ToDecimal(lblTaxTotalAmount.Text);
                 InfoSalesMaster.TotalAmount = Convert.ToDecimal(txtTotalAmount.Text);
@@ -2300,7 +2146,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    InfoSalesMaster.SuffixPrefixId = 0;
+                    InfoSalesMaster.SuffixPrefixId = 0m;
                 }
                 if (isAutomatic)
                 {
@@ -2314,7 +2160,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                 InfoSalesMaster.Extra1 = string.Empty;
                 InfoSalesMaster.Extra2 = string.Empty;
                 spSalesMaster.SalesMasterEdit(InfoSalesMaster);
-                decimal dcAgainstVopucherTypeId = 0;
+                decimal dcAgainstVopucherTypeId = 0m;
                 string strAgainstVoucherNo = "NA";
                 spStockPosting.StockPostingDeleteByagainstVoucherTypeIdAndagainstVoucherNoAndVoucherNoAndVoucherType(dcAgainstVopucherTypeId, strAgainstVoucherNo, strVoucherNo, InfoSalesMaster.VoucherTypeId);
                 spLedgerPosting.LedgerPostDelete(InfoSalesMaster.VoucherNo, InfoSalesMaster.VoucherTypeId);
@@ -2325,8 +2171,8 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     if (cbxPrintAfterSave.Checked)
                     {
-                        SettingsSP spSettings = new SettingsSP();
-                        if (spSettings.SettingsStatusCheck("Printer") == "Dot Matrix")
+                        SettingsSP spSettings2 = new SettingsSP();
+                        if (spSettings2.SettingsStatusCheck("Printer") == "Dot Matrix")
                         {
                             PrintForDotMatrix(decSalesMasterId);
                         }
@@ -2341,8 +2187,8 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     if (cbxPrintAfterSave.Checked)
                     {
-                        SettingsSP spSettings = new SettingsSP();
-                        if (spSettings.SettingsStatusCheck("Printer") == "Dot Matrix")
+                        SettingsSP spSettings2 = new SettingsSP();
+                        if (spSettings2.SettingsStatusCheck("Printer") == "Dot Matrix")
                         {
                             PrintForDotMatrix(decSalesMasterId);
                         }
@@ -2353,34 +2199,30 @@ namespace Profunia.Inventory.Desktop.Transactions
                     }
                     frmSalesReportObj.gridFill();
                 }
-                this.Close();
+                base.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 50" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS51:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to delete the details from table while updating
-        /// </summary>
+
         public void removeSalesInvoiceDetails()
         {
             try
             {
-                foreach (var strId in lstArrOfRemove)
+                foreach (object item in lstArrOfRemove)
                 {
-                    decimal decDeleteId = Convert.ToDecimal(strId);
+                    decimal decDeleteId = Convert.ToDecimal(item);
                     spSalesDetails.SalesDetailsDelete(decDeleteId);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 51" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS52:" + ex.Message;
             }
         }
-        /// <summary>
-        /// FUnction to edit the details 
-        /// </summary>
+
         public void SalesInvoiceDetailsEdit()
         {
             try
@@ -2388,33 +2230,30 @@ namespace Profunia.Inventory.Desktop.Transactions
                 for (int inI = 0; inI < dgvPointOfSales.Rows.Count; inI++)
                 {
                     decimal decRefStatus = spSalesMaster.SalesInvoiceReferenceCheckForEdit(decSalesMasterId);
-                    if (Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtSalesDetailsId"].Value) == 0 || dgvPointOfSales.Rows[inI].Cells["dgvtxtSalesDetailsId"].Value == null)   // here check the  row added or editing current row
+                    if (Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtSalesDetailsId"].Value) == 0m || dgvPointOfSales.Rows[inI].Cells["dgvtxtSalesDetailsId"].Value == null)
                     {
                         InfoSalesDetails.SalesMasterId = decSalesMasterId;
                         InfoSalesDetails.ExtraDate = DateTime.Now;
                         InfoSalesDetails.Extra1 = string.Empty;
                         InfoSalesDetails.Extra2 = string.Empty;
-                        if (dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value.ToString() != string.Empty)
+                        if (dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtProductName"].Value.ToString() != string.Empty && dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString() != string.Empty)
                         {
-                            if (dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value != null && dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString() != string.Empty)
-                            {
-                                InfoSalesDetails.SlNo = Convert.ToInt32(dgvPointOfSales.Rows[inI].Cells["dgvtxtSlNo"].Value.ToString());
-                                InfoSalesDetails.ProductId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtProductId"].Value.ToString());
-                                InfoSalesDetails.Qty = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString());
-                                InfoSalesDetails.Rate = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRate"].Value.ToString());
-                                InfoSalesDetails.UnitId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtUnitId"].Value.ToString());
-                                InfoSalesDetails.UnitConversionId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtunitconversionId"].Value.ToString());
-                                InfoSalesDetails.Discount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtDiscount"].Value.ToString());
-                                InfoSalesDetails.TaxId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxttaxid"].Value.ToString());
-                                InfoSalesDetails.BatchId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtBatchId"].Value.ToString());
-                                InfoSalesDetails.GodownId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGodownId"].Value.ToString());
-                                InfoSalesDetails.RackId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRackId"].Value.ToString());
-                                InfoSalesDetails.TaxAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTaxAmount"].Value.ToString());
-                                InfoSalesDetails.GrossAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGrossValue"].Value.ToString());
-                                InfoSalesDetails.NetAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtNetAmount"].Value.ToString());
-                                InfoSalesDetails.Amount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTotalAmount"].Value.ToString());
-                                spSalesDetails.SalesDetailsAdd(InfoSalesDetails);
-                            }
+                            InfoSalesDetails.SlNo = Convert.ToInt32(dgvPointOfSales.Rows[inI].Cells["dgvtxtSlNo"].Value.ToString());
+                            InfoSalesDetails.ProductId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtProductId"].Value.ToString());
+                            InfoSalesDetails.Qty = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtQuantity"].Value.ToString());
+                            InfoSalesDetails.Rate = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRate"].Value.ToString());
+                            InfoSalesDetails.UnitId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtUnitId"].Value.ToString());
+                            InfoSalesDetails.UnitConversionId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtunitconversionId"].Value.ToString());
+                            InfoSalesDetails.Discount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtDiscount"].Value.ToString());
+                            InfoSalesDetails.TaxId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxttaxid"].Value.ToString());
+                            InfoSalesDetails.BatchId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtBatchId"].Value.ToString());
+                            InfoSalesDetails.GodownId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGodownId"].Value.ToString());
+                            InfoSalesDetails.RackId = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtRackId"].Value.ToString());
+                            InfoSalesDetails.TaxAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTaxAmount"].Value.ToString());
+                            InfoSalesDetails.GrossAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtGrossValue"].Value.ToString());
+                            InfoSalesDetails.NetAmount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtNetAmount"].Value.ToString());
+                            InfoSalesDetails.Amount = Convert.ToDecimal(dgvPointOfSales.Rows[inI].Cells["dgvtxtTotalAmount"].Value.ToString());
+                            spSalesDetails.SalesDetailsAdd(InfoSalesDetails);
                         }
                     }
                     else
@@ -2448,21 +2287,18 @@ namespace Profunia.Inventory.Desktop.Transactions
                     InfoSalesBillTax.Extra2 = string.Empty;
                     for (int inTax = 0; inTax < inTaxRowCount; inTax++)
                     {
-                        if (dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value.ToString() != string.Empty)
+                        if (dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value.ToString() != string.Empty && dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value != null && dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty)
                         {
-                            if (dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value != null && dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value.ToString() != string.Empty)
-                            {
-                                InfoSalesBillTax.TaxId = Convert.ToInt32(dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value.ToString());
-                                InfoSalesBillTax.TaxAmount = Convert.ToDecimal(dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value.ToString());
-                                spSalesBillTax.SalesBillTaxEditBySalesMasterIdAndTaxId(InfoSalesBillTax);
-                            }
+                            InfoSalesBillTax.TaxId = Convert.ToInt32(dgvPOSTax.Rows[inTax].Cells["dgvtxttax"].Value.ToString());
+                            InfoSalesBillTax.TaxAmount = Convert.ToDecimal(dgvPOSTax.Rows[inTax].Cells["dgvtxtTaxAmt"].Value.ToString());
+                            spSalesBillTax.SalesBillTaxEditBySalesMasterIdAndTaxId(InfoSalesBillTax);
                         }
                     }
                     infoStockPosting.Date = InfoSalesMaster.Date;
                     infoStockPosting.VoucherTypeId = DecPOSVoucherTypeId;
                     infoStockPosting.VoucherNo = strVoucherNo;
                     infoStockPosting.InvoiceNo = txtVoucherNo.Text.Trim();
-                    infoStockPosting.AgainstVoucherTypeId = 0;
+                    infoStockPosting.AgainstVoucherTypeId = 0m;
                     infoStockPosting.AgainstVoucherNo = "NA";
                     infoStockPosting.AgainstInvoiceNo = "NA";
                     infoStockPosting.ProductId = InfoSalesDetails.ProductId;
@@ -2470,7 +2306,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     infoStockPosting.UnitId = InfoSalesDetails.UnitId;
                     infoStockPosting.GodownId = InfoSalesDetails.GodownId;
                     infoStockPosting.RackId = InfoSalesDetails.RackId;
-                    infoStockPosting.InwardQty = 0;
+                    infoStockPosting.InwardQty = 0m;
                     infoStockPosting.OutwardQty = InfoSalesDetails.Qty;
                     infoStockPosting.Rate = InfoSalesDetails.Rate;
                     infoStockPosting.FinancialYearId = InfoSalesMaster.FinancialYearId;
@@ -2486,12 +2322,12 @@ namespace Profunia.Inventory.Desktop.Transactions
                     infoPartyBalance.VoucherNo = strVoucherNo;
                     infoPartyBalance.InvoiceNo = txtVoucherNo.Text.Trim();
                     infoPartyBalance.VoucherTypeId = DecPOSVoucherTypeId;
-                    infoPartyBalance.AgainstVoucherTypeId = 0;
+                    infoPartyBalance.AgainstVoucherTypeId = 0m;
                     infoPartyBalance.AgainstVoucherNo = "NA";
                     infoPartyBalance.AgainstInvoiceNo = "NA";
                     infoPartyBalance.ReferenceType = "New";
                     infoPartyBalance.Debit = InfoSalesMaster.GrandTotal;
-                    infoPartyBalance.Credit = 0;
+                    infoPartyBalance.Credit = 0m;
                     infoPartyBalance.CreditPeriod = 0;
                     infoPartyBalance.ExchangeRateId = InfoSalesMaster.ExchangeRateId;
                     infoPartyBalance.FinancialYearId = PublicVariables._decCurrentFinancialYearId;
@@ -2503,35 +2339,25 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 52" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS53:" + ex.Message;
             }
         }
 
-        /// <summary>
-        /// Function to call this form from frmVoucherSearch to view details and for updation 
-        /// </summary>
-        /// <param name="frm"></param>
-        /// <param name="decId"></param>
         public void CallFromVoucherSearch(frmVoucherSearch frm, decimal decId)
         {
-
             try
             {
                 base.Show();
-                this.objVoucherSearch = frm;
+                objVoucherSearch = frm;
                 decSalesMasterId = decId;
                 DetailsFillForEdit();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 53" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS54:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmSalesInvoiceRegister to view details and for updation 
-        /// </summary>
-        /// <param name="decSalesMasterid"></param>
-        /// <param name="frmSiRegister"></param>
+
         public void CallFromSalesRegister(decimal decSalesMasterid, frmSalesInvoiceRegister frmSiRegister)
         {
             try
@@ -2543,14 +2369,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 54" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS55:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmSalesReport to view details and for updation 
-        /// </summary>
-        /// <param name="decSalesMasterid"></param>
-        /// <param name="frmSIReport"></param>
+
         public void CallFromSalesInvoiceReport(decimal decSalesMasterid, frmSalesReport frmSIReport)
         {
             try
@@ -2562,12 +2384,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 55" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS56:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to fill the details here for updation
-        /// </summary>
+
         public void DetailsFillForEdit()
         {
             try
@@ -2598,49 +2418,48 @@ namespace Profunia.Inventory.Desktop.Transactions
                 cmbPricingLevel.SelectedValue = dtblMaster.Rows[0]["pricingLevelId"].ToString();
                 cmbSalesMan.SelectedValue = dtblMaster.Rows[0]["employeeId"].ToString();
                 txtBalance.Text = dtblMaster.Rows[0]["grandTotal"].ToString();
-                DataTable dtbl = new DataTable();
-                dtbl = spSalesDetails.SalesDetailsViewBySalesMasterId(decSalesMasterId);
-                for (int i = 0; i < dtbl.Rows.Count; i++)
+                DataTable dtbl3 = new DataTable();
+                dtbl3 = spSalesDetails.SalesDetailsViewBySalesMasterId(decSalesMasterId);
+                for (int j = 0; j < dtbl3.Rows.Count; j++)
                 {
                     dgvPointOfSales.Rows.Add();
-                    decSalesDetailsId = Convert.ToDecimal(dtbl.Rows[i]["salesDetailsId"].ToString());
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtSalesDetailsId"].Value = decSalesDetailsId;
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtSlNo"].Value = dtbl.Rows[i]["slNo"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtProductCode"].Value = dtbl.Rows[i]["productCode"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtProductName"].Value = dtbl.Rows[i]["productName"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtQuantity"].Value = dtbl.Rows[i]["qty"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtUnit"].Value = dtbl.Rows[i]["unitName"].ToString();
-                    decimal dcrate = Convert.ToDecimal(dtbl.Rows[i]["rate"].ToString());
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtRate"].Value = Math.Round(dcrate, PublicVariables._inNoOfDecimalPlaces);
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtGrossValue"].Value = dtbl.Rows[i]["grossAmount"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtDiscount"].Value = dtbl.Rows[i]["discount"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtNetAmount"].Value = dtbl.Rows[i]["netAmount"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtTaxPercentage"].Value = dtbl.Rows[i]["taxName"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtTaxAmount"].Value = dtbl.Rows[i]["taxAmount"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtTotalAmount"].Value = dtbl.Rows[i]["amount"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtBarcode"].Value = dtbl.Rows[i]["barcode"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtunitconversionId"].Value = dtbl.Rows[i]["unitConversionId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtBatchId"].Value = dtbl.Rows[i]["batchId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtRackId"].Value = dtbl.Rows[i]["rackId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtGodownId"].Value = dtbl.Rows[i]["godownId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtBatchno"].Value = dtbl.Rows[i]["batchNo"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtGodownName"].Value = dtbl.Rows[i]["godownName"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtRackName"].Value = dtbl.Rows[i]["rackName"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxttaxid"].Value = dtbl.Rows[i]["taxId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtProductId"].Value = dtbl.Rows[i]["productId"].ToString();
-                    dgvPointOfSales.Rows[i].Cells["dgvtxtUnitId"].Value = dtbl.Rows[i]["unitId"].ToString();
+                    decSalesDetailsId = Convert.ToDecimal(dtbl3.Rows[j]["salesDetailsId"].ToString());
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtSalesDetailsId"].Value = decSalesDetailsId;
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtSlNo"].Value = dtbl3.Rows[j]["slNo"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtProductCode"].Value = dtbl3.Rows[j]["productCode"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtProductName"].Value = dtbl3.Rows[j]["productName"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtQuantity"].Value = dtbl3.Rows[j]["qty"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtUnit"].Value = dtbl3.Rows[j]["unitName"].ToString();
+                    decimal dcrate = Convert.ToDecimal(dtbl3.Rows[j]["rate"].ToString());
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtRate"].Value = Math.Round(dcrate, PublicVariables._inNoOfDecimalPlaces);
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtGrossValue"].Value = dtbl3.Rows[j]["grossAmount"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtDiscount"].Value = dtbl3.Rows[j]["discount"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtNetAmount"].Value = dtbl3.Rows[j]["netAmount"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtTaxPercentage"].Value = dtbl3.Rows[j]["taxName"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtTaxAmount"].Value = dtbl3.Rows[j]["taxAmount"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtTotalAmount"].Value = dtbl3.Rows[j]["amount"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtBarcode"].Value = dtbl3.Rows[j]["barcode"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtunitconversionId"].Value = dtbl3.Rows[j]["unitConversionId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtBatchId"].Value = dtbl3.Rows[j]["batchId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtRackId"].Value = dtbl3.Rows[j]["rackId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtGodownId"].Value = dtbl3.Rows[j]["godownId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtBatchno"].Value = dtbl3.Rows[j]["batchNo"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtGodownName"].Value = dtbl3.Rows[j]["godownName"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtRackName"].Value = dtbl3.Rows[j]["rackName"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxttaxid"].Value = dtbl3.Rows[j]["taxId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtProductId"].Value = dtbl3.Rows[j]["productId"].ToString();
+                    dgvPointOfSales.Rows[j].Cells["dgvtxtUnitId"].Value = dtbl3.Rows[j]["unitId"].ToString();
                 }
-              
                 taxGridFill();
-                dtbl = spSalesBillTax.SalesInvoiceSalesBillTaxViewAllBySalesMasterId(decSalesMasterId);
-                foreach (DataGridViewRow dgvrowTax in dgvPOSTax.Rows)
+                dtbl3 = spSalesBillTax.SalesInvoiceSalesBillTaxViewAllBySalesMasterId(decSalesMasterId);
+                foreach (DataGridViewRow item in (IEnumerable)dgvPOSTax.Rows)
                 {
-                    for (int i = 0; i < dtbl.Rows.Count; i++)
+                    for (int j = 0; j < dtbl3.Rows.Count; j++)
                     {
-                        if (dgvPOSTax.Rows[i].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[i].Cells["dgvtxttax"].Value.ToString() != string.Empty)
+                        if (dgvPOSTax.Rows[j].Cells["dgvtxttax"].Value != null && dgvPOSTax.Rows[j].Cells["dgvtxttax"].Value.ToString() != string.Empty)
                         {
-                            dgvPOSTax.Rows[i].Cells["dgvtxttax"].Value = dtbl.Rows[i]["taxId"].ToString();
-                            dgvPOSTax.Rows[i].Cells["dgvtxtTaxAmt"].Value = dtbl.Rows[i]["taxAmount"].ToString();
+                            dgvPOSTax.Rows[j].Cells["dgvtxttax"].Value = dtbl3.Rows[j]["taxId"].ToString();
+                            dgvPOSTax.Rows[j].Cells["dgvtxtTaxAmt"].Value = dtbl3.Rows[j]["taxAmount"].ToString();
                         }
                     }
                 }
@@ -2648,13 +2467,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:56" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS57:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to delete an item from table
-        /// </summary>
-        /// <param name="decSalesInvoiceid"></param>
+
         public void DeleteFunction(decimal decSalesInvoiceid)
         {
             try
@@ -2664,19 +2480,19 @@ namespace Profunia.Inventory.Desktop.Transactions
                 Messages.DeletedMessage();
                 if (objfrmSalesInvoiceRegister != null)
                 {
-                    this.Close();
+                    base.Close();
                     objfrmSalesInvoiceRegister.Enabled = true;
                     objfrmSalesInvoiceRegister.gridFill();
                 }
                 else if (frmSalesReportObj != null)
                 {
-                    this.Close();
+                    base.Close();
                     frmSalesReportObj.Enabled = true;
                     frmSalesReportObj.gridFill();
                 }
                 else if (frmDayBookObj != null)
                 {
-                    this.Close();
+                    base.Close();
                 }
                 else
                 {
@@ -2685,14 +2501,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 57" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS58:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmDayBook to view details and for updation 
-        /// </summary>
-        /// <param name="frmDayBook"></param>
-        /// <param name="decMasterId"></param>
+
         public void callFromDayBook(frmDayBook frmDayBook, decimal decMasterId)
         {
             try
@@ -2705,14 +2517,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 58" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS59:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmVatReturnReport to view details and for updation 
-        /// </summary>
-        /// <param name="frmVatReport"></param>
-        /// <param name="decMasterId"></param>
+
         public void callFromVatReturnReport(frmVatReturnReport frmVatReport, decimal decMasterId)
         {
             try
@@ -2725,14 +2533,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 59" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS60:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmAgeingReport to view details and for updation 
-        /// </summary>
-        /// <param name="frmAgeing"></param>
-        /// <param name="decMasterId"></param>
+
         public void callFromAgeing(frmAgeingReport frmAgeing, decimal decMasterId)
         {
             try
@@ -2745,14 +2549,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 60" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS61:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmVoucherWiseProductSearch to view details and for updation 
-        /// </summary>
-        /// <param name="frmVoucherProductObj"></param>
-        /// <param name="decMasterId"></param>
+
         public void callFromVoucherWiseProductSearch(frmVoucherWiseProductSearch frmVoucherProductObj, decimal decMasterId)
         {
             try
@@ -2765,14 +2565,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 61" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS62:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call this form from frmLedgerDetails to view details and for updation 
-        /// </summary>
-        /// <param name="LedgerDetailsObj"></param>
-        /// <param name="decMasterId"></param>
+
         public void CallFromLedgerDetails(frmLedgerDetails LedgerDetailsObj, decimal decMasterId)
         {
             try
@@ -2785,15 +2581,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("PO: 62" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS63:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Function to call frmProductSearchPopup form to select and view a product
-        /// </summary>
-        /// <param name="frmProductSearchPopup"></param>
-        /// <param name="decproductId"></param>
-        /// <param name="decCurrentRowIndex"></param>
+
         public void CallFromProductSearchPopup(frmProductSearchPopup frmProductSearchPopup, decimal decproductId, decimal decCurrentRowIndex)
         {
             ProductInfo infoProduct = new ProductInfo();
@@ -2801,42 +2592,30 @@ namespace Profunia.Inventory.Desktop.Transactions
             try
             {
                 base.Show();
-                this.frmProductSearchPopupObj = frmProductSearchPopup;
-                
+                frmProductSearchPopupObj = frmProductSearchPopup;
                 cmbItem.SelectedValue = decproductId;
-               
                 frmProductSearchPopupObj.Close();
                 frmProductSearchPopupObj = null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 63" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS64:" + ex.Message;
             }
         }
-        #endregion
-        #region Events
-        /// <summary>
-        /// here set the textbox value as dtp value
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void dtpDate_ValueChanged(object sender, EventArgs e)
         {
             try
             {
-                DateTime date = this.dtpDate.Value;
-                this.txtDate.Text = date.ToString("dd-MMM-yyyy");
+                DateTime date = dtpDate.Value;
+                txtDate.Text = date.ToString("dd-MMM-yyyy");
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:63" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS65:" + ex.Message;
             }
         }
-        /// <summary>
-        /// When form load call the cleart function
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void frmPOS_Load(object sender, EventArgs e)
         {
             try
@@ -2845,16 +2624,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-
-                MessageBox.Show("POS:64" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS66:" + ex.Message;
             }
-
         }
-        /// <summary>
-        /// Gridview row added event for generate the Serial No
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void dgvPointOfSales_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             try
@@ -2865,14 +2638,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:65" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS67:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Gridview row added event for generate the Serial No in rtax grid
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void dgvPOSTax_RowsAdded(object sender, DataGridViewRowsAddedEventArgs e)
         {
             try
@@ -2881,14 +2650,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:66" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS68:" + ex.Message;
             }
         }
-        /// <summary>
-        /// To add a new ledger from this button click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnNewLedger_Click(object sender, EventArgs e)
         {
             try
@@ -2899,14 +2664,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 67" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS69:" + ex.Message;
             }
         }
-        /// <summary>
-        /// TO create a new counter using this button click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnNewCounter_Click(object sender, EventArgs e)
         {
             isFromCounterCombo = true;
@@ -2942,19 +2703,15 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    MessageBox.Show("You don’t have privilege", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("You don’t have privilege", "Openmiracle", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 68" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS70:" + ex.Message;
             }
         }
-        /// <summary>
-        /// To create a new Salesman using this button click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnNewSalesMan_Click(object sender, EventArgs e)
         {
             try
@@ -2988,23 +2745,19 @@ namespace Profunia.Inventory.Desktop.Transactions
                             open.WindowState = FormWindowState.Normal;
                         }
                     }
-                    this.Enabled = false;
+                    base.Enabled = false;
                 }
                 else
                 {
-                    MessageBox.Show("You don’t have privilege", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    MessageBox.Show("You don’t have privilege", "Openmiracle", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 69" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS71:" + ex.Message;
             }
         }
-        /// <summary>
-        /// To create a new SalesAccount using this button click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnNewSalesAccount_Click(object sender, EventArgs e)
         {
             try
@@ -3015,14 +2768,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 70" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS72:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Clear button click
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnClear_Click(object sender, EventArgs e)
         {
             try
@@ -3063,19 +2812,14 @@ namespace Profunia.Inventory.Desktop.Transactions
                     frmAgeingObj.Enabled = true;
                     frmAgeingObj = null;
                 }
-
-                this.BringToFront();
+                base.BringToFront();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 71" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS73:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Add button click, call the status check function here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnAdd_Click(object sender, EventArgs e)
         {
             try
@@ -3084,19 +2828,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 72" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS74:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Save button click, call the save or edit function
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnSave_Click(object sender, EventArgs e)
         {
             try
             {
-                if (CheckUserPrivilege.PrivilegeCheck(PublicVariables._decCurrentUserId, this.Name, btnSave.Text))
+                if (CheckUserPrivilege.PrivilegeCheck(PublicVariables._decCurrentUserId, base.Name, btnSave.Text))
                 {
                     SaveOrEdit();
                 }
@@ -3107,14 +2847,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 73" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS75:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Close button click, here closing the form based on the settings
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnClose_Click(object sender, EventArgs e)
         {
             try
@@ -3125,24 +2861,20 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    this.Close();
+                    base.Close();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 74" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS76:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Delete button click, call the delete function here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnDelete_Click(object sender, EventArgs e)
         {
             try
             {
-                if (CheckUserPrivilege.PrivilegeCheck(PublicVariables._decCurrentUserId, this.Name, "Delete"))
+                if (CheckUserPrivilege.PrivilegeCheck(PublicVariables._decCurrentUserId, base.Name, "Delete"))
                 {
                     if (PublicVariables.isMessageDelete)
                     {
@@ -3164,23 +2896,18 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 75" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS77:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Remove button click, call the remove function here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void lnklblRemove_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-
             try
             {
                 if (dgvPointOfSales.SelectedCells.Count > 0 && dgvPointOfSales.CurrentRow != null)
                 {
                     int inRowIndex = dgvPointOfSales.CurrentRow.Index;
-                    if (MessageBox.Show("Do you want to remove current row?", "Open Miracle", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
+                    if (MessageBox.Show("Do you want to remove current row?", "Openmiracle", MessageBoxButtons.YesNo, MessageBoxIcon.Question, MessageBoxDefaultButton.Button1) == DialogResult.Yes)
                     {
                         if (btnSave.Text == "Update")
                         {
@@ -3209,61 +2936,46 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 76" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS78:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Grid dopuble click for edit the items
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void dgvPointOfSales_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             try
             {
-                if (dgvPointOfSales.Rows.Count > 0 && dgvPointOfSales.CurrentRow != null)
+                if (dgvPointOfSales.Rows.Count > 0 && dgvPointOfSales.CurrentRow != null && dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value != null && dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value.ToString() != string.Empty)
                 {
-                    if (dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value != null)
+                    txtProductCode.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value.ToString();
+                    cmbItem.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtProductName"].Value.ToString();
+                    txtQuantity.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtQuantity"].Value.ToString();
+                    cmbUnit.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtUnit"].Value.ToString();
+                    txtRate.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtRate"].Value.ToString();
+                    txtGrossValue.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtGrossValue"].Value.ToString();
+                    cmbTax.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTaxPercentage"].Value.ToString();
+                    txtTaxAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTaxAmount"].Value.ToString();
+                    txtNetAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtNetAmount"].Value.ToString();
+                    txtDiscountAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtDiscount"].Value.ToString();
+                    txtAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTotalAmount"].Value.ToString();
+                    txtBarcode.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtBarcode"].Value.ToString();
+                    cmbBatch.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtBatchno"].Value.ToString();
+                    cmbGodown.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtGodownName"].Value.ToString();
+                    cmbRack.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtRackName"].Value.ToString();
+                    if (dgvPointOfSales.CurrentRow.Cells["rowId"].Value != null && dgvPointOfSales.CurrentRow.Cells["rowId"].Value.ToString() != string.Empty)
                     {
-                        if (dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value.ToString() != string.Empty)
-                        {
-                            txtProductCode.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtProductCode"].Value.ToString();
-                            cmbItem.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtProductName"].Value.ToString();
-                            txtQuantity.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtQuantity"].Value.ToString();
-                            cmbUnit.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtUnit"].Value.ToString();
-                            txtRate.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtRate"].Value.ToString();
-                            txtGrossValue.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtGrossValue"].Value.ToString();
-                            cmbTax.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTaxPercentage"].Value.ToString();
-                            txtTaxAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTaxAmount"].Value.ToString();
-                            txtNetAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtNetAmount"].Value.ToString();
-                            txtDiscountAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtDiscount"].Value.ToString();
-                            txtAmount.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtTotalAmount"].Value.ToString();
-                            txtBarcode.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtBarcode"].Value.ToString();
-                            cmbBatch.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtBatchno"].Value.ToString();
-                            cmbGodown.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtGodownName"].Value.ToString();
-                            cmbRack.Text = dgvPointOfSales.CurrentRow.Cells["dgvtxtRackName"].Value.ToString();
-                            if (dgvPointOfSales.CurrentRow.Cells["rowId"].Value != null && dgvPointOfSales.CurrentRow.Cells["rowId"].Value.ToString() != string.Empty)
-                            {
-                                rowIdToEdit = int.Parse(dgvPointOfSales.CurrentRow.Cells["rowId"].Value.ToString());
-                            }
-                            btnAdd.Text = "Edit";
-                            txtQuantity.Focus();
-                            txtQuantity.SelectAll();
-                        }
+                        rowIdToEdit = int.Parse(dgvPointOfSales.CurrentRow.Cells["rowId"].Value.ToString());
                     }
+                    btnAdd.Text = "Edit";
+                    txtQuantity.Focus();
+                    txtQuantity.SelectAll();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 77" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS79:" + ex.Message;
             }
         }
 
-        /// <summary>
-        /// barcode leave call the fill function here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void txtBarcode_Leave(object sender, EventArgs e)
         {
             try
@@ -3273,14 +2985,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 78" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS80:" + ex.Message;
             }
         }
-        /// <summary>
-        /// call the fill function based on the selected product code
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtProductCode_Leave(object sender, EventArgs e)
         {
             try
@@ -3303,14 +3011,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS : 79" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                formMDI.infoError.ErrorString = "POS81:" + ex.Message;
             }
         }
-        /// <summary>
-        /// date validation and set the textbox value as dtp value
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDate_Leave(object sender, EventArgs e)
         {
             try
@@ -3326,29 +3030,22 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :80" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS82:" + ex.Message;
             }
         }
-        /// <summary>
-        /// doing the grand total amount calculations here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBillDiscount_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                decimal decGrandTotal = 0;
+                decimal decGrandTotal = 0m;
                 if (txtBillDiscount.Text.Trim() != string.Empty)
                 {
                     decimal decTotal = Convert.ToDecimal(txtTotalAmount.Text.Trim());
-                   
                     decimal decBilldiscount = Convert.ToDecimal(txtBillDiscount.Text.Trim());
                     if (decBilldiscount > decTotal)
                     {
-                        //txtGrandTotal.Text = "0.00";
                         txtGrandTotal.Text = decTotal.ToString();
-
                     }
                     else
                     {
@@ -3358,19 +3055,15 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    txtGrandTotal.Text = txtTotalAmount.Text.Trim(); ;
+                    txtGrandTotal.Text = txtTotalAmount.Text.Trim();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :81" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS83:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Qty text change here call the gross value calculations
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtQuantity_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3379,14 +3072,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :82" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS84:" + ex.Message;
             }
         }
-        /// <summary>
-        /// call the discount calculations here in gross value changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtGrossValue_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3395,14 +3084,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :83" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS85:" + ex.Message;
             }
         }
-        /// <summary>
-        /// call the gross value calculations in rate changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtRate_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3411,33 +3096,25 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :84" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS86:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Call the discount calculation in DiscountPercentage textbox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountPercentage_TextChanged(object sender, EventArgs e)
         {
             try
             {
-                if (isFromDiscAmt == true)
+                if (isFromDiscAmt)
                 {
                     DiscountCalculation();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :85" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS87:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Call the tax amount calculations in net amount text changed
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtNetAmount_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3446,14 +3123,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :86" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS88:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Call the DiscountPercentage Calculation in discount amount ctext change 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountAmount_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3463,14 +3136,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :87" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS89:" + ex.Message;
             }
         }
-        /// <summary>
-        /// TO get total amount calculation in paid amount textbox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtPaidAmount_TextChanged(object sender, EventArgs e)
         {
             try
@@ -3479,43 +3148,32 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :88" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS90:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Call the product fill function based on the product here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbItem_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                if (isFromBarcode == false)
+                if (!isFromBarcode)
                 {
                     cmbUnit.DataSource = null;
-                    if (cmbItem.SelectedIndex > -1 && cmbItem.SelectedValue != null)
+                    if (cmbItem.SelectedIndex > -1 && cmbItem.SelectedValue != null && cmbItem.SelectedValue.ToString() != "System.Data.DataRowView" && cmbItem.Text != "System.Data.DataRowView")
                     {
-                        if (cmbItem.SelectedValue.ToString() != "System.Data.DataRowView" && cmbItem.Text != "System.Data.DataRowView")
-                        {
-                            GodownComboFill();
-                            RackComboFill();
-                            decProductId = Convert.ToDecimal(cmbItem.SelectedValue.ToString());
-                            FillControlsByProductName(decProductId);
-                        }
+                        GodownComboFill();
+                        RackComboFill();
+                        decProductId = Convert.ToDecimal(cmbItem.SelectedValue.ToString());
+                        FillControlsByProductName(decProductId);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :89" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS91:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Decimal validation in bill discount keypress event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBillDiscount_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3524,14 +3182,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :90" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS92:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Decimal validation in  discount amount keypress event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountAmount_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3540,14 +3194,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :91" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS93:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Decimal validation in Rate keypress event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtRate_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3556,14 +3206,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :92" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS94:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Decimal validation in Qty keypress event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtQuantity_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3572,14 +3218,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :93" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS95:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Form closing event, checking the other opend form status here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void frmPOS_FormClosing(object sender, FormClosingEventArgs e)
         {
             try
@@ -3636,14 +3278,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :94" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS96:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Doing the unit conversion here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbUnit_SelectedValueChanged(object sender, EventArgs e)
         {
             try
@@ -3653,16 +3291,16 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     DataTable dtblUnitByProduct = new DataTable();
                     dtblUnitByProduct = SpUnitConvertion.UnitConversionIdAndConRateViewallByProductId(decProductId.ToString());
-                    foreach (DataRow drUnitByProduct in dtblUnitByProduct.Rows)
+                    foreach (DataRow row in dtblUnitByProduct.Rows)
                     {
-                        if (cmbUnit.SelectedValue.ToString() == drUnitByProduct.ItemArray[0].ToString())
+                        if (cmbUnit.SelectedValue.ToString() == row.ItemArray[0].ToString())
                         {
-                            lblUnitConversion.Text = drUnitByProduct.ItemArray[2].ToString();
-                            lblUnitConversionRate.Text = drUnitByProduct.ItemArray[3].ToString();
+                            lblUnitConversion.Text = row.ItemArray[2].ToString();
+                            lblUnitConversionRate.Text = row.ItemArray[3].ToString();
                             if (isAfterFillControls)
                             {
                                 decimal decNewConversionRate = Convert.ToDecimal(lblUnitConversionRate.Text.ToString());
-                                decimal decNewRate = (decCurrentRate * decCurrentConversionRate) / decNewConversionRate;
+                                decimal decNewRate = decCurrentRate * decCurrentConversionRate / decNewConversionRate;
                                 txtRate.Text = Math.Round(decNewRate, PublicVariables._inNoOfDecimalPlaces).ToString();
                             }
                         }
@@ -3671,14 +3309,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :95" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS97:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Get the product current unit rate here
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbUnit_Enter(object sender, EventArgs e)
         {
             try
@@ -3693,19 +3327,15 @@ namespace Profunia.Inventory.Desktop.Transactions
                 }
                 else
                 {
-                    decCurrentRate = 0;
+                    decCurrentRate = 0m;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 92" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS98:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Set the bill discount as 0 if its empty, its checking in leave event
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBillDiscount_Leave(object sender, EventArgs e)
         {
             try
@@ -3717,14 +3347,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 93" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS99:" + ex.Message;
             }
         }
-        /// <summary>
-        /// set the field as empty whilw entering to edit
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBillDiscount_Enter(object sender, EventArgs e)
         {
             try
@@ -3733,14 +3359,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 94" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS100:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Decimal validation in paid amount textbox
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtPaidAmount_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3749,14 +3371,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 95" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS101:" + ex.Message;
             }
         }
-        /// <summary>
-        /// set the field as 0 while leaving if its empty
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountPercentage_Leave(object sender, EventArgs e)
         {
             try
@@ -3768,14 +3386,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 96" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS102:" + ex.Message;
             }
         }
-        /// <summary>
-        /// set the field as 0 while leaving if its empty
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountAmount_Leave(object sender, EventArgs e)
         {
             try
@@ -3789,15 +3403,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 97" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS103:" + ex.Message;
             }
         }
 
-        /// <summary>
-        /// For Decimal validation in Discount percentage
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void txtDiscountPercentage_KeyPress(object sender, KeyPressEventArgs e)
         {
             try
@@ -3806,21 +3415,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS :98" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS104:" + ex.Message;
             }
         }
-        #endregion
-        #region Navigation
-        /// <summary>
-        /// For enter key navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBarcode_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     if (txtProductCode.Visible)
                     {
@@ -3836,56 +3439,45 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 99" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS105:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtProductCode_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbItem.Focus();
                 }
-                else if (e.KeyCode == Keys.Back)
+                else if (e.KeyCode == Keys.Back && (txtProductCode.Text.Trim() == string.Empty || txtProductCode.SelectionStart == 0))
                 {
-                    if (txtProductCode.Text.Trim() == string.Empty || txtProductCode.SelectionStart == 0)
+                    if (txtBarcode.Visible)
                     {
-                        if (txtBarcode.Visible)
-                        {
-                            txtBarcode.SelectionStart = 0;
-                            txtBarcode.SelectionLength = 0;
-                            txtBarcode.Focus();
-                        }
-                        else
-                        {
-                            cmbCounter.Focus();
-                        }
+                        txtBarcode.SelectionStart = 0;
+                        txtBarcode.SelectionLength = 0;
+                        txtBarcode.Focus();
+                    }
+                    else
+                    {
+                        cmbCounter.Focus();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 100" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS106:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtQuantity_KeyDown(object sender, KeyEventArgs e)
         {
             string strtxt = txtQuantity.Text.Trim();
             try
             {
                 SettingsSP spSettings = new SettingsSP();
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     if (spSettings.SettingsStatusCheck("ShowUnit") == "Yes")
                     {
@@ -3897,86 +3489,68 @@ namespace Profunia.Inventory.Desktop.Transactions
                         txtRate.Select();
                     }
                 }
-                else if (e.KeyCode == Keys.Back)
+                else if (e.KeyCode == Keys.Back && txtQuantity.SelectionLength > 0)
                 {
-                    if (txtQuantity.SelectionLength > 0)
+                    txtQuantity.Text = strtxt.Trim();
+                    txtQuantity.SelectionStart = 0;
+                    txtQuantity.SelectionLength = 0;
+                    if (spSettings.SettingsStatusCheck("AllowBatch") == "Yes")
                     {
-                        txtQuantity.Text = strtxt.Trim();
-                        txtQuantity.SelectionStart = 0;
-                        txtQuantity.SelectionLength = 0;
-                        if (spSettings.SettingsStatusCheck("AllowBatch") == "Yes")
-                        {
-                            cmbBatch.Focus();
-                        }
-                        else if (spSettings.SettingsStatusCheck("AllowGodown") == "Yes")
-                        {
-                            cmbRack.Focus();
-                        }
-                        else
-                        {
-                            cmbItem.Focus();
-                        }
+                        cmbBatch.Focus();
+                    }
+                    else if (spSettings.SettingsStatusCheck("AllowGodown") == "Yes")
+                    {
+                        cmbRack.Focus();
+                    }
+                    else
+                    {
+                        cmbItem.Focus();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 101" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS107:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnAdd_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnSave_Click(sender, e);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 102" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS108:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtBillDiscount_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     txtPaidAmount.Focus();
                     txtPaidAmount.SelectAll();
                 }
-                else if (e.KeyCode == Keys.Back)
+                else if (e.KeyCode == Keys.Back && (txtBillDiscount.Text.Trim() == string.Empty || txtBillDiscount.SelectionStart == 0))
                 {
-                    if (txtBillDiscount.Text.Trim() == string.Empty || txtBillDiscount.SelectionStart == 0)
-                    {
-                        txtNarration.Focus();
-                        txtNarration.SelectionStart = 0;
-                        txtNarration.SelectionLength = 0;
-                    }
+                    txtNarration.Focus();
+                    txtNarration.SelectionStart = 0;
+                    txtNarration.SelectionLength = 0;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 103" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS109:" + ex.Message;
             }
         }
-        /// <summary>
-        /// Form keydown for quick access
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void frmPOS_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -3992,7 +3566,9 @@ namespace Profunia.Inventory.Desktop.Transactions
                 else if (e.Control && e.KeyCode == Keys.D)
                 {
                     if (btnDelete.Enabled)
+                    {
                         btnDelete_Click(sender, e);
+                    }
                 }
                 else if (e.KeyCode == Keys.F9)
                 {
@@ -4007,14 +3583,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 104" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS110:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void btnSave_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -4026,19 +3598,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 105" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS111:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtPaidAmount_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnSave.Focus();
                 }
@@ -4049,38 +3617,30 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 106" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS112:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDate_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbPricingLevel.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 107" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS113:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbPricingLevel_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbSalesMan.Focus();
                 }
@@ -4091,19 +3651,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 108" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS114:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation and short cut to create a new Salesman
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbSalesMan_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbCashOrParty.Focus();
                 }
@@ -4116,7 +3672,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     SendKeys.Send("{F10}");
                     btnNewSalesMan_Click(sender, e);
                 }
-                if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control) //Pop Up
+                if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control)
                 {
                     if (cmbSalesMan.Focused)
                     {
@@ -4141,19 +3697,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 109" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS115:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbSalesAccount_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbCounter.Focus();
                 }
@@ -4166,7 +3718,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     SendKeys.Send("{F10}");
                     btnNewSalesAccount_Click(sender, e);
                 }
-                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control) //Pop Up
+                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control)
                 {
                     if (cmbSalesAccount.Focused)
                     {
@@ -4190,19 +3742,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 110" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS116:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbCounter_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     txtBarcode.Focus();
                 }
@@ -4218,84 +3766,54 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 111" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS117:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtDiscountPercentage_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
                 isFromDiscAmt = true;
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     txtDiscountAmount.SelectionStart = 0;
                     txtDiscountAmount.SelectionLength = 0;
                     txtDiscountAmount.Focus();
                 }
-                else if (e.KeyCode == Keys.Back)
+                else if (e.KeyCode == Keys.Back && (txtDiscountPercentage.Text.Trim() == string.Empty || txtDiscountPercentage.SelectionStart == 0))
                 {
-                    if (txtDiscountPercentage.Text.Trim() == string.Empty || txtDiscountPercentage.SelectionStart == 0)
-                    {
-                        txtQuantity.Focus();
-                    }
+                    txtQuantity.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 112" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS118:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtGrandTotal_TextChanged(object sender, EventArgs e)
         {
             try
             {
                 decimal dcTotalAmount = Convert.ToDecimal(txtTotalAmount.Text);
-                decimal dcBillDisc = 0;
-                decimal dcGrandTotal = 0;
-                if (txtBillDiscount.Text.Trim() != string.Empty)
-                {
-                    dcBillDisc = Convert.ToDecimal(txtBillDiscount.Text);
-                }
-                else
-                {
-                    dcBillDisc = 0;
-                }
-                if (dcBillDisc < dcTotalAmount)
-                {
-                    dcGrandTotal = dcTotalAmount - dcBillDisc;
-                }
-                else
-                {
-                    dcGrandTotal = Convert.ToDecimal(txtGrandTotal.Text);
-                }
-               
-                decimal dcBalance = 0;
+                decimal dcBillDisc2 = 0m;
+                decimal dcGrandTotal2 = 0m;
+                dcBillDisc2 = ((!(txtBillDiscount.Text.Trim() != string.Empty)) ? 0m : Convert.ToDecimal(txtBillDiscount.Text));
+                dcGrandTotal2 = ((!(dcBillDisc2 < dcTotalAmount)) ? Convert.ToDecimal(txtGrandTotal.Text) : (dcTotalAmount - dcBillDisc2));
+                decimal dcBalance = 0m;
                 if (txtPaidAmount.Text != string.Empty)
                 {
-                    dcBalance = decimal.Parse(txtPaidAmount.Text) - dcGrandTotal;
+                    dcBalance = decimal.Parse(txtPaidAmount.Text) - dcGrandTotal2;
                 }
                 txtBalance.Text = dcBalance.ToString();
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 113" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS119:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtVoucherNo_KeyDown(object sender, KeyEventArgs e)
         {
             try
@@ -4308,25 +3826,21 @@ namespace Profunia.Inventory.Desktop.Transactions
                     }
                     else
                     {
-                        this.Close();
+                        base.Close();
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 114" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS120:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbCashOrParty_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbSalesAccount.Focus();
                 }
@@ -4339,7 +3853,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                     SendKeys.Send("{F10}");
                     btnNewLedger_Click(sender, e);
                 }
-                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control) //Pop Up For ProductSearch
+                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control)
                 {
                     if (cmbCashOrParty.Focused)
                     {
@@ -4363,21 +3877,16 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 115" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS121:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbItem_KeyDown(object sender, KeyEventArgs e)
         {
-            string strProductName;
             try
             {
                 SettingsSP spSettings = new SettingsSP();
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     if (spSettings.SettingsStatusCheck("AllowGodown") == "Yes")
                     {
@@ -4410,7 +3919,7 @@ namespace Profunia.Inventory.Desktop.Transactions
                         txtBarcode.Select();
                     }
                 }
-                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control) //Pop Up
+                else if (e.KeyCode == Keys.F && Control.ModifierKeys == Keys.Control)
                 {
                     if (cmbItem.Focused)
                     {
@@ -4422,18 +3931,18 @@ namespace Profunia.Inventory.Desktop.Transactions
                     }
                     if (cmbItem.SelectedIndex != -1)
                     {
-                        frmProductSearchPopup frmProductSearchPopupObj = new frmProductSearchPopup();
-                        frmProductSearchPopupObj.MdiParent = formMDI.MDIObj;
-                        frmProductSearchPopupObj.CallFromPOS(this, cmbItem.SelectedIndex, txtProductCode.Text);
+                        frmProductSearchPopup frmProductSearchPopupObj2 = new frmProductSearchPopup();
+                        frmProductSearchPopupObj2.MdiParent = formMDI.MDIObj;
+                        frmProductSearchPopupObj2.CallFromPOS(this, cmbItem.SelectedIndex, txtProductCode.Text);
                     }
                     else
                     {
-                        frmProductSearchPopup frmProductSearchPopupObj = new frmProductSearchPopup();
-                        frmProductSearchPopupObj.MdiParent = formMDI.MDIObj;
-                        frmProductSearchPopupObj.CallFromPOS(this, cmbItem.SelectedIndex,string.Empty);
+                        frmProductSearchPopup frmProductSearchPopupObj2 = new frmProductSearchPopup();
+                        frmProductSearchPopupObj2.MdiParent = formMDI.MDIObj;
+                        frmProductSearchPopupObj2.CallFromPOS(this, cmbItem.SelectedIndex, string.Empty);
                     }
                 }
-                else if (e.KeyCode == Keys.C && Control.ModifierKeys == Keys.Alt) //Creation
+                else if (e.KeyCode == Keys.C && Control.ModifierKeys == Keys.Alt)
                 {
                     frmProductCreation frmProductCreationObj = new frmProductCreation();
                     bool isFromItemCombo = true;
@@ -4441,36 +3950,32 @@ namespace Profunia.Inventory.Desktop.Transactions
                     {
                         if (cmbItem.SelectedValue != null)
                         {
-                            strProductName = cmbItem.SelectedValue.ToString();
+                            string strProductName2 = cmbItem.SelectedValue.ToString();
                         }
                         else
                         {
-                            strProductName = string.Empty;
+                            string strProductName2 = string.Empty;
                         }
                         frmProductCreationObj.MdiParent = formMDI.MDIObj;
                         frmProductCreationObj.CallFromPOSForProductCreation(this, isFromItemCombo);
                     }
                     else
                     {
-                        MessageBox.Show("You don’t have privilege", "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show("You don’t have privilege", "Openmiracle", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
                     }
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 116" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS122:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbGodown_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbRack.Focus();
                 }
@@ -4481,19 +3986,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 117" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS123:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbRack_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     cmbBatch.Focus();
                 }
@@ -4504,20 +4005,16 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 118" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS124:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbBatch_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
                 SettingsSP spSettings = new SettingsSP();
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     txtQuantity.Focus();
                 }
@@ -4536,19 +4033,15 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 119" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS125:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbUnit_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     txtRate.Focus();
                 }
@@ -4559,69 +4052,50 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 120" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS126:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtRate_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnAdd.Focus();
                 }
-                else if (e.KeyCode == Keys.Back)
+                else if (e.KeyCode == Keys.Back && txtRate.SelectionStart == 0)
                 {
-                    if (txtRate.SelectionStart == 0)
-                    {
-                        txtQuantity.Focus();
-                    }
+                    txtQuantity.Focus();
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 121" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS127:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbGodown_SelectedIndexChanged(object sender, EventArgs e)
         {
             try
             {
-                if (cmbGodown.SelectedIndex > -1)
+                if (cmbGodown.SelectedIndex > -1 && cmbGodown.SelectedValue.ToString() != "System.Data.DataRowView" && cmbGodown.Text != "System.Data.DataRowView")
                 {
-                    if (cmbGodown.SelectedValue.ToString() != "System.Data.DataRowView" && cmbGodown.Text != "System.Data.DataRowView")
-                    {
-                        decimal dcGodownId = Convert.ToDecimal(cmbGodown.SelectedValue.ToString());
-                        RackComboFillByGodownId(dcGodownId);
-                    }
+                    decimal dcGodownId = Convert.ToDecimal(cmbGodown.SelectedValue.ToString());
+                    RackComboFillByGodownId(dcGodownId);
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS: 122" + ex.Message, "Open Miracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS128:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtNarration_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     inNarrationCount++;
                     if (inNarrationCount == 2)
@@ -4634,31 +4108,24 @@ namespace Profunia.Inventory.Desktop.Transactions
                 {
                     inNarrationCount = 0;
                 }
-                if (e.KeyCode == Keys.Back)
+                if (e.KeyCode == Keys.Back && (txtNarration.Text == string.Empty || txtNarration.SelectionStart == 0))
                 {
-                    if (txtNarration.Text == string.Empty || txtNarration.SelectionStart == 0)
-                    {
-                        txtRate.Focus();
-                        txtRate.SelectionStart = 0;
-                        txtRate.SelectionLength = 0;
-                    }
+                    txtRate.Focus();
+                    txtRate.SelectionStart = 0;
+                    txtRate.SelectionLength = 0;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:123" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS129:" + ex.Message;
             }
         }
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cbxPrintAfterSave_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnSave.Focus();
                 }
@@ -4669,48 +4136,36 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:124" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS130:" + ex.Message;
             }
         }
 
-        /// <summary>
-        /// For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         private void txtDiscountAmount_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnAdd.Focus();
                 }
-                if (e.KeyCode == Keys.Back)
+                if (e.KeyCode == Keys.Back && txtDiscountAmount.SelectionStart == 0)
                 {
-                    if (txtDiscountAmount.SelectionStart == 0)
-                    {
-                        txtDiscountPercentage.Focus();
-                        txtDiscountPercentage.SelectionLength = 0;
-                        txtDiscountPercentage.SelectionStart = 0;
-                    }
+                    txtDiscountPercentage.Focus();
+                    txtDiscountPercentage.SelectionLength = 0;
+                    txtDiscountPercentage.SelectionStart = 0;
                 }
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:125" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS131:" + ex.Message;
             }
         }
-        /// <summary>
-        ///  For enter key and backspace navigation
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void cmbTax_KeyDown(object sender, KeyEventArgs e)
         {
             try
             {
-                if (e.KeyCode == Keys.Enter)
+                if (e.KeyCode == Keys.Return)
                 {
                     btnAdd.Focus();
                 }
@@ -4721,15 +4176,10 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:126" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS132:" + ex.Message;
             }
-
         }
-        /// <summary>
-        /// Set the PaidAmount textbox as 0 while leaving, if its empty
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+
         private void txtPaidAmount_Leave(object sender, EventArgs e)
         {
             try
@@ -4741,9 +4191,12 @@ namespace Profunia.Inventory.Desktop.Transactions
             }
             catch (Exception ex)
             {
-                MessageBox.Show("POS:127" + ex.Message, "OpenMiracle", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                formMDI.infoError.ErrorString = "POS133:" + ex.Message;
             }
         }
-        #endregion
+
+       
+
+       
     }
 }

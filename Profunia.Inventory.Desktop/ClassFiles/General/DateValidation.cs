@@ -20,6 +20,8 @@ using System.Data.SqlClient;
 using System.Windows.Forms;
 using System.Drawing;
 using System.Globalization;
+using Profunia.Inventory.Desktop.ClassFiles.Info;
+
 namespace Profunia.Inventory.Desktop.ClassFiles.General
 {
     class DateValidation

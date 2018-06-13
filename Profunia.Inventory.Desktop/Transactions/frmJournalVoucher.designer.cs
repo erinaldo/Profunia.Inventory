@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmJournalVoucher
     {
@@ -49,7 +51,7 @@
             this.btnSave = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtVoucherNo = new System.Windows.Forms.TextBox();
-            this.dgvJournalVoucher = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvJournalVoucher = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvcmbAccountLedger = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dgvcmbDrOrCr = new System.Windows.Forms.DataGridViewComboBoxColumn();

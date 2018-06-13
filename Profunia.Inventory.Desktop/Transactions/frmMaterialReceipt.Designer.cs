@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmMaterialReceipt
     {
@@ -55,7 +57,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtReceiptNo = new System.Windows.Forms.TextBox();
             this.lblReceiptNo = new System.Windows.Forms.Label();
-            this.dgvProduct = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvProduct = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.lblDate = new System.Windows.Forms.Label();
             this.btnNewLedger = new System.Windows.Forms.Button();
             this.dtpDate = new System.Windows.Forms.DateTimePicker();

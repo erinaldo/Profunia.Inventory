@@ -13,12 +13,13 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Linq;
+using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
 using System.Collections;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Transactions
 {
     public partial class frmPurchaseInvoice : Form
@@ -3298,9 +3299,9 @@ namespace Profunia.Inventory.Desktop.Transactions
                     decMaterialReceiptMasterId = Convert.ToDecimal(cmbOrderNo.SelectedValue.ToString());
                 }
                 DataSet dsPurchaseInvoice = spPurchaseMaster.PurchaseInvoicePrinting(1, decPurchaseOrderMasterId, decMaterialReceiptMasterId, decMasterId);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.PurchaseInvoicePrinting(dsPurchaseInvoice);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.PurchaseInvoicePrinting(dsPurchaseInvoice);
             }
             catch (Exception ex)
             {

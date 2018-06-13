@@ -14,12 +14,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
+using System.Data;using Profunia.Inventory.Desktop.ClassFiles.General;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.SP;
 using System.Drawing;
-using System.Data.SqlClient;
+using Profunia.Inventory.Desktop.ClassFiles.SP;using Profunia.Inventory.Desktop.ClassFiles.Info;using Profunia.Inventory.Desktop.ClassFiles.General;using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Windows.Forms;
+using Profunia.Inventory.Desktop.Others;using Profunia.Inventory.Desktop.Reports;using Profunia.Inventory.Desktop.Registers;using Profunia.Inventory.Desktop.Masters;using Profunia.Inventory.Desktop.Search;using System.Windows.Forms;
+using Profunia.Inventory.Desktop.CrystalReports;
+
 namespace Profunia.Inventory.Desktop.Transactions
 {
     public partial class frmPurchaseOrder : Form
@@ -350,9 +351,9 @@ namespace Profunia.Inventory.Desktop.Transactions
             {
                 PurchaseOrderMasterSP spPurchaseOrderMaster = new PurchaseOrderMasterSP();
                 DataSet dsPurchaseOrder = spPurchaseOrderMaster.PurchaseOrderPrinting(decMasterId);
-                frmReport frmReport = new frmReport();
-                frmReport.MdiParent = formMDI.MDIObj;
-                frmReport.PurchaseOrderPrinting(dsPurchaseOrder);
+                frmReport frmRepor = new frmReport();
+                frmRepor.MdiParent = formMDI.MDIObj;
+                frmRepor.PurchaseOrderPrinting(dsPurchaseOrder);
             }
             catch (Exception ex)
             {

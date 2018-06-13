@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmSalesOrder
     {
@@ -57,7 +59,7 @@
             this.lblNarration = new System.Windows.Forms.Label();
             this.txtOrderNo = new System.Windows.Forms.TextBox();
             this.label7 = new System.Windows.Forms.Label();
-            this.dgvSalesOrder = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvSalesOrder = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtBarcode = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtProductCode = new System.Windows.Forms.DataGridViewTextBoxColumn();

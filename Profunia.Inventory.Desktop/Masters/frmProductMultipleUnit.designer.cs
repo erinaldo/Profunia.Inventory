@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Masters
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Masters
 {
     partial class frmProductMultipleUnit
     {
@@ -39,7 +41,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.label7 = new System.Windows.Forms.Label();
             this.txtProductName = new System.Windows.Forms.TextBox();
-            this.dgvMultipleUnit = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvMultipleUnit = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.btnSave = new System.Windows.Forms.Button();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtqtymultipleunit = new System.Windows.Forms.DataGridViewTextBoxColumn();

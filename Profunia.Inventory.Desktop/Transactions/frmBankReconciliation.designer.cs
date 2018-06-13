@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Transactions
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Transactions
 {
     partial class frmBankReconciliation
     {
@@ -41,7 +43,7 @@
             this.btnClear = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.dgvBankReconciliation = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvBankReconciliation = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.dgvtxtSlNo = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dgvtxtParticular = new System.Windows.Forms.DataGridViewTextBoxColumn();

@@ -11,6 +11,9 @@
 //You should have received a copy of the GNU General Public License
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
+using Profunia.Inventory.Desktop.ClassFiles.General;
+using Profunia.Inventory.Desktop.ClassFiles.SP;
+using Profunia.Inventory.Desktop.CrystalReports;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -226,9 +229,9 @@ namespace Profunia.Inventory.Desktop.Reports
                     DataTable dtblNew = dtbl.Copy();
                     ds.Tables.Add(dtblCompany);
                     ds.Tables.Add(dtblProduct);
-                    frmReport frmReport = new frmReport();
-                    frmReport.MdiParent = formMDI.MDIObj;
-                    frmReport.ProductBatchReportPrinting(ds);
+                    frmReport frmRepor = new frmReport();
+                    frmRepor.MdiParent = formMDI.MDIObj;
+                    frmRepor.ProductBatchReportPrinting(ds);
                 }
                 else
                 {

@@ -1,4 +1,6 @@
-﻿namespace Profunia.Inventory.Desktop.Reports
+﻿using Profunia.Inventory.Desktop.ClassFiles.General;
+
+namespace Profunia.Inventory.Desktop.Reports
 {
     partial class frmDayBook
     {
@@ -32,7 +34,7 @@
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmDayBook));
             this.btnPrint = new System.Windows.Forms.Button();
-            this.dgvDayBook = new Open_Miracle.dgv.DataGridViewEnter();
+            this.dgvDayBook = new Profunia.Inventory.Desktop.ClassFiles.General.dgv.DataGridViewEnter();
             this.btnSearch = new System.Windows.Forms.Button();
             this.btnReset = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();

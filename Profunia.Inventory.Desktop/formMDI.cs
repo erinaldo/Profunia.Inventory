@@ -70,9 +70,10 @@ namespace Profunia.Inventory.Desktop
         public formMDI()
         {
             InitializeComponent();
-            //ControlMover.Init(ucCalculator1);
-            //ControlMover.Init(ucQuickLaunch1);
-            //infoError.PropertyChanged += CategoryInfo_PropertyChanged;
+            //ControlMover.Init(this.ucCalculator1);
+            ControlMover.Init(this.ucQuickLaunch1);
+            infoError.PropertyChanged += new PropertyChangedEventHandler(this.CategoryInfo_PropertyChanged);
+
         }
 
         public void CurrentDateBefore()
